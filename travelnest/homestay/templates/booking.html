@@ -1,23 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking</title>
-    {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking</title>
+
 </head>
+
 <body>
-    
 
-          <h1><center><b>Booking Details</b></center></h1>
 
-          <!-- 123 -->
-          <div class="container">
-            <h2><center><b>Reservation Info</b></center></h2>
-            <img src="{% static 'images/image1.jpg' %}" alt="Your Image">
-            <div class ="container">
-               
-            </div>
-    
+  <h1>
+    <center><b>Booking Details</b></center>
+  </h1>
+  <!-- 123 -->
+  <div class="container" style="
+    border: 1px solid rgb(221, 221, 221);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
+    height: 400px;
+    width: 600px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+">     
+
+
+    <div class="item">
+      {% load static %}
+        <img src="{% static 'images/image1.jpg' %}" alt="" height="300px" width="300px" style="border-radius: 5%;">
+    </div>
+    <div class="item-details" style=" padding-left: 20px; font: bold;">
+        <ul style="list-style: none; padding: 0;">
+            <li>Arival Date: October 10, 2023</li>
+            <li>Depature Date: October 15, 2023</li>
+            <li>Rate: Rs 20000</li>
+            <li>Discount:</li>
+            <li>Tax: Rs 200</li>
+            <li>Total</li>
+        </ul>
+        <button style="background-color:  rgb(238, 83, 83); border-radius: 5%;">Next Step</button>
+
+    </div>
+
+</div>
+
 </body>
+
 </html>
