@@ -1,0 +1,38 @@
+<!-- user_details_form.html -->
+<div class="container" style="
+    border: 1px solid rgb(221, 221, 221);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
+    height: 400px;
+    width: 600px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+">     
+<center><h2>Your Personal Information</h2>
+</center>
+<br>
+<div>
+  <form action="{% url 'user_details' %}" method="post">
+    {% csrf_token %}
+    <div>
+      <label for="fullname">Guest Full Name</label>
+      <input type="text" name="fullname" class="form-control" id="fullname" />
+    </div>
+    <div>
+      <label for="email">Email</label>
+      <input type="text" name="email" class="form-control" id="email" />
+    </div>
+    <div>
+      <label for="number">Phone Number</label>
+      <input type="number" name="number" class="form-control" id="number" />
+    </div>
+    <div>
+      <button type="submit" class="form-control">Next Step</button>
+    </div>
+  </form>
+</div>
+  </div>
