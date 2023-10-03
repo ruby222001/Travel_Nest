@@ -11,28 +11,29 @@
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
-">     
-<center><h2>Your Personal Information</h2>
-</center>
-<br>
-<div>
-  <form action="{% url 'user_details' %}" method="post">
-    {% csrf_token %}
-    <div>
-      <label for="fullname">Guest Full Name</label>
-      <input type="text" name="fullname" class="form-control" id="fullname" />
+    flex-direction: column;
+">
+    <h2 style="text-align: center;">Your Personal Information</h2>
+
+    <br>
+    <div style="font-weight: bold;">
+        <form action="{% url 'user_details' %}" method="post">
+            {% csrf_token %}
+            <div>
+                <label for="fullname">Guest Full Name</label>
+                <input type="text" name="fullname" class="form-control" id="fullname" />
+            </div>
+            <div>
+                <label for="email">Email</label>
+                <input type="text" name="email" class="form-control" id="email" />
+            </div>
+            <div>
+                <label for="number">Phone Number</label>
+                <input type="number" name="number" class="form-control" id="number" />
+            </div>
+            <div>
+                <button type="submit" class="form-control">Next Step</button>
+            </div>
+        </form>
     </div>
-    <div>
-      <label for="email">Email</label>
-      <input type="text" name="email" class="form-control" id="email" />
-    </div>
-    <div>
-      <label for="number">Phone Number</label>
-      <input type="number" name="number" class="form-control" id="number" />
-    </div>
-    <div>
-      <button type="submit" class="form-control">Next Step</button>
-    </div>
-  </form>
 </div>
-  </div>

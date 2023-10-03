@@ -27,29 +27,33 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    display: flex;
+    
+  
 ">     
 
+<h2 style="text-align: center;">Your Personal Information</h2>
+<div style="display: flex;">
+  <div style="font-weight: bold;">
+    {% load static %}
+          <img src="{% static 'images/image1.jpg' %}" alt="" height="250px" width="250px" style="border-radius: 5%;">
+      </div>
+      <div class="item-details" style=" padding-left: 20px; font: bold;">
+          <ul style="list-style: none; padding: 0;">
+              <li>Arival Date: October 10, 2023</li>
+              <li>Depature Date: October 15, 2023</li>
+              <li>Rate: Rs 20000</li>
+              <li>Discount:</li>
+              <li>Tax: Rs 200</li>
+              <li>Total</li>
+          </ul>
+          <button style="background-color:  rgb(238, 83, 83); border-radius: 5%;" id="redirect-button">Next Step</button>
+         </div>
+          <div class="user-details-container" style="display: none;">
+            <!-- The user details form will be loaded here dynamically -->
+          </div>
+      
+</div>
 
-    <div class="item">
-      {% load static %}
-        <img src="{% static 'images/image1.jpg' %}" alt="" height="300px" width="300px" style="border-radius: 5%;">
-    </div>
-    <div class="item-details" style=" padding-left: 20px; font: bold;">
-        <ul style="list-style: none; padding: 0;">
-            <li>Arival Date: October 10, 2023</li>
-            <li>Depature Date: October 15, 2023</li>
-            <li>Rate: Rs 20000</li>
-            <li>Discount:</li>
-            <li>Tax: Rs 200</li>
-            <li>Total</li>
-        </ul>
-        <button style="background-color:  rgb(238, 83, 83); border-radius: 5%;" id="redirect-button">Next Step</button>
-       </div>
-        <div class="user-details-container" style="display: none;">
-          <!-- The user details form will be loaded here dynamically -->
-        </div>
-    
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
