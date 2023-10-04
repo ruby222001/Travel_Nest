@@ -3,3 +3,15 @@ img{
 width:"300px";
 border-radius: 5%;
 }
+.form-group {
+    display: inline-block;
+    width: 45%; /* You can adjust the width as needed */
+    margin-right: 10px; /* Add some spacing between the two form groups */
+}
+
+/* Adjust label width and alignment as needed */
+.form-group label {
+    display: block;
+    width: 100%;
+    text-align: left;
+}
