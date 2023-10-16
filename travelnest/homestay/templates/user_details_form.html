@@ -1,66 +1,90 @@
-<!-- user_details_form.html -->
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="container" style="
-    border: 1px solid rgb(221, 221, 221);
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
-    height: 400px;
-    width: 600px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
-">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  {% load static %}
+  
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+{% endblock %}
+<body>
+    <h1 class="center-text">Booking Details</h1>
+    <div class="progress-container">
+        <div class="step step-1 {% if step == 1 %}active{% endif %}">
+            <div class="step-circle {% if step == 1 %}active-step-circle{% endif %}">1</div>
+        </div>
+        <div class="line"></div>
+        <div class="step step-2 {% if step == 2 %}active{% endif %}">
+            <div class="step-circle {% if step == 2 %}active-step-circle{% endif %}">2</div>
+        </div>
+        <div class="line"></div>
+        <div class="step step-3 {% if step == 3 %}active{% endif %}">
+            <div class="step-circle {% if step == 3 %}active-step-circle{% endif %}">3</div>
+        </div>
+        <div class="progress-bar blue-progress-bar" id="progress"></div>
+    </div>
+      <br>
+<div class="container">
     <h2 style="text-align: center;">Your Personal Information</h2>
-
-    <br>
-    <div style="font-weight: bold;">
+    <div >
         <form action="{% url 'user_details' %}" method="post">
             {% csrf_token %}
             <div>
                 <label for="fullname">Guest Full Name</label><br>
-                <input type="text" id="fullInput" class="full-length-input" name="fullInput"style=" width: 100%;
-                padding: 10px;
-                margin: 10px 0;
-                border: 1px solid #ccc;
-                border-radius: 5px;">
+                <input type="text" id="fullInput" class="full-length-input" name="fullInput">
             </div>
-            <div class="form-group"style="
-            display: inline-block;
-            width: 45%; 
-            margin-right: 10px; 
-        ">
-                <label for="email">Email</label><br>
-                <input type="text" name="email" class="form-control" id="email">
+            <div class="form-group">
+                <div class="form-field">
+                    <label for="email">Email:</label>
+                    <input type="text" name="email" class="form1" id="email">
+                </div>
+                <div class="form-field">
+                    <label for="number">Phone Number:</label>
+                    <input type="text" name="number" class="form1" id="number">
+                </div>
             </div>
-            <div class="form-group"style="
-                display: inline-block;
-                width: 45%; 
-                margin-right: 10px; 
-            ">
-                <label for="number">Phone Number</label>
-                <input type="number" name="number" class="form-control" id="number">
-            </div><br>
+            
+            
 
             <div>
                 <label for="info">Additional Information (optional)</label><br>
-                <textarea name="info" class="form-control" id="info" rows="8" style="width: 100%;"></textarea>
-            </div><br>
+                <textarea name="info" class="info"  rows="5"></textarea>
+            </div>
             <div style="text-align: center;">
-                <button type="submit" class="form-control" id="button1"style="background-color: rgb(238, 83, 83); border-radius: 5%; display: block; margin: 0 auto;">Next Step</button>
+                <button type="submit" id="redirect-button" >Next Step</button>
             </div>
             
         </form>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-  $(document).ready(function() {
-    $("#button1").click(function() {
-        window.location.href = '{% url "payment" %}';
-    });
-  });
-</script>
+
+        <script>
+            const progressBar = document.getElementById("progress");
+        
+            if (step === 1) {
+                progressBar.style.width = "33.33%";
+            } else if (step === 2) {
+                progressBar.style.width = "66.66%";
+                document.querySelector(".step-circle.step-2").classList.add("active-step-circle");
+            } else if (step === 3) {
+                progressBar.style.width = "100%";
+                document.querySelector(".step-circle.step-3").classList.add("active-step-circle");
+            }
+        
+            document.getElementById("redirect-button").addEventListener("click", function() {
+                step = 2;
+                progressBar.style.width = "66.66%";
+                document.querySelector(".step-circle.step-2").classList.add("active-step-circle");
+                window.location.href = "{% url 'user_details' %}";
+            });
+        </script>
+        
+          
     </div>
 </div>
+</body>
+</html>

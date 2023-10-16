@@ -1,70 +1,83 @@
+
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Booking</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-</head>
-
-<body>
-
-<!-- //booking details -->
-  <h1>
-    <center><b>Booking Details</b></center>
-  </h1>
-  <!-- 123 -->
-  <div class="container" style="
-    border: 1px solid rgb(221, 221, 221);
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
-    height: 400px;
-    width: 600px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    
+  {% load static %}
   
-">     
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+{% endblock %}
+<body>
+  <h1 class="center-text">Booking Details</h1>
 
-<h2 style="text-align: center;">Your Personal Information</h2>
-<div style="display: flex;">
-  <div style="font-weight: bold;">
-    {% load static %}
-          <img src="{% static 'images/image1.jpg' %}" alt="" height="250px" width="250px" style="border-radius: 5%;">
+  <div class="progress-container">
+    <div class="step step-1 {% if step == 1 %}active{% endif %}">
+        <div class="step-circle {% if step == 1 %}active-step-circle{% endif %}">1</div>
+    </div>
+    <div class="line"></div>
+    <div class="step step-2 {% if step == 2 %}active{% endif %}">
+        <div class="step-circle {% if step == 2 %}active-step-circle{% endif %}">2</div>
+    </div>
+    <div class="line"></div>
+    <div class="step step-3 {% if step == 3 %}active{% endif %}">
+        <div class="step-circle {% if step == 3 %}active-step-circle{% endif %}">3</div>
+    </div>
+    <div class="progress-bar blue-progress-bar" id="progress"></div>
+</div>
+
+  
+  <div class="container" >     
+    <h2 class="center-text">Reservation Info</h2>
+    <div class="flex-container">
+      <div class="font-bold">
+        {% load static %}
+        <img src="{% static 'images/image1.jpg' %}" alt="" class="image" />
       </div>
-      <div class="item-details" style=" padding-left: 20px; font: bold;">
-          <ul style="list-style: none; padding: 0;">
-              <li>Arival Date: October 10, 2023</li>
-              <li>Depature Date: October 15, 2023</li>
-              <li>Rate: Rs 20000</li>
-              <li>Discount:</li>
-              <li>Tax: Rs 200</li>
-              <li>Total</li>
-          </ul>
-          <button style="background-color:  rgb(238, 83, 83); border-radius: 5%;" id="redirect-button">Next Step</button>
-         </div>
-          <div class="user-details-container" style="display: none;">
-            <!-- The user details form will be loaded here dynamically -->
-          </div>
-      
-</div>
+      <div class="item-details">
+        <ul class="list-style">
+          <li>Arival Date: October 10, 2023</li>
+          <li>Depature Date: October 15, 2023</li>
+          <li>Rate: Rs 20000</li>
+          <li>Discount:</li>
+          <li>Tax: Rs 200</li>
+          <li>Total</li>
+        </ul>
+     
+    </div>
+  </div><br>
+  <button id="redirect-button">Next Step</button>      </div>
 
-</div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-  $(document).ready(function() {
-    $("#redirect-button").click(function() {
-      window.location.href = "{% url 'user_details' %}";
+  </div>
+
+  <script>
+    const progressBar = document.getElementById("redirect-button");
+
+    if (step === 1) {
+        progressBar.style.width = "33.33%";
+    } else if (step === 2) {
+        progressBar.style.width = "66.66%";
+        document.querySelector(".step-circle.step-2").classList.add("active-step-circle");
+    } else if (step === 3) {
+        progressBar.style.width = "100%";
+        document.querySelector(".step-circle.step-3").classList.add("active-step-circle");
+    }
+
+    document.getElementById("redirect-button").addEventListener("click", function() {
+        step = 2;
+        progressBar.style.width = "66.66%";
+        document.querySelector(".step-circle.step-2").classList.add("active-step-circle");
+        window.location.href = "{% url 'user_details' %}";
     });
-  });
 </script>
+
+  
 
 
 </body>
-
 </html>

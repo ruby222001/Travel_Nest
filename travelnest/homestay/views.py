@@ -1,19 +1,21 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-# Create your views here.
+
 def home(request):
-    return render(request,"home.html")
+    return render(request, "home.html")
+
 def booking(request):
-    return render(request,"booking.html")
-
-
+    step = 1
+    return render(request, 'booking.html', {'step': step})
 
 def user_details(request):
+    step = 2
     if request.method == 'POST':
         # Process the form data and save it to the database
         # Redirect to a success page or do what's necessary
         return redirect('payment')
-    return render(request, 'user_details_form.html')
+    return render(request, 'user_details_form.html', {'step': step})
+
 def payment(request):
-   
-    return render(request,'payment.html')
+    step = 3
+    return render(request, 'payment.html', {'step': step})
