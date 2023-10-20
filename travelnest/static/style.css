@@ -1,72 +1,77 @@
+/* base.html */
 #name {
     font-size: 50px;
     text-decoration: underline;
     font-family: garamond;
-  }
-  
-  .navbar.navbar-expand-lg {
-    height:80px;
-  }
-  
-  .row{
-    padding:0px 60px;
-  }
+}
 
-  .nav-item{
+.navbar.navbar-expand-lg {
+    height:80px;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+.row{
+    padding:0px 60px;
+}
+
+.nav-item{
     font-size: 25px;
-  }
-  
-  .name1{
+}
+
+.name1{
     text-decoration: underline;
     font-family: garamond;
     font-size:50px;
-  }
-  
-  .footer-row{
+}
+
+.footer-row{
     display: flex;
     justify-content:space-between;
     margin-top: 100px;
     margin-bottom:90px;
-  }
-  
-  .topic{
+}
+
+.topic{
     font-family:garamond;
-  }
-  
-  .type{
+}
+
+.type{
     font-size:20px;
-  }
-  
-  .type1{
+}
+
+.type1{
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     font-size:20px;
-  }
-  
-  .footer-bottom{
+}
+
+.footer-bottom{
     font-size:20px;
     color:rgb(78, 78, 78);
-  }
-  
-  .navbar-nav {
+}
+
+.navbar-nav {
     font-size:20px;
     margin:0 auto;
     display: flex;
     gap: 60px;
-  }
+}
 
-  .navbar-nav1{
+.navbar-nav1{
     display: flex;
     list-style: none;
-  }
+}
 
-  .icon{
+.icon{
     display:flex;
     justify-content: space-between; 
     font-size:30px;
     color:rgb(100, 100, 100);
-  }
+}
 
-  @media (max-width: 768px) {
+@media (max-width: 768px) {
     .footer-row {
         flex-direction: column;
         text-align: center;
@@ -81,11 +86,11 @@
 
     .name1{
         font-size:35px;
-      }
+    }
 
     .type{
         font-size:15px;
-      }
+    }
 
     .type1{
         font-size:15px;
@@ -109,11 +114,37 @@
         gap:11px;
     }
 }
-  
 
-  
-  
-  
-  
-  
-  
+
+/* index.html */
+
+#us{
+    margin:80px 0px;
+}
+
+.top{
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.choose{
+    display: flex;
+    justify-content: center;
+}
+
+.about{
+    text-align: center;
+}
+
+.about img{
+    width:30%;
+}
+
+.filter2{
+    display: flex;
+    border: 1px solid black;
+    border-radius: 35px;
+    padding: 11px;
+    width: fit-content;
+    gap:3px;
+}
