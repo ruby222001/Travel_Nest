@@ -9,6 +9,38 @@
   {% load static %}
   
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <style>
+    @media (max-width: 600px) {
+      .container {
+        width: 90%;
+        padding: 16px;
+      }
+
+      .img {
+        height: auto;
+        width: 100%;
+      }
+
+      .list-style li {
+        font-size: 14px;
+      }
+
+      #redirect-button {
+        width: 40%;
+      }
+      .form-group {
+    flex-direction: row; /* Stack the form fields vertically on smaller screens */
+  }
+
+  .form-field {
+    margin-bottom: 10px; /* Add space between form fields */
+  }
+
+  .form1 {
+    width: 85%; /* Make the input fields fill the container width */
+  }
+    }
+  </style>
 </head>
 {% endblock %}
 <body>
@@ -31,7 +63,7 @@
     <h2 style="text-align: center;">Payment</h2>
 
     <br>
-    <div style="font-weight: bold;">
+    <div>
         <form action="{% url 'payment' %}" method="post">
             {% csrf_token %}
             <div>

@@ -11,6 +11,27 @@
   {% load static %}
   
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <style>
+    @media (max-width: 600px) {
+      .container {
+        width: 90%;
+        padding: 16px;
+      }
+
+      .img {
+        height: auto;
+        width: 100%;
+      }
+
+      .list-style li {
+        font-size: 14px;
+      }
+
+      #redirect-button {
+        width: 40%;
+      }
+    }
+  </style>
 </head>
 {% endblock %}
 <body>
