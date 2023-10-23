@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     'contents',
     'accounts',
+    'hosting',
 ]
 
 MIDDLEWARE = [

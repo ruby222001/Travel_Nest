@@ -1,11 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    Hello World
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+    <h1>Add Your Homestay</h1>
+    <form method="post" action="{% url 'add_homestay' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="name">Name:</label>
+        <input type="text" name="name" required><br>
+        <label for="photo">Photo:</label>
+        <input type="file" name="photo" required><br>
+        <label for="price">Price:</label>
+        <input type="text" name="price" required><br>
+        <label for="location">Location:</label>
+        <input type="text" name="location" required><br>
+        <label for="features">Features:</label>
+        <textarea name="features" required></textarea><br>
+        <button type="submit">Add</button>
+    </form>
+
+
+    <a href="{% url 'list_homestays' %}">View All Homestays</a>
+
+
+{% endblock %}
