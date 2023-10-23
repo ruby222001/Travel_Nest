@@ -6,7 +6,7 @@
 }
 
 .navbar.navbar-expand-lg {
-    height:80px;
+    height:110px;
 }
 
 body {
@@ -113,6 +113,9 @@ body {
     .navbar-nav{
         gap:11px;
     }
+    body {
+        overflow-x: hidden;
+    }
 }
 
 
@@ -147,4 +150,15 @@ body {
     padding: 11px;
     width: fit-content;
     gap:3px;
+}
+
+@media (max-width:768px){
+    .choose{
+        flex-direction: column;
+    }
+    .filter2{
+        display: flex;  
+        overflow-x: scroll;
+        justify-content: center;
+    }
 }
