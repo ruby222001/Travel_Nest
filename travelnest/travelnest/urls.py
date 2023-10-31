@@ -18,6 +18,6 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('homestay/',include('homestay.urls')),
+    path('listing/',include('listing.urls')),
     path('admin/', admin.site.urls),
 ]
