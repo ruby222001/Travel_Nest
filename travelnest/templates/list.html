@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <h1>List of Homestays</h1>
+    <ul>
+        {% for homestay in homestays %}
+            <li>
+                <h3>{{ homestay.name }}</h3>
+                <img src="{{ homestay.photo.url }}" alt="{{ homestay.name }}" width="200">
+                <p>Price: ${{ homestay.price }}</p>
+                <p>Location: {{ homestay.location }}</p>
+                <p>Features: {{ homestay.features }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
