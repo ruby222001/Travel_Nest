@@ -1,104 +1,82 @@
-
-{% block content %}
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Booking</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  {% load static %}
-  
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-  <style>
-    @media (max-width: 600px) {
-      .container {
-        width: 90%;
-        padding: 16px;
-      }
-
-      .img {
-        height: auto;
-        width: 100%;
-      }
-
-      .list-style li {
-        font-size: 14px;
-      }
-
-      #redirect-button {
-        width: 40%;
-      }
-    }
-  </style>
-</head>
+{% extends 'base.html' %}
+{% load static %}
+{% block extrastyle %}
+<link href="{% static 'css/style1.css' %}" rel="stylesheet" />
 {% endblock %}
-<body>
-  <h1 class="center-text">Booking Details</h1>
+{% block content %}
+<br>
+<h1 class="booking-center-text">Booking Details</h1>
 
-  <div class="progress-container">
-    <div class="step step-1 {% if step == 1 %}active{% endif %}">
-        <div class="step-circle {% if step == 1 %}active-step-circle{% endif %}">1</div>
-    </div>
-    <div class="line"></div>
-    <div class="step step-2 {% if step == 2 %}active{% endif %}">
-        <div class="step-circle {% if step == 2 %}active-step-circle{% endif %}">2</div>
-    </div>
-    <div class="line"></div>
-    <div class="step step-3 {% if step == 3 %}active{% endif %}">
-        <div class="step-circle {% if step == 3 %}active-step-circle{% endif %}">3</div>
-    </div>
-    <div class="progress-bar blue-progress-bar" id="progress"></div>
+<div class="progress-box">
+  <div class="step booking-step {% if step == 1 %}active{% endif %}">
+    <div class="step-circle booking-step-circle {% if step == 1 %}booking-active-step-circle{% endif %}">1</div>
+  </div>
+  <div class="line"></div>
+  <div class="step booking-step {% if step == 2 %}active{% endif %}">
+    <div class="step-circle booking-step-circle {% if step == 2 %}booking-active-step-circle{% endif %}">2</div>
+  </div>
+  <div class="line"></div>
+  <div class="step booking-step {% if step == 3 %}active{% endif %}">
+    <div class="step-circle booking-step-circle {% if step == 3 %}booking-active-step-circle{% endif %}">3</div>
+  </div>
+  <div class="progress-bar blue-progress-bar" id="progress"></div>
 </div>
 
   
-  <div class="container" >     
-    <h2 class="center-text">Reservation Info</h2>
-    <div class="flex-container">
-      <div class="font-bold">
-        {% load static %}
-        <img src="{% static 'images/image1.jpg' %}" alt="" class="image" />
-      </div>
-      <div class="item-details">
-        <ul class="list-style">
-          <li>Arival Date: October 10, 2023</li>
-          <li>Depature Date: October 15, 2023</li>
+<div class="reservation-info-box">
+  <h2 >Reservation Info</h2>
+<br>
+  
+   <div>
+    <div class="reservation-image">
+      <img src="{% static 'images/image1.jpg' %}" alt="" class="image" />
+  </div>
+  <div class="reservation-details">
+      <ul class="booking-list-style">
+          <li>Arrival Date: October 10, 2023</li>
+          <li>Departure Date: October 15, 2023</li>
           <li>Rate: Rs 20000</li>
           <li>Discount:</li>
           <li>Tax: Rs 200</li>
           <li>Total</li>
-        </ul>
-     
-    </div>
-  </div><br>
-  <button id="redirect-button">Next Step</button>      </div>
-
+      </ul>
+  </div>
+   </div>
+  <div>
+    <button id="redirect-button" onclick="redirectToUserDetailsPage()">Next Step</button>
   </div>
 
-  <script>
-    const progressBar = document.getElementById("redirect-button");
-
-    if (step === 1) {
-        progressBar.style.width = "33.33%";
-    } else if (step === 2) {
-        progressBar.style.width = "66.66%";
-        document.querySelector(".step-circle.step-2").classList.add("active-step-circle");
-    } else if (step === 3) {
-        progressBar.style.width = "100%";
-        document.querySelector(".step-circle.step-3").classList.add("active-step-circle");
-    }
-
-    document.getElementById("redirect-button").addEventListener("click", function() {
-        step = 2;
-        progressBar.style.width = "66.66%";
-        document.querySelector(".step-circle.step-2").classList.add("active-step-circle");
-        window.location.href = "{% url 'user_details' %}";
-    });
-</script>
-
+  </div>
+ 
+  
   
 
 
-</body>
-</html>
+
+
+<script>
+  function redirectToUserDetailsPage() {
+  // Assuming you want to redirect to the URL named 'user_details'
+  window.location.href = "{% url 'user_details' %}";
+}
+  const progressBar = document.getElementById("redirect-button");
+
+  if (step === 1) {
+    progressBar.style.width = "33.33%";
+  } else if (step === 2) {
+    progressBar.style.width = "66.66%";
+    document.querySelector(".step-circle.step-2").classList.add("active-step-circle");
+  } else if (step === 3) {
+    progressBar.style.width = "100%";
+    document.querySelector(".step-circle.step-3").classList.add("active-step-circle");
+  }
+
+  document.getElementById("redirect-button").addEventListener("click", function () {
+    step = 2;
+    progressBar.style.width = "66.66%";
+    document.querySelector(".step-circle.step-2").classList.add("active-step-circle");
+    window.location.href = "{% url 'user_details' %}";
+  })
+</script>
+
+{% endblock content %}
