@@ -10,7 +10,7 @@ def host(request):
 
 def list_homestays(request):
     homestays = Homestay.objects.all()
-    return render(request, 'list.html', {'homestays': homestays})
+    return render(request, 'properties.html', {'homestays': homestays})
 
 
 def add_homestay(request):
@@ -26,3 +26,11 @@ def add_homestay(request):
         return redirect("list_homestays") 
 
     return render(request, "host.html")
+
+def show_homestay(request):
+    return render(request,'properties.html')
+
+def show_singleproperty(request,id):
+    list_homestays = Homestay.objects.get(id=id)
+    return render(request,'singleproperty.html', {'list_homestays':list_homestays})
+

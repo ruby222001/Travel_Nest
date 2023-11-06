@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,24 +8,156 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Single property demo</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Bentham|Playfair+Display|Raleway:400,500|Suranna|Trocchi"
+    rel="stylesheet">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 </head>
 
 <body>
-    <h1>single Property Demo</h1>
-    
-          <img
-            src="https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/214165146.jpg?k=8f9aae4654146ff515aacf521adef5ac0333ab30a89af1f67e8264e6536e729d&o="
-            width="400" height="200">
-          
-            <h5 class="card-title">Gorkha Ghar</h5>
-            <p class="card-text">Gorkha</p>
-            <p class="card-text" style="box-shadow: 1cm;"><i class="bi bi-star-fill" style="color: yellow;"></i> 7.5</p>
-            <p class="card-text">NRs.600/2 night</p>
-            <a href="#" class="btn btn-primary">Book Now</a>
-          
+
+  <div class="wrapper">
+
+    <div class="product-img">
+      <img src="{{ list_homestays.photo.url }}" alt="{{ list_homestays.name }}" width="400" height="200">
+    </div>
+    <div class="product-info">
+      <div class="product-text">
+        <h1>{{ list_homestays.name }}</h1>
+
+        <h2>Location:<br> {{ list_homestays.location }}</h2>
+        <p>Features: <br>{{ list_homestays.features }}</p><br>
+        <h2>Price:<span> NRs.{{ list_homestays.price }}</span></h2>
+      </div>
+      <div class="product-price-btn">
+        
+        <button type="button" class="btn btn-primary">
+
+          <a href="{% url 'booking'%}" class="btn btn-primary">Book Now</a>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+
+
+
 </body>
+
 </html>
+<style>
+  body {
+    background-color: #ffffff;
+  }
+
+  .wrapper {
+    height: 420px ;
+    width: 654px ;
+    margin: 50px auto;
+    border-radius: 7px 7px 7px 7px;
+    
+  }
+
+  .product-img {
+    float: left;
+    height: 420px;
+    width: 327px;
+  }
+
+  .product-img img {
+    border-radius: 7px 0 0 7px;
+  }
+
+  .product-info {
+    float: left;
+    height: 420px;
+    width: 327px;
+    border-radius: 0 7px 10px 7px;
+    background-color: #ffffff;
+  }
+
+  .product-text {
+    height: 300px;
+    width: 327px;
+  }
+
+  .product-text h1 {
+    margin: 0 0 0 38px;
+    padding-top: 52px;
+    font-size: 34px;
+    color: #474747;
+  }
+
+  .product-text h1,
+  .product-price-btn p {
+    font-family: 'Bentham', serif;
+  }
+
+  .product-text h2 {
+    margin: 0 0 47px 38px;
+    font-size: 20px;
+    font-family: 'Raleway', sans-serif;
+    color: #2c2727;
+    
+  }
+
+  .product-text p {
+   
+    margin: 0 0 0 38px;
+    font-family: 'Playfair Display', serif;
+    color: #5c5858;
+  
+    font-size: 15px;
+   
+  }
+
+  .product-price-btn {
+    height: 103px;
+    width: 327px;
+    margin-top: 17px;
+   
+  }
+
+  .product-price-btn p {
+    display: inline-block;
+    position: absolute;
+   
+    height: 50px;
+    font-family: 'Trocchi', serif;
+    margin: 0 0 0 38px;
+    font-size: 28px;
+    font-weight: lighter;
+    color: #474747;
+  }
+
+  span {
+    display: inline-block;
+    height: 50px;
+    font-family: 'Suranna', serif;
+    font-size: 28px;
+  }
+
+  .product-price-btn button {
+    float: right;
+    display: inline-block;
+    height: 50px;
+    width: 176px;
+    margin: 0 40px 0 16px;
+    box-sizing: border-box;
+    border: transparent;
+    border-radius: 60px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #ffffff;
+    cursor: pointer;
+    outline: none;
+  }
+</style>
+{% endblock %}
