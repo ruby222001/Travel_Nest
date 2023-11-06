@@ -1,69 +1,32 @@
-{% block content %}
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Booking</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  {% load static %}
-  
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-  <style>
-    @media (max-width: 600px) {
-      .container {
-        width: 90%;
-        padding: 16px;
-      }
-
-      .img {
-        height: auto;
-        width: 100%;
-      }
-
-      .list-style li {
-        font-size: 14px;
-      }
-
-      #redirect-button {
-        width: 40%;
-      }
-      .form-group {
-    flex-direction: row; /* Stack the form fields vertically on smaller screens */
-  }
-
-  .form-field {
-    margin-bottom: 10px; /* Add space between form fields */
-  }
-
-  .form1 {
-    width: 85%; /* Make the input fields fill the container width */
-  }
-    }
-  </style>
-</head>
+{% extends 'base.html' %}
+{% load static %}
+{% block extrastyle %}
+    <link href="{% static 'css/style1.css' %}" rel="stylesheet" />
 {% endblock %}
-<body>
-    <h1 class="center-text">Booking Details</h1>
-    <div class="progress-container">
-        <div class="step step-1 {% if step == 1 %}active{% endif %}">
-            <div class="step-circle {% if step == 1 %}active-step-circle{% endif %}">1</div>
+<br>
+{% block content %}
+
+
+
+    <h1 class="booking-center-text">Booking Details</h1>
+    <div class="progress-box">
+        <div class="step booking-step {% if step == 1 %}active{% endif %}">
+            <div class="step-circle booking-step-circle {% if step == 1 %}booking-active-step-circle{% endif %}">1</div>
         </div>
         <div class="line"></div>
-        <div class="step step-2 {% if step == 2 %}active{% endif %}">
-            <div class="step-circle {% if step == 2 %}active-step-circle{% endif %}">2</div>
+        <div class="step booking-step {% if step == 2 %}active{% endif %}">
+            <div class="step-circle booking-step-circle {% if step == 2 %}booking-active-step-circle{% endif %}">2</div>
         </div>
         <div class="line"></div>
-        <div class="step step-3 {% if step == 3 %}active{% endif %}">
-            <div class="step-circle {% if step == 3 %}active-step-circle{% endif %}">3</div>
+        <div class="step booking-step {% if step == 3 %}active{% endif %}">
+            <div class="step-circle booking-step-circle {% if step == 3 %}booking-active-step-circle{% endif %}">3</div>
         </div>
         <div class="progress-bar blue-progress-bar" id="progress"></div>
-    </div>
+      </div>
       <br>
-<div class="container">
+<div class="reservation-info-box">
     <h2 style="text-align: center;">Your Personal Information</h2>
-    <div >
+    <div class ="flex-bookingcontainer">
         <form action="{% url 'user_details' %}" method="post">
             {% csrf_token %}
             <div>
@@ -92,6 +55,9 @@
             </div>
             
         </form>
+        </div>
+        </div>
+
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script>
@@ -116,7 +82,6 @@
         </script>
         
           
-    </div>
-</div>
-</body>
-</html>
+    
+
+{% endblock content %}
