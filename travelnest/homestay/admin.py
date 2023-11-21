@@ -7,4 +7,4 @@ from .models import Userdetails
 # Register your models here.
 class UserdetailsAdmin(admin.ModelAdmin):
     list_display =('GuestFullName',"Email","PhoneNumber","AdditionalInformation")
-admin.site.register(Userdetails)
+admin.site.register(Userdetails,UserdetailsAdmin)

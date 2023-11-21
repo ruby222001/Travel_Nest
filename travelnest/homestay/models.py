@@ -5,3 +5,5 @@ class Userdetails(models.Model):
     Email=models.CharField(max_length=100)
     PhoneNumber=models.CharField(max_length=10)
     AdditionalInformation=models.CharField(max_length=200)
+def __str__(self):
+        return self.GuestFullName
