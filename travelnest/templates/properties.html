@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 <!doctype html>
 <html lang="en">
 
@@ -17,11 +20,14 @@
   <div class="content">
     <div class="container">
       <div class="row">
+        {% for h in homestays %}
         <div class="col-xs-12 col-sm-4">
           <div class="card" style="margin-bottom:20px">
-            <img src="https://ktmgh.com/kathmandu-guest-house/wp-content/uploads/2018/04/deluxe4.png"
-              class="card-img-top">
+            <a href="{% url 'showsingle' id=h.id %}">
+            <img src="{{ h.photo.url }}"
+              class="card-img-top" width="400" height="200"></a>
             <div class="card-body">
+<<<<<<< HEAD
               <h5 class="card-title">Namaste Homestay</h5>
               <p class="card-text">Sundhara, Lalitpur</p>
               <p class="card-text" style="box-shadow: 1cm;"><i class="bi bi-star-fill" style="color: yellow;"></i> 8.5</p>
@@ -99,9 +105,21 @@
               <p class="card-text" style="box-shadow: 1cm;"><i class="bi bi-star-fill" style="color: yellow;"></i> 9.5</p>
               <p class="card-text">NRs.800/2 night</p>
               <a href="#" class="btn btn-primary">Book Now</a>
+=======
+              <h5 class="card-title"><a href="{% url 'showsingle' id=h.id %}">{{ h.name }}</a></h5>
+              <p class="card-text">{{ h.location }}</p>
+              <!--<p class="card-text" style="box-shadow: 1cm;"><i class="bi bi-star-fill" style="color: yellow;"></i> 8.5</p>-->
+              <p class="card-text">NRs.{{ h.price }}</p>
+              <a  href="{% url 'booking'%}" class="btn btn-primary">Book Now</a>
+>>>>>>> 014b31406ee081980ffc211400065cc580924052
             </div>
           </div>
         </div>
+        {% endfor %}
+        
+       
+      
+        
 
       </div>
     </div>
@@ -116,3 +134,4 @@
 </body>
 
 </html>
+{% endblock %}
