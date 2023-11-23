@@ -45,7 +45,7 @@
                         <a class="nav-link" aria-current="page" href="hosting/list_homestays/">Places to Stay</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">About Us</a>
+                        <a class="nav-link" href="{% url 'about' %}">About Us</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -276,13 +276,16 @@
         <div class="footer-row">
         <div>
             <h1 class="name1">TravelNest</h1>
-            <p class="type1">Lorem Ipsum Lorem Ipsum <br/> Lorem Ipsum Lorem Ipsum <br/>Lorem Ipsum Lorem Ipsum</p>
+            <p class="type1">TravelNest is a platform for hosts <br>
+                to rent out their rooms to tourists <br> seeking unique and personalized <br>accommodations.
         </div>
         <div>
             <h1 class="topic">Quick Links</h2>
             <ul style="list-style: none; padding-left: 0;" class="type">
-            <li>About</li>
-            <li>Shop</li>
+            <li >
+                <a  href="{% url 'about' %}">About Us</a>
+
+            </li>
             <li>Contact</li>
             </ul>
         </div>

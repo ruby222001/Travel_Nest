@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extrastyle %}
+<link href="{% static 'css/style1.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <br>
+<center>        <h1 >ABOUT US</h1>
+    <br>
+</center>        <img src="{% static 'images/about.jpg' %}" alt="image" style="">
+        <p>
+            TravelNest is a platform for hosts to rent out their rooms to tourists seeking unique and personalized accommodations. Hosts can list their available rooms, set pricing, and efficiently manage bookings. Travelers can discover and book homestays that match their preferences, budget, and desired location. 
+        </p>
+    </div>
+    <div>
+
+    </div>
+{% endblock %}

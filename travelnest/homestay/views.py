@@ -3,7 +3,6 @@ from django.shortcuts import redirect, render
 
 from homestay.models import Userdetails
 
-
 def home(request):
     return render(request, "home.html")
 
@@ -17,7 +16,7 @@ def user_details(request):
         Username = request.POST.get('fullInput')
         Email = request.POST.get('email')
         PhoneNumber = request.POST.get('number')
-        information=request.POST.get('info')
+        information = request.POST.get('info')
         print(f'Username: {Username}, Email: {Email}, PhoneNumber: {PhoneNumber}, AdditionalInformation: {information}')
 
         if PhoneNumber:
@@ -25,15 +24,12 @@ def user_details(request):
                 GuestFullName=Username,
                 Email=Email,
                 PhoneNumber=PhoneNumber,
-                AdditionalInformation=information)
-        en = Userdetails(GuestFullName=Username, Email=Email, PhoneNumber=PhoneNumber,AdditionalInformation=information)
-        en.save()
-        # Process the form data and save it to the database
-        # Redirect to a success page or do what's necessary
-        return redirect('payment')
+                AdditionalInformation=information
+            )
+            en.save() 
+            return redirect('payment')
     else:
-
-      return render(request, 'user_details_form.html', {'step': step})
+        return render(request, 'user_details_form.html', {'step': step})
 
 def payment(request):
     step = 3
