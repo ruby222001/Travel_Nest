@@ -3,6 +3,7 @@ from django.shortcuts import redirect, render
 
 from homestay.models import Userdetails
 
+
 def home(request):
     return render(request, "home.html")
 

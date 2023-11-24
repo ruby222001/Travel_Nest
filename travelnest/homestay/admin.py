@@ -8,3 +8,4 @@ from .models import Userdetails
 class UserdetailsAdmin(admin.ModelAdmin):
     list_display =('GuestFullName',"Email","PhoneNumber","AdditionalInformation")
 admin.site.register(Userdetails,UserdetailsAdmin)
+
