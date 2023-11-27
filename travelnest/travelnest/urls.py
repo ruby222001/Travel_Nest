@@ -24,7 +24,6 @@ from . import settings
 urlpatterns = [
     path('listing/',include('listing.urls')),
     path('admin/', admin.site.urls),
-
     path('',views.home, name='home'),
     path('accounts/', include('accounts.urls')),
     path('hosting/', include('hosting.urls')),
