@@ -33,9 +33,15 @@
   </div>
   <div class="reservation-details">
       <ul class="booking-list-style">
-          <li>Arrival Date: October 10, 2023</li>
-          <li>Departure Date: October 15, 2023</li>
-          <li>Rate: Rs 20000</li>
+        
+        <h1>{{ list_homestays.name }}</h1>
+
+        <li>Arrival Date: <input type="date" id="arrival-date" name="arrival-date"></li>
+        <li>Departure Date: <input type="date" id="departure-date" name="departure-date"></li>
+        <li>Price: <span> NRs.{{ homestay.price }}</span></li>
+        <h2>Location:<br> {{ homestay.location }}</h2>
+        <p>Features: <br>{{ homestay.features }}</p><br>
+        
           <li>Discount:</li>
           <li>Tax: Rs 200</li>
           <li>Total</li>
