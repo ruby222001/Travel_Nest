@@ -28,6 +28,8 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('hosting/', include('hosting.urls')),
     path("homestay/",include("homestay.urls")),
+    path("map/", include('map.urls')),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -33,7 +33,6 @@ ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'accounts.User'
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -44,12 +43,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'homestay',
-  
     'listing',
-
     'contents',
     'accounts',
     'hosting',
+    'map',
+   
+    
  
 ]
 
@@ -61,6 +61,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+
 ]
 
 ROOT_URLCONF = 'travelnest.urls'
@@ -92,6 +94,8 @@ WSGI_APPLICATION = 'travelnest.wsgi.application'
 
 DATABASES = {
     'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }

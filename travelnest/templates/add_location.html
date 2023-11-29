@@ -1,0 +1,12 @@
+<!-- map_app/templates/map_app/add_location.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Add Location</h2>
+  <form method="post" action="{% url 'add_location' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+  </form>
+{% endblock %}

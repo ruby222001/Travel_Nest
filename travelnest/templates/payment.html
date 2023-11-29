@@ -58,6 +58,7 @@
         <br>
         <form id="paymentForm" action="{% url 'payment' %}" method="post">
             {% csrf_token %}
+
             <div>
                 <label for="fullname">Cardholder Name</label><br>
                 <input type="text" id="form1" class="full-length-input" name="fullInput">
@@ -130,6 +131,7 @@
                     };
                 });
             </script>
+           
              <a href="#" >Pay on Arrival</a>
              
                </div>
