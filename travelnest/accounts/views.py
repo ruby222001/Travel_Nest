@@ -88,3 +88,6 @@ def update_profile(request):
 
 def change_password(request):
     pass
+
+def about(request):
+    return render(request, 'about.html')

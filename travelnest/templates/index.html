@@ -27,44 +27,110 @@
         </form>
     </div>
 </section>
-<section class="row1" id="slider">
-    <img src="{% static 'images/slider.png' %}" style="width: 100%;"/>
+<section class="row1" id="slider" >
+<div id="carouselExampleFade" class="carousel slide carousel-fade">
+    <div class="carousel-inner" >
+      <div class="carousel-item active">
+        <img src="{% static 'images/slider1.2.png' %}" class="d-block w-100" style="width: 100%;"/ >
+        
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'images/slider2.1.png' %}" class="d-block w-100"  style="width: 100%;"/>
+        
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'images/slider3.1.png' %}" class="d-block w-100"  style="width: 100%;"/>
+        
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
 </section>
+<!--
+<section class="row1" id="slider" >
+    <img src="{% static 'images/slider.png' %}" style="width: 100%;"/>
+</section>-->
 <section class="row1" id="us">
     <div>
         <div class="top">
             <h1>Why Choose Us</h1>
-            <p>The main reason is because our competitors have<br/> disgusting sites, but we can' t write that here,<br/> so the text here will be different</p>
+            
         </div>
         <div class="choose">
             <div class="about">
                 <img src="{% static 'images/headphone.png' %}"/>
                 <h4>24/7 Support</h4>
-                <p>Is there something you don't<br/> understand? Feel free to call us.<br/> Phone number in the footer</p>
+                <p>Is there something you don't<br/> understand? Feel free to chat with us.<br/> Get all your queries answered.</p>
             </div>
             <div class="about">
                 <img src="{% static 'images/cat.png' %}"/>
-                <h4>We are nice</h4>
-                <p>Fantasy is over,<br/> there will be something<br/> really convincing here</p>
+                <h4>Become a host</h4>
+                <p>Rent your properties<br/> and welcome guests. <br/> Make use of your Property. </p>
             </div>
             <div class="about">
                 <img src="{% static 'images/search.png' %}"/>
                 <h4>Simple search process</h4>
-                <p>We checked it out, even the kid<br/> did it, but it was my mom's<br/> friend's son</p>
+                <p>Find your homestay    <br/>according to  your taste <br/>and convenience.</p>
             </div>
             <div class="about">
                 <img src="{% static 'images/payment.png' %}"/>
                 <h4>Payment methods</h4>
-                <p>We have a lot of them,<br/> from cryptocurrencies to barter<br/> for potatoes</p>
+                <p>We have a lot of them.<br/> Find homestay within<br/> your budget. </p>
             </div>
         </div>
     </div>
 </section>
 <section class="row1" id="hosting">
-    <img src="{% static 'images/hosting.png' %}" style="width: 100%;"/>
+    <img src="{% static 'images/hosting1.2.png' %}" alt="Image by tirachard on Freepik" style="width: 100%;"/>
 </section>
-<section class="row1" id="reviews">
-    <h1 style="text-align: center; height: 500px; border:1px solid black;">Reviews</h1>
-</section>
+<section class="title title--md text-left m-b-20 text-center" id="reviews"> <b style="font-size: 30px;">Reviews</b>
+    <br><br>
+     <div class="row row-cols-1 row-cols-md-3 g-4">
+         <div class="col">
+           <div class="card h-100">
+             <div class="mt-3">
+                 <img src="{% static 'images/s.png' %}" class="card-img-top rounded-circle mx-auto d-block" style="width: 80px; height: 80px; object-fit: cover;">
+             </div>
+ 
+     <!-- review -->
+             <div class="card-body">
+                 
+               <h5 class="card-title">Sarah Haselschwardt</h5>
+               <p class="card-text">My husband and I loved our time at Barauli Community Homestay! It gave us a glimpse into life in rural Nepal and allowed us to experience the culture in a meaningful way while building real relationships with community members.</p>
+             </div>
+            
+           </div>
+         </div>
+         <div class="col">
+           <div class="card h-100">
+             <div class="mt-3">
+                 <img src="{% static 'images/s.png' %}" class="card-img-top rounded-circle mx-auto d-block" style="width: 80px; height: 80px; object-fit: cover;">
+             </div>            <div class="card-body">
+               <h5 class="card-title">Clio Bailey</h5>
+               <p class="card-text">We adored our Homestay. The family was so kind, welcoming, and knowledgeable about the local area. We ate with them almost every night, and on the nights that we didn’t, they had great recommendations for where to eat in town. Our room was comfortable.</p>
+             </div>
+           
+           </div>
+         </div>
+         <div class="col">
+           <div class="card h-100">
+             <div class="mt-3">
+                 <img src="{% static 'images/s.png' %}" class="card-img-top rounded-circle mx-auto d-block" style="width: 80px; height: 80px; object-fit: cover;">
+             </div>            <div class="card-body">
+               <h5 class="card-title">Eric Johnson</h5>
+               <p class="card-text">Lubra is a small village in one of the most beautiful locations in the world. I would have been content sitting quietly in the village or on a nearby hill all day just taking it all in. My day however involved petting a few baby goats, bringing supplies to a monastery on top of a large hill, having...</p>
+             </div>
+            
+           </div>
+         </div>
+       </div>
+ </section>
 
 {% endblock %}
