@@ -28,9 +28,32 @@
         </form>
     </div>
 </section>
-<section class="row1" id="slider">
-    <img src="{% static 'images/slider.png' %}" style="width: 100%;"/>
-</section>
+<section class="row1" id="slider" >
+    <div id="carouselExampleFade" class="carousel slide carousel-fade">
+        <div class="carousel-inner" >
+          <div class="carousel-item active">
+            <img src="{% static 'images/slider1.2.png' %}" class="d-block w-100" style="width: 100%;"/ >
+            
+          </div>
+          <div class="carousel-item">
+            <img src="{% static 'images/slider2.1.png' %}" class="d-block w-100"  style="width: 100%;"/>
+            
+          </div>
+          <div class="carousel-item">
+            <img src="{% static 'images/slider3.1.png' %}" class="d-block w-100"  style="width: 100%;"/>
+            
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </section>
 <section class="row1" id="us">
     <div>
         <div class="top">
