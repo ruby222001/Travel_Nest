@@ -1,6 +1,8 @@
 import json
 from django.urls import path
 import requests
+
+from hosting.models import Homestay
 from .models import Payment
 from django.contrib import messages
 
@@ -14,9 +16,13 @@ from django.views.decorators.csrf import csrf_exempt
 def home(request):
     return render(request, "home.html")
 
-def booking(request):
+def booking(request,id):
     step = 1
-    return render(request, 'booking.html', {'step': step})
+    list_homestays = Homestay.objects.get(id=id)
+    return render(request,'booking.html',  {'step': step,'list_homestays':list_homestays})
+
+
+
 
 def user_details(request):
     step = 2
@@ -89,5 +95,4 @@ def verify_payment(request):
     
     except Exception as e:
         print(f"Exception: {e}") 
-    # Handle other HTTP methods if needed
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)

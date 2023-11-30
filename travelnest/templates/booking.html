@@ -5,6 +5,38 @@
 {% endblock %}
 {% block content %}
 <br>
+<script>
+  function validateBooking() {
+    var arrivalDate = document.getElementById('arrival-date').value;
+    var departureDate = document.getElementById('departure-date').value;
+    var totalGuests = document.getElementById('number').value;
+
+    // Check if arrival date, departure date, and total guests are filled in
+    if (!arrivalDate || !departureDate || !totalGuests) {
+      alert('Please select arrival date, departure date, and enter the number of guests.');
+      return false;
+    }
+
+    // Convert date strings to Date objects for comparison
+    var arrivalDateObj = new Date(arrivalDate);
+    var departureDateObj = new Date(departureDate);
+
+    // Check if departure date is after arrival date
+    if (arrivalDateObj >= departureDateObj) {
+      alert('Departure date must be after arrival date.');
+      return false;
+    }
+
+    // Check if the number of guests is a valid positive integer
+    if (isNaN(totalGuests) || totalGuests <= 0 || Math.floor(totalGuests) !== +totalGuests) {
+      alert('Please enter a valid number of guests.');
+      return false;
+    }
+
+    // If all validations pass, proceed to the user details page
+    return redirectToUserDetailsPage();
+  }
+</script>
 <h1 class="booking-center-text">Booking Details</h1>
 
 <div class="progress-box">
@@ -29,27 +61,28 @@
   
    <div>
     <div class="reservation-image">
-      <img src="{% static 'images/image1.jpg' %}" alt="" class="image" />
+      <img src="{{ list_homestays.photo.url }}" alt="" class="image" />
   </div>
   <div class="reservation-details">
       <ul class="booking-list-style">
         
+    
+
         <h1>{{ list_homestays.name }}</h1>
 
-        <li>Arrival Date: <input type="date" id="arrival-date" name="arrival-date"></li>
-        <li>Departure Date: <input type="date" id="departure-date" name="departure-date"></li>
-        <li>Price: <span> NRs.{{ homestay.price }}</span></li>
-        <li>Location:<br> {{ homestay.location }}</l>
-        <p>Features: <br>{{ homestay.features }}</p><br>
-        
-          <li>Discount:</li>
-          <li>Tax: Rs 200</li>
-          <li>Total</li>
+        <li><b>Arrival Date:  </b>   <input type="date" id="arrival-date" name="arrival-date"></li>
+        <li><b>Departure Date:</b> <input type="date" id="departure-date" name="departure-date"></li>
+        <li><b>Total Guests:</b><input type="number" id="number" name="number"></li>
+        <li><b>Price:</b> NRs.{{ list_homestays.price }}</li>
+        <li><b>Location:</b> {{ list_homestays.location }}</li>
+          <li><b>Discount:</b></li>
+          <li><b>Tax:</b> Rs 200</li>
+          <li><b>Total</b></li>
       </ul>
   </div>
    </div>
   <div>
-    <button id="redirect-button" onclick="redirectToUserDetailsPage()">Next Step</button>
+    <button id="redirect-button" onclick="return validateBooking()">Next Step</button>
   </div>
 
   </div>

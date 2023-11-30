@@ -8,5 +8,6 @@ urlpatterns = [
     path('list_homestays/', views.list_homestays, name='list_homestays'),
     path('show',views.show_homestay),
     path('showsingle/<id>',views.show_singleproperty, name='showsingle'),
-    
+    path('booking/<int:id>', views.booking, name='booking'),
+
 ]

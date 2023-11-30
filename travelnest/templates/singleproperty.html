@@ -24,17 +24,23 @@
     </div>
     <div class="product-info">
       <div class="product-text">
-        <h1>{{ list_homestays.name }}</h1>
+        <ul class="booking-list-style">
+        
+          <h1></h1>
+  
+          <h1>{{ list_homestays.name }}</h1>
+  
+             <li><b>Price:</b> NRs.{{ list_homestays.price }}</li>
+          <li><b>Location:</b> {{ list_homestays.location }}</li>
+          <p>Features: {{ list_homestays.features }}</p><br>
 
-        <h2>Location:<br> {{ list_homestays.location }}</h2>
-        <p>Features: <br>{{ list_homestays.features }}</p><br>
-        <h2>Price:<span> NRs.{{ list_homestays.price }}</span></h2>
+        </ul>        
       </div>
       <div class="product-price-btn">
         
         <button type="button" class="btn btn-primary">
 
-          <a href="{% url 'booking'%}" class="btn btn-primary">Book Now</a>
+          <a href="{% url 'booking' id=list_homestays.id %}" class="btn btn-primary">Book Now</a>
         </button>
       </div>
     </div>
@@ -64,7 +70,12 @@
     
     
   }
-
+  .booking-list-style {
+    list-style: none;
+    padding: 0;
+ 
+  }
+  
   .product-img {
     float: left;
     height: 420px;

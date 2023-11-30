@@ -23,14 +23,21 @@ def add_homestay(request):
 
         Homestay.objects.create(name=name, photo=photo, price=price, location=location, features=features)
 
-        return redirect("list_homestays") 
+        return redirect("list_homestays",id=Homestay.id) 
 
     return render(request, "host.html")
 
 def show_homestay(request):
-    return render(request,'properties.html')
+    return render(request,'properties.html', {'list_homestays':list_homestays})
 
 def show_singleproperty(request,id):
     list_homestays = Homestay.objects.get(id=id)
     return render(request,'singleproperty.html', {'list_homestays':list_homestays})
+
+def booking(request,id):
+    step = 1
+    list_homestays = Homestay.objects.get(id=id)
+    
+    return render(request,'booking.html',  {'step': step},{'list_homestays':list_homestays})
+
 

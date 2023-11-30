@@ -31,7 +31,8 @@
               <p class="card-text">{{ h.location }}</p>
               <!--<p class="card-text" style="box-shadow: 1cm;"><i class="bi bi-star-fill" style="color: yellow;"></i> 8.5</p>-->
               <p class="card-text">NRs.{{ h.price }}</p>
-              <a  href="{% url 'booking' %}" class="btn btn-primary">Book Now</a>
+          
+              <a href="{% url 'booking' id=h.id %}" class="btn btn-primary">Book Now</a>
             </div>
           </div>
         </div>

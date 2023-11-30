@@ -2,6 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('show',views.show_homestay),
+    path('show/<id>',views.show_homestay),
     
 ]
