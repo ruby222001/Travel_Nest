@@ -61,37 +61,33 @@ def payment(request):
         return render(request, 'payment.html', {'step': step})
 @csrf_exempt
 def verify_payment(request):
-    data = request.POST
-    product_id = data.get('product_identity')
-    token = data.get('token')
-    amount = data.get('amount')
+    try:
+        if request.method == 'POST':
+          data = request.POST
+          product_id = data.get('product_identity')
+          token = data.get('token')
+          amount = data.get('amount')
 
-    url = "https://khalti.com/api/v2/payment/verify/"
-    payload = {
+          url = "https://khalti.com/api/v2/payment/verify/"
+          verify_payload = {
             "token": token,
             "amount": amount,
         }
-    headers = {
+
+          headers = {
             "Authorization": "Key test_secret_key_5e4c4d2114a54d119fbb859d4086947b"
         }
 
-    response = requests.post(url, payload, headers = headers)
-   
-    response_data = json.loads(response.text)
-    status_code = str(response.status_code)
+        response = requests.post(url, json=verify_payload, headers=headers)
+        response_data = response.json()
 
-    if status_code == '400':
-        response = JsonResponse({'status':'false','message':response_data['detail']}, status=500)
-        return response
-    payment = Payment.objects.create(
-        GuestFullName=response_data['user']['idx'],  # Update this with the actual field in your Payment model
-        Email=response_data['user']['email'],  # Update this with the actual field in your Payment model
-        PhoneNumber=response_data['user']['phone'],  # Update this with the actual field in your Payment model
-        Amount=response_data['amount'],
-    )
+        if response.status_code == 200:
+            return JsonResponse({'status': 'success', 'message': 'Payment verified', 'data': response_data})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Payment verification failed', 'data': response_data}, status=500)
 
-    # Display success message
-    messages.success(request, f"Payment Done !! With IDX. {response_data['user']['idx']}")
-
-    return render(request, 'payment_success.html', {'payment': payment})
     
+    except Exception as e:
+        print(f"Exception: {e}") 
+    # Handle other HTTP methods if needed
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)

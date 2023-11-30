@@ -28,7 +28,6 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('hosting/', include('hosting.urls')),
     path("homestay/",include("homestay.urls")),
-    path("map/", include('map.urls')),
 
 ]
 

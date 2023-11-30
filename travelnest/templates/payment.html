@@ -92,9 +92,15 @@
             type: "POST",
             data: payload,
             dataType: 'json',
-            success: function (response) { alert(response) },
-            error: function (error) { alert(error.responseJSON['message']) }
-        });
+            success: function (response) {
+    if (response.status === 'true') {
+        alert(response.message);
+        // Handle success case here
+    } else {
+        alert(response.message);
+        // Handle failure case here
+    }
+},        });
     }
 
                 document.addEventListener("DOMContentLoaded", function () {
@@ -112,6 +118,7 @@
                             onSuccess: function (payload) {
                                 console.log(payload);
                 verifyPayment(payload);
+                
             },
                                     
                             
