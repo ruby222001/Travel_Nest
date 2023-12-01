@@ -1,47 +1,43 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% block extrastyle %}
+<link href="{% static 'css/style1.css' %}" rel="stylesheet" />
+{% endblock %}
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
+<br><br><br>
+<div class="reservation-info-box">
+  <center>
+    <h2> Information</h2>
+  </center><br>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Single property demo</title>
-  <link href="https://fonts.googleapis.com/css?family=Bentham|Playfair+Display|Raleway:400,500|Suranna|Trocchi"
-    rel="stylesheet">
+  <div>
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-</head>
-
-<body>
-
-  <div class="wrapper">
-
-    <div class="product-img">
+    <div class="reservation-image">
       <img src="{{ list_homestays.photo.url }}" alt="{{ list_homestays.name }}" width="400" height="200">
     </div>
-    <div class="product-info">
-      <div class="product-text">
+
+        <div class="reservation-details">
+
         <ul class="booking-list-style">
         
-          <h1></h1>
+      
   
-          <h1>{{ list_homestays.name }}</h1>
+          <h3>{{ list_homestays.name }}</h3>
   
              <li><b>Price:</b> NRs.{{ list_homestays.price }}</li>
           <li><b>Location:</b> {{ list_homestays.location }}</li>
-          <p>Features: {{ list_homestays.features }}</p><br>
+          <p><b>Features:</b> {{ list_homestays.features }}</p><br>
 
         </ul>        
       </div>
-      <div class="product-price-btn">
-        
-        <button type="button" class="btn btn-primary">
-
-          <a href="{% url 'booking' id=list_homestays.id %}" class="btn btn-primary">Book Now</a>
-        </button>
+      </div>
+      <div >
+        <div>
+          <a href="{% url 'booking' id=list_homestays.id %}"style="text-decoration: none;">
+            <button id="redirect-button">Book Now</button>
+          </a>
+        </div>
+       
       </div>
     </div>
 
@@ -50,13 +46,13 @@
 
 
 
-
+</div>
 
 
 </body>
 
 </html>
-<style>
+<!-- <style>
   body {
     background-color: #ffffff;
   }
@@ -175,5 +171,5 @@
     outline: none;
     
   }
-</style>
+</style> -->
 {% endblock %}

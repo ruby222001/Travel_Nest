@@ -3,6 +3,7 @@ from django.urls import path
 import requests
 
 from hosting.models import Homestay
+from hosting.views import list_homestays
 from .models import Payment
 from django.contrib import messages
 
@@ -11,6 +12,7 @@ from django.shortcuts import redirect, render
 from homestay.models import Userdetails
 from django.views.decorators.csrf import csrf_exempt
 
+from django.shortcuts import render, get_object_or_404
 
 
 def home(request):
@@ -18,35 +20,31 @@ def home(request):
 
 def booking(request,id):
     step = 1
-    list_homestays = Homestay.objects.get(id=id)
-    return render(request,'booking.html',  {'step': step,'list_homestays':list_homestays})
+    list_homestays = Homestay.objects.get(id=id) 
+     
+    return render(request,'booking.html',  {'step': step,'list_homestays':list_homestays,'homestay_id':id})
 
+def confirmation(request, homestay_id):
+    arrival_date = request.GET.get('arrival_date')
+    departure_date = request.GET.get('departure_date')
+    total_guests = request.GET.get('total_guests')
 
+    list_homestays = get_object_or_404(Homestay, id=homestay_id)
 
+    return render(request, 'confirmation.html', {
+        'step': 2,
+        'list_homestays': list_homestays,
+        'arrival_date': arrival_date,
+        'departure_date': departure_date,
+        'total_guests': total_guests,
+        'total_price': calculate_total_price(list_homestays.price),
+    })
 
-def user_details(request):
-    step = 2
-    if request.method == 'POST':
-        Username = request.POST.get('fullInput')
-        Email = request.POST.get('email')
-        PhoneNumber = request.POST.get('number')
-        information = request.POST.get('info')
-        print(f'Username: {Username}, Email: {Email}, PhoneNumber: {PhoneNumber}, AdditionalInformation: {information}')
-
-        if PhoneNumber:
-            en = Userdetails(
-                GuestFullName=Username,
-                Email=Email,
-                PhoneNumber=PhoneNumber,
-                AdditionalInformation=information
-            )
-            en.save() 
-            return redirect('payment')
-    else:
-        return render(request, 'user_details_form.html', {'step': step})
-
+def calculate_total_price(base_price):
+    # Perform any calculations for total price here
+    return base_price
 def payment(request):
-    step = 3
+    step=3
     if request.method == 'POST':
         username = request.POST.get('fullInput')
         email = request.POST.get('email')
@@ -96,3 +94,7 @@ def verify_payment(request):
     except Exception as e:
         print(f"Exception: {e}") 
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
+    
+
+
+

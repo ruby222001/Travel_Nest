@@ -60,21 +60,27 @@
             {% csrf_token %}
 
             <div>
-                <label for="fullname">Cardholder Name</label><br>
-                <input type="text" id="form1" class="full-length-input" name="fullInput">
+                <label for="fullname">User name</label>
+                <input type="text" id="fullname" class="form1" name="fullInput">
+            </div>
+            <div >
+                <label for="email">Email:</label>
+                <input type="text" name="email" class="form1" id="email">
             </div>
             <div class="form-group">
+                
                 <div class="form-field">
-                    <label for="email">Email:</label>
-                    <input type="text" name="email" class="form1" id="email">
+                    <label for="number">Nationality</label>
+                    <input type="country" name="text" class="form1" id="number">
                 </div>
                 <div class="form-field">
                     <label for="number">Phone Number:</label>
                     <input type="text" name="number" class="form1" id="number">
                 </div>
+              
             </div><br>
             <div style="text-align: center;">
-                <button onclick="showPopup();" type="button">Pay Amount</button>
+                <button onclick="showPopup();" type="button">Proceed</button>
             </div>
         </form>
 
@@ -82,7 +88,7 @@
             <h2>Choose payment option</h2>
             <br>
             <br>
-            <a href="#"id="payment-button" style="height: 30px; width: 30px;">
+            <a href="#"id="payment-button" style="height: 30px; width: 30px;" onclick="handlePaymentOption('Khalti');hidePopup();">
                 <img src="{% static 'images/khaltilogo.png' %}" alt="Logo 1">
             </a>
             <script>
@@ -139,22 +145,47 @@
                 });
             </script>
            
-             <a href="#" >Pay on Arrival</a>
-             
-               </div>
-
-        <div class="overlay" id="overlay" onclick="hidePopup()"></div>
-
+           <a href="#" onclick="showPayOnArrivalPopup();hidePopup();">Pay on Arrival</a>
+        </div>
+        
+        <div class="popup-container" id="payOnArrivalPopup">
+            <h2 style="font-weight: bold;">
+                Pay on Arrival</h2><br><br>
+            <p style="font-size:160%;">Thank you for Booking. You can make the payment when you arrive.
+            
+            </p>
+            <br>
+            <button  onclick="hidePayOnArrivalPopup()">CLose</button>
+        </div>
         <script>
             function showPopup() {
                 document.getElementById('popup').style.display = 'block';
-                document.getElementById('overlay').style.display = 'block';
             }
 
             function hidePopup() {
                 document.getElementById('popup').style.display = 'none';
                 document.getElementById('overlay').style.display = 'none';
             }
+            function showPayOnArrivalPopup() {
+        document.getElementById('payOnArrivalPopup').style.display = 'block';
+    }
+
+    function hidePayOnArrivalPopup() {
+        document.getElementById('payOnArrivalPopup').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    }
+    function handlePaymentOption(option) {
+        // Close the main popup
+        hidePopup();
+
+        // Show the relevant payment method popup
+        if (option === 'Khalti') {
+            // Additional actions for Khalti option
+            // ...
+        } else if (option === 'PayOnArrival') {
+            showPayOnArrivalPopup();
+        }
+    }
         </script>
         
     </div>

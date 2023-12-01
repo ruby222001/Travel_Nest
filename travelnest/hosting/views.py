@@ -1,4 +1,6 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import HttpResponse, redirect, render
+from django.shortcuts import render, get_object_or_404
+
 from .models import Homestay
 
 # Create your views here.
@@ -36,8 +38,27 @@ def show_singleproperty(request,id):
 
 def booking(request,id):
     step = 1
-    list_homestays = Homestay.objects.get(id=id)
-    
-    return render(request,'booking.html',  {'step': step},{'list_homestays':list_homestays})
+    list_homestays = Homestay.objects.get(id=id) 
+     
+    return render(request,'booking.html',  {'step': step,'list_homestays':list_homestays,'homestay_id':id})
+
+def confirmation(request, homestay_id):
+    arrival_date = request.GET.get('arrival_date')
+    departure_date = request.GET.get('departure_date')
+    total_guests = request.GET.get('total_guests')
+
+    list_homestays = get_object_or_404(Homestay, id=homestay_id)
+
+    return render(request, 'confirmation.html', {
+        'step': 2,
+        'list_homestays': list_homestays,
+        'arrival_date': arrival_date,
+        'departure_date': departure_date,
+        'total_guests': total_guests,
+        'total_price': calculate_total_price(list_homestays.price),
+    })
 
 
+def calculate_total_price(base_price):
+    # Perform any calculations for total price here
+    return base_price  # For simplicity, just returning the base price

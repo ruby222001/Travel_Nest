@@ -33,10 +33,13 @@
       return false;
     }
 
-    // If all validations pass, proceed to the user details page
-    return redirectToUserDetailsPage();
+
+    window.location.href = "{% url 'confirmation' homestay_id=list_homestays.id %}?arrival_date=" + arrivalDate + "&departure_date=" + departureDate + "&total_guests=" + totalGuests;
+    return false;
+
   }
 </script>
+
 <h1 class="booking-center-text">Booking Details</h1>
 
 <div class="progress-box">
@@ -54,50 +57,36 @@
   <div class="progress-bar blue-progress-bar" id="progress"></div>
 </div>
 
-  
+
 <div class="reservation-info-box">
-  <h2 >Reservation Info</h2>
-<br>
-  
-   <div>
+  <center>
+    <h2>Reservation Info</h2>
+  </center><br>
+
+  <div>
     <div class="reservation-image">
-      <img src="{{ list_homestays.photo.url }}" alt="" class="image" />
-  </div>
-  <div class="reservation-details">
+      <img src="{{ list_homestays.photo.url }}" alt="" class="image" style="object-fit: cover;" />
+    </div>
+    <div class="reservation-details">
       <ul class="booking-list-style">
-        
-    
-
         <h1>{{ list_homestays.name }}</h1>
-
-        <li><b>Arrival Date:  </b>   <input type="date" id="arrival-date" name="arrival-date"></li>
+        <li><b>Arrival Date: </b> <input type="date" id="arrival-date" name="arrival-date"></li>
         <li><b>Departure Date:</b> <input type="date" id="departure-date" name="departure-date"></li>
         <li><b>Total Guests:</b><input type="number" id="number" name="number"></li>
         <li><b>Price:</b> NRs.{{ list_homestays.price }}</li>
         <li><b>Location:</b> {{ list_homestays.location }}</li>
-          <li><b>Discount:</b></li>
-          <li><b>Tax:</b> Rs 200</li>
-          <li><b>Total</b></li>
+        <li><b>Discount:Nill</b></li>
+        <li><b>Tax:</b> Rs 200</li>
+        <li><b>Total:</b> NRs.{{ list_homestays.price | default_if_none:0 | add:200 }}</li>
       </ul>
+    </div>
   </div>
-   </div>
   <div>
     <button id="redirect-button" onclick="return validateBooking()">Next Step</button>
   </div>
-
-  </div>
- 
-  
-  
-
-
-
+</div>
 
 <script>
-  function redirectToUserDetailsPage() {
-  // Assuming you want to redirect to the URL named 'user_details'
-  window.location.href = "{% url 'user_details' %}";
-}
   const progressBar = document.getElementById("redirect-button");
 
   if (step === 1) {
@@ -114,7 +103,7 @@
     step = 2;
     progressBar.style.width = "66.66%";
     document.querySelector(".step-circle.step-2").classList.add("active-step-circle");
-    window.location.href = "{% url 'user_details' %}";
+    window.location.href = "{% url 'payment' %}";
   })
 </script>
 
