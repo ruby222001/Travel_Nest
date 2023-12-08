@@ -1,68 +1,49 @@
-/* base.html */
-#name {
-    font-size: 50px;
-    text-decoration: underline;
-    font-family: garamond;
+/* Navbar */
+header.row {
+    color: white;
+    margin: auto;
 }
 
-.navbar.navbar-expand-lg {
-    height: 110px;
+header .container-fluid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    height: 70px;
 }
 
-body {
-    overflow-x: hidden;
+header .container-fluid div:first-child {
+    font-size: 24px;
 }
 
-.row {
-    padding: 0px 60px;
+header .container-fluid div:last-child {
+    font-size: 24px;
+    display: flex;
 }
 
-.nav-item {
-    font-size: 25px;
+header .container-fluid div:last-child div {
+    margin-left: 24px;
 }
 
-.name1 {
-    text-decoration: underline;
-    font-family: garamond;
-    font-size: 50px;
+/* Reset styles for anchor elements */
+a, a:link, a:visited {
+    color: inherit !important; /* Use the default text color */
+    text-decoration: none !important; /* Remove underline */
 }
 
+
+
+/* Footer */
 .footer-row {
     display: flex;
     justify-content: space-between;
     margin-top: 100px;
     margin-bottom: 90px;
-    
-}
-
-.topic {
-    font-family: garamond;
-}
-
-.type {
-    font-size: 20px;
-}
-
-.type1 {
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    font-size: 20px;
 }
 
 .footer-bottom {
     font-size: 20px;
     color: rgb(78, 78, 78);
-}
-
-.navbar-nav {
-    font-size: 20px;
-    margin: 0 auto;
-    display: flex;
-    gap: 60px;
-}
-
-.navbar-nav1 {
-    display: flex;
-    list-style: none;
 }
 
 .icon {
@@ -72,72 +53,75 @@ body {
     color: rgb(100, 100, 100);
 }
 
-
-@media (max-width: 768px) {
-    .footer-row {
-        flex-direction: column;
-        text-align: center;
-        font-size: 15px;
-        margin-bottom: 25px;
-        
-    }
-
-    .topic {
-        margin-top: 5px;
-        font-size: 25px;
-        font-weight: bold;
-    }
-
-    .name1 {
-        font-size: 35px;
-    }
-
-    .type {
-        font-size: 15px;
-    }
-
-    .type1 {
-        font-size: 15px;
-    }
-
-    .icon {
-        justify-content: center;
-        font-size: 25px;
-        gap: 11px;
-    }
-
-    .footer-bottom {
-        text-align: center;
-    }
-
-    .row {
-        padding: 0px 25px;
-    }
-
-    .navbar-nav {
-        gap: 11px;
-    }
-
-    body {
-        overflow-x: hidden;
-    }
+/* Slider */
+.slider{
+    height:100vh;
+    width:100vw;
+    object-fit: cover;
 }
 
-
-/* index.html */
-
-#us {
-    margin: 80px 0px;
-}
-
-.top {
-    text-align: center;
-    margin-bottom: 60px;
-}
-
-.choose {
+.carousel-caption{
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    margin-bottom: 30vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.slider-text{
+    color: white;
+    font-size: 4vw;
+    font-family: 'Times New Roman', Times, serif;
+    width: 40vw;
+}
+
+.cta-button {
+    position: relative;
+    font-size: 16px;
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+    padding: 10px 24px;
+    width: 210px;
+    font-weight: bold;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}
+
+.cta-button span {
+    position: relative;
+    z-index: 2;
+}
+
+.cta-button:before {
+    content: "";
+    position: absolute;
+    background: white;
+    width: 100%;
+    height: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.cta-button:hover:before {
+    height: 100%;
+}
+
+.cta-button:hover span {
+    transform: translateY(-100%);
+    color: black; /* Change text color to white on hover */
+}
+
+.scrolled {
+    background-color: white !important;
+    transition: background-color 0.3s ease-in-out;
+    color: gray;
 }
 
 .about {
@@ -148,25 +132,8 @@ body {
     width: 30%;
 }
 
-.filter2 {
+.choose {
     display: flex;
-    border: 1px solid black;
-    border-radius: 35px;
-    padding: 11px;
-    width: fit-content;
-    gap: 3px;
+    justify-content: center;
 }
-
-@media (max-width:768px) {
-    .choose {
-        flex-direction: column;
-    }
-
-    .filter2 {
-        display: flex;
-        overflow-x: scroll;
-        justify-content: center;
-    }
-}
-
 
