@@ -1,17 +1,13 @@
 import json
 from django.urls import path
 import requests
-
 from hosting.models import Homestay
 from hosting.views import list_homestays
 from .models import Payment
 from django.contrib import messages
-
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
-from homestay.models import Userdetails
 from django.views.decorators.csrf import csrf_exempt
-
 from django.shortcuts import render, get_object_or_404
 
 
@@ -49,20 +45,20 @@ def payment(request):
         username = request.POST.get('fullInput')
         email = request.POST.get('email')
         phone_number = request.POST.get('number')
+        payment_method = request.POST.get('paymentMethod')
 
-        # Create an instance of Userdetails and save it to the database
-        user_detail = Userdetails.objects.create(
+        payment_instance = Payment.objects.create(
             GuestFullName=username,
             Email=email,
             PhoneNumber=phone_number,
-            AdditionalInformation=""
+            paymentmethod=payment_method,
         )
 
-        # Perform any additional logic or redirect to another page
         return redirect('payment')
 
     else:
         return render(request, 'payment.html', {'step': step})
+
 @csrf_exempt
 def verify_payment(request):
     try:

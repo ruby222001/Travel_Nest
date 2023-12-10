@@ -1,12 +1,7 @@
 from django.contrib import admin
-from django.contrib.auth.models import Group
-
-from .models import Userdetails
-
-
-
-# Register your models here.
-class UserdetailAdmin(admin.ModelAdmin):
-    list_display =('GuestFullName',"Email","PhoneNumber","AdditionalInformation")
-admin.site.register(Userdetails,UserdetailAdmin)
+from .models import Payment
+@admin.register(Payment)
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ('GuestFullName', 'Email', 'PhoneNumber', 'paymentmethod')
+    list_filter = ('paymentmethod',)
 

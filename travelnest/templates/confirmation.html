@@ -33,7 +33,7 @@
     
 
       <h1>{{ list_homestays.name }}</h1>
-      <li><b>Arrival Date:</b>  {{ arrival_date }}  </li>
+      <li><b>Arrival Date:     </b>  {{ arrival_date }}  </li>
       <li><b>Departure Date:</b>  {{ departure_date }} </li>
       <li><b>Total Guests: </b> {{ total_guests }}</li>
       <li><b>Price:</b>  NRs.{{ list_homestays.price }}</li>
@@ -42,21 +42,19 @@
       <li><b>Tax:</b>  Rs 200</li>
       <li><b>Total:</b>  NRs.{{ total_price }}</li>
   </div>
-
-  <div>
-    <button id="confirm-button" onclick="confirmDetails()">Yes</button>
-    <button id="cancel-button" onclick="cancelDetails()">No</button>
+<br>
+  <div class="center"style="text-align: center;">
+    <button id="redirect-button" style="display: inline-block;  margin-right: 10px;" onclick="confirmDetails()">Yes</button>
+    <button id="redirect-button"  style="display: inline-block;  margin-right: 10px;" onclick="cancelDetails()">No</button>
   </div>
 </div>
 
 <script>
   function confirmDetails() {
-    // Assuming you want to redirect to the next step after confirmation
     window.location.href = "{% url 'payment' %}";
   }
 
   function cancelDetails() {
-    // Assuming you want to go back to the previous page after cancellation
     history.back();
   }
 </script>

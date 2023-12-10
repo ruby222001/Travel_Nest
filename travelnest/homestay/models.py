@@ -1,23 +1,14 @@
 from django.db import models
-
-from hosting.models import Homestay
-# Create your models here.
-class Userdetails(models.Model):
-    GuestFullName=models.CharField(max_length=50)
-    Email=models.CharField(max_length=100)
-    PhoneNumber=models.CharField(max_length=10)
-    AdditionalInformation=models.CharField(max_length=200)
-
-
-
 class Payment(models.Model):
-    GuestFullName = models.ForeignKey(Userdetails, on_delete=models.CASCADE)
+    PAYMENT_METHOD_CHOICES = [
+        ('khalti', 'Khalti'),
+        ('arrival', 'Pay on Arrival'),
+    ]
+
+    GuestFullName = models.CharField(max_length=100)
     Email = models.CharField(max_length=100)
     PhoneNumber = models.CharField(max_length=10)
-    Amount = models.DecimalField(max_digits=10, decimal_places=2)
+    paymentmethod = models.CharField(max_length=100, choices=PAYMENT_METHOD_CHOICES, default='khalti')
 
-def __str__(self):
-        return self.GuestFullName
-
-def __str__(self):
-        return self.GuestFullName
+    def __str__(self):
+        return f"{self.GuestFullName} - {self.paymentmethod}"
