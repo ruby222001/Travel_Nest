@@ -1,0 +1,92 @@
+<!-- host.html -->
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+    <!-- Navbar and other content -->
+
+    <div class="container main-content">
+        <!-- Content specific to host.html -->
+        
+        <!-- Add a form to list homestay information -->
+        <form method="post" action="{% url 'save_homestay_info' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Name of the homestay -->
+            <div class="mb-3">
+                <label for="homestay_name">Homestay Name</label>
+                <input type="text" class="form-control" id="homestay_name" name="homestay_name" required>
+            </div>
+            
+            <!-- Address -->
+            <div class="mb-3">
+                <label for="address">Address</label>
+                <input type="text" class="form-control" id="address" name="address" required>
+            </div>
+
+            <!-- Location -->
+            <div class="mb-3">
+                <label for="location">Location</label>
+                <input type="text" class="form-control" id="location" name="location" required>
+            </div>
+
+            <!-- Thumbnail Picture -->
+            <div class="mb-3">
+                <label for="thumbnail_picture">Thumbnail Picture</label>
+                <input type="file" class="form-control" id="thumbnail_picture" name="thumbnail_picture" accept="image/*" required>
+            </div>
+
+            <!-- Mobile Number -->
+            <div class="mb-3">
+                <label for="price">Price</label>
+                <input type="text" class="form-control" id="price" name="price" required>
+            </div>
+
+            <!-- Secondary Picture -->
+            <!-- <div class="mb-3">
+                <label for="secondary_picture">Secondary Picture</label>
+                <input type="file" class="form-control" id="secondary_picture" name="secondary_picture" accept="image/*" required multiple>
+            </div> -->
+
+            <!-- Citizenship Photo -->
+            <div class="mb-3">
+                <label for="citizenship_photo">Citizenship Photo</label>
+                <input type="file" class="form-control" id="citizenship_photo" name="citizenship_photo" accept="image/*" required>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+
+            <!-- Mobile Number -->
+            <div class="mb-3">
+                <label for="mobile_number">Mobile Number</label>
+                <input type="text" class="form-control" id="mobile_number" name="mobile_number" required>
+            </div>
+
+            <!-- Ownership Document Photo -->
+            <div class="mb-3">
+                <label for="ownership_document_photo">Ownership Document Photo</label>
+                <input type="file" class="form-control" id="ownership_document_photo" name="ownership_document_photo" accept="image/*" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="features">Homestay Features</label>
+                <textarea class="form-control" id="features" name="features" rows="4" placeholder="Enter homestay features, each on a new line"></textarea>
+                <small id="featuresHelp" class="form-text text-muted">Separate features by new lines.</small>
+            </div>
+            
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <!-- Footer and script links -->
+
+    {% endblock %}

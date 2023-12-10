@@ -11,10 +11,23 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 </head>
-<body>
+<body {% block body_class %}{% endblock %}>
     <div>
+        {% if messages %}
+        <div class="row">
+            {% for m in messages %}
+            <div class="alert {% if m.tags == 'error' %} 
+            alert-danger 
+            {% else%}
+            alert-{{ m.tags }} 
+            {% endif %}
+            text-center">{{ m }}</div>
+            {% endfor %}
+        </div>
+      
+    {% endif %}
         <header class="row">
-            <div class="container-fluid fixed-top navbar">
+            <div class="container-fluid navbar">
                 <div>
                     <a href="/">
                         TravelNest
@@ -27,9 +40,14 @@
                         </a>
                     </div>
                     <div>
-                        <a href="{% url 'list' %}">
+                        <a href="{% url 'list_homestays' %}">
                             Places
                         </a>
+                    </div>
+                    <div>
+                        {% if user.is_authenticated %}
+                        <a class="nav-link" href="{% url 'content_based_recommendation' %}">You May Like</a>
+                        {% endif %}
                     </div>
                     <div>
                         About Us
@@ -38,81 +56,197 @@
                         Contact Us
                     </div>
                     <div>
-                        Become a Host
-                    </div>
-                    <div>
-                        <li class="nav-item dropdown" style="list-style: none;">
+                        {% if user.is_authenticated %}
+                        <li class="nav-item dropdown" style=" list-style: none;">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ user.username }}</a>
+                            <ul class="dropdown-menu">
+                                {% if user.is_host %}
+                                    <li><a class="dropdown-item" href="{% url 'host' %}">Host</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'view_profile' %}">Profile</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                                {% elif user.is_guest %}
+                                    <li><a class="dropdown-item" href="{% url 'view_profile' %}">Profile</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                                {% else %}
+                                    <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item dropdown" style="margin-right: 35px; list-style: none;">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Host</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#hostloginModal">Login</a></li>
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#hostsignupModal">Register</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown" style=" list-style: none;">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Guest</a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#guestloginModal">Login</a></li>
                                 <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#guestsignupModal">Register</a></li>
                             </ul>
                         </li>
+                    {% endif %}
                     </div>
                 </div>
             </div>
         </header>
 
-        <div class="modal fade" id="guestsignupModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="registerModalLabel">Guest Registration</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                    <form action="" method="post">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                        <label for="">First Name</label>
-                        <input type="text" class="form-control" name="first_name">
+        <!-- Guest Signup Modal -->
+            <div class="modal fade" id="guestsignupModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="registerModalLabel">Guest Registration</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="mb-3">
-                        <label for="">Last Name</label>
-                        <input type="text" class="form-control" name="last_name">
+                        <div class="modal-body">
+                        <form action="{% url 'guest_signup' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                            <label for="">Profil Picture</label>
+                            <input type="file" class="form-control" name="image">
+                            </div>
+                            <div class="mb-3">
+                            <label for="">First Name</label>
+                            <input type="text" class="form-control" name="first_name">
+                            </div>
+                            <div class="mb-3">
+                            <label for="">Last Name</label>
+                            <input type="text" class="form-control" name="last_name">
+                            </div>
+                            <div class="mb-3">
+                            <label for="">Email</label>
+                            <input type="email" class="form-control" name="email">
+                            </div>
+                            <div class="mb-3">
+                            <label for="">Mobile</label>
+                            <input type="text" class="form-control" name="mobile">
+                            </div>
+                            <div class="mb-3">
+                            <label for="">Address</label>
+                            <input type="text" class="form-control" name="address">
+                            </div>
+                            <div class="mb-3">
+                            <label for="">username</label>
+                            <input type="text" class="form-control" name="username">
+                            </div>
+                            <div class="mb-3">
+                            <label for="">Password</label>
+                            <input type="password" class="form-control" name="password">
+                            </div>
+                            <div class="mb-3">
+                            <input type="submit" class="btn btn-primary" value="Sign Up">
+                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#guestloginModal">Already Registered? LogIn</a>
+                            </div>
+                        </form>
                         </div>
-                        <div class="mb-3">
-                        <label for="">Email</label>
-                        <input type="email" class="form-control" name="email">
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
-                        <div class="mb-3">
-                        <label for="">Mobile</label>
-                        <input type="text" class="form-control" name="mobile">
-                        </div>
-                        <div class="mb-3">
-                        <label for="">Address</label>
-                        <input type="text" class="form-control" name="address">
-                        </div>
-                        <div class="mb-3">
-                        <label for="">username</label>
-                        <input type="text" class="form-control" name="username">
-                        </div>
-                        <div class="mb-3">
-                        <label for="">Password</label>
-                        <input type="password" class="form-control" name="password">
-                        </div>
-                        <div class="mb-3">
-                        <input type="submit" class="btn btn-primary" value="Sign Up">
-                        </div>
-                    </form>
-                    </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <!-- Guest Login Modal -->
+            <div class="modal fade" id="guestloginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="loginModalLabel">Guest Login</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                        <form action="{% url 'guest_login' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                            <label for="">username</label>
+                            <input type="text" class="form-control" name="username">
+                            </div>
+                            <div class="mb-3">
+                            <label for="">Password</label>
+                            <input type="password" class="form-control" name="password">
+                            </div>
+                            <div class="mb-3">
+                            <input type="submit" class="btn btn-primary" value="Login">
+                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#guestsignupModal">Still not Registered? Register Now</a>
+                            </div>
+                        </form>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
-        <div class="modal fade" id="guestloginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+            <!-- Host Signup Modal -->
+            <div class="modal fade" id="hostsignupModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="registerModalLabel">Host Registration</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                        <form action="{% url 'host_signup' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                            <label for="">Profil Picture</label>
+                            <input type="file" class="form-control" name="image">
+                            </div>
+                            <div class="mb-3">
+                            <label for="">First Name</label>
+                            <input type="text" class="form-control" name="first_name">
+                            </div>
+                            <div class="mb-3">
+                            <label for="">Last Name</label>
+                            <input type="text" class="form-control" name="last_name">
+                            </div>
+                            <div class="mb-3">
+                            <label for="">Email</label>
+                            <input type="email" class="form-control" name="email">
+                            </div>
+                            <div class="mb-3">
+                            <label for="">Mobile</label>
+                            <input type="text" class="form-control" name="mobile">
+                            </div>
+                            <div class="mb-3">
+                            <label for="">Address</label>
+                            <input type="text" class="form-control" name="address">
+                            </div>
+                            <div class="mb-3">
+                            <label for="">username</label>
+                            <input type="text" class="form-control" name="username">
+                            </div>
+                            <div class="mb-3">
+                            <label for="">Password</label>
+                            <input type="password" class="form-control" name="password">
+                            </div>
+                            <div class="mb-3">
+                            <input type="submit" class="btn btn-primary" value="Sign Up">
+                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#hostloginModal">Already Registered? LogIn</a>
+                            </div>
+                        </form>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Host Login Modal -->
+            <div class="modal fade" id="hostloginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="loginModalLabel">Guest Login</h1>
+                    <h1 class="modal-title fs-5" id="loginModalLabel">Host Login</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                    <form action="" method="post">
+                    <form action="{% url 'host_login' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="mb-3">
                         <label for="">username</label>
@@ -124,6 +258,7 @@
                         </div>
                         <div class="mb-3">
                         <input type="submit" class="btn btn-primary" value="Login">
+                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#hostsignupModal">Still not Registered? Register Now</a></li>
                         </div>
                     </form>
                     </div>
@@ -132,7 +267,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+            </div>
 
         {% block content %}
 

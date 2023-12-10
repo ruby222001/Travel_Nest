@@ -1,23 +1,42 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <section>
-        <div class="" style="display:flex; justify-content:center;">
-            <div>
-                <div>
-                <img src="{% static 'images/slider1.jpg' %}" style="height: 65vh; width: 35vw;"/>
+{% block content %}
+    <div class="container mt-5">
+        <h1>Homestay Details</h1>
+
+        <div class="row">
+            <!-- Left Column: Homestay Image -->
+            <div class="col-md-6">
+                <img src="{{ homestay.thumbnail_picture.url }}" alt="{{ homestay.homestay_name }}" class="img-fluid">
+            </div>
+
+            <!-- Right Column: Homestay Details -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>{{ homestay.homestay_name }}</h3>
+                        <p>{{ homestay.location }}</p>
+                        <p>Price: {{ homestay.price }}</p>
+                        <p>Features:</p>
+                        {{ homestay.features|linebreaksbr }}
+                        <!-- Add more details as needed -->
+
+                        <br/>
+                        <br/>
+                        <!-- Book Now Button -->
+                        <a href="#" class="btn btn-primary">Book Now</a>
+                    </div>
                 </div>
             </div>
-            <div>
-                Map Section
-            </div>
         </div>
-    </section>
-</body>
-</html>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <div>
+            <h1>
+                Ratings and Reviews
+            </h1>
+        </div>
+    </div>
+{% endblock %}

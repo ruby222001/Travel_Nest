@@ -1,6 +1,6 @@
 /* Navbar */
 header.row {
-    color: white;
+    color: black;
     margin: auto;
 }
 
@@ -8,8 +8,11 @@ header .container-fluid {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
     height: 70px;
+    padding-left: 10px;
+    padding-right: 80px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 header .container-fluid div:first-child {
@@ -22,15 +25,19 @@ header .container-fluid div:last-child {
 }
 
 header .container-fluid div:last-child div {
-    margin-left: 24px;
+    margin-left: 35px;
 }
 
-/* Reset styles for anchor elements */
-a, a:link, a:visited {
-    color: inherit !important; /* Use the default text color */
-    text-decoration: none !important; /* Remove underline */
+a {
+    color: inherit !important;
+    text-decoration: none !important;
 }
 
+.home-page .navbar {
+    position: fixed;
+    color: white;
+    z-index: 100;
+}
 
 
 /* Footer */
@@ -137,3 +144,22 @@ a, a:link, a:visited {
     justify-content: center;
 }
 
+.overlay-container {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    height: 100px;
+    background: rgba(85, 84, 84, 0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 1; /* Set a higher z-index than the carousel */
+    padding: 25px;
+    color: white;
+}
+
+
+
+#carouselExampleAutoplaying {
+    z-index: 0; /* Set a lower z-index than the form */
+}

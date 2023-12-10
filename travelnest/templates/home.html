@@ -1,6 +1,32 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block body_class %}class="home-page"{% endblock %}
 {% block content %}
+<body  class="home-page">
+    <div class="overlay-container">
+        <form method="post" action="{% url 'recommend_homestays' %}">
+            {% csrf_token %}
+            <div class="search-form">
+                <label for="location">Location:</label>
+                <input type="text" name="location" required>
+
+                <label for="checkin_date">Check-in Date:</label>
+                <input type="date" name="checkin_date" required>
+
+                <label for="checkout_date">Check-out Date:</label>
+                <input type="date" name="checkout_date" required>
+
+                <label for="guests">Number of Guests:</label>
+                <input type="number" name="guests" min="1" required>
+
+                <label for="features">Features:</label>
+                <input type="text" name="features" required>
+
+                <button type="submit">Search</button>
+            </div>
+        </form>
+    </div>
+
 <section>
     <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
@@ -11,7 +37,7 @@
                         STAY WITH US, FEEL AT HOME
                     </div>
                     <div>
-                        <button class="cta-button"><span>EXPLORE</span></button>
+                        <a href="{% url 'list_homestays' %}"><button class="cta-button"><span>EXPLORE</span></button></a>
                     </div>
                 </div>
             </div>
@@ -22,7 +48,7 @@
                         BEST VACATION EXPERIENCE EVER
                     </div>
                     <div>
-                        <button class="cta-button"><span>EXPLORE</span></button>
+                        <a href="{% url 'list_homestays' %}"><button class="cta-button"><span>EXPLORE</span></button></a>
                     </div>
                 </div>
             </div>
@@ -33,7 +59,7 @@
                         COME AS A GUEST, LEAVE AS A FRIEND
                     </div>
                     <div>
-                        <button class="cta-button"><span>EXPLORE</span></button>
+                        <a href="{% url 'list_homestays' %}"><button class="cta-button"><span>EXPLORE</span></button></a>
                     </div>
                 </div>
             </div>
@@ -88,4 +114,5 @@
         </div>
     </div>
 </section>
+</body>
 {% endblock %}

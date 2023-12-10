@@ -2,15 +2,15 @@
 {% load static %}
 {% block content %}
     <div class="container mt-5">
-        <h1>Find Your Homestays</h1>
+        <h1>You May Also Like</h1>
         
 
-        {% if homestays %}
+        {% if recommended_homestays %}
             <div class="row">
-                {% for homestay in homestays %}
+                {% for homestay, similarity in recommended_homestays %}
                     <div class="col-md-4 mb-4">
                         <div class="card">
-                            <img src="{{ homestay.thumbnail_picture.url }}" class="card-img-top" alt="{{ homestay.homestay_name }}" style="width: 375px; height: 375px; object-fit: cover;">
+                            <img src="{{ homestay.thumbnail_picture.url }}" class="card-img-top" alt="{{ homestay.homestay_name }}" style="width: 395px; height: 375px; object-fit: cover;">
                             <div class="card-body">
                                 <h5 class="card-title">{{ homestay.homestay_name }}</h5>
                                 <p class="card-text">{{ homestay.location }}</p>
@@ -29,7 +29,36 @@
                 {% endfor %}
             </div>
         {% else %}
-            <p>No approved homestays available.</p>
+            <p>No recommendations at the moment.</p>
         {% endif %}
     </div>
 {% endblock %}
+
+
+
+<!-- recommendations.html -->
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homestay Recommendations</title>
+</head>
+<body>
+    <h1>Recommended Homestays</h1>
+
+    {% if recommended_homestays %}
+        <ul>
+            {% for homestay, similarity in recommended_homestays %}
+                <li>
+                    <h3>{{ homestay.homestay_name }}</h3>
+                    <p>Location: {{ homestay.location }}</p>
+                    <p>Similarity: {{ similarity }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No recommendations at the moment.</p>
+    {% endif %}
+</body>
+</html> -->
