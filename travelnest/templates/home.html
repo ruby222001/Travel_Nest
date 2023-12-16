@@ -4,7 +4,7 @@
 {% block content %}
 <body  class="home-page">
     <div class="overlay-container">
-        <form method="post" action="{% url 'recommend_homestays' %}">
+        <form method="GET" action="{% url 'search_homestays' %}">
             {% csrf_token %}
             <div class="search-form">
                 <label for="location">Location:</label>
@@ -19,8 +19,8 @@
                 <label for="guests">Number of Guests:</label>
                 <input type="number" name="guests" min="1" required>
 
-                <label for="features">Features:</label>
-                <input type="text" name="features" required>
+                <label for="faetures">Features:</label>
+                <input type="text" name="features">
 
                 <button type="submit">Search</button>
             </div>
@@ -37,7 +37,7 @@
                         STAY WITH US, FEEL AT HOME
                     </div>
                     <div>
-                        <a href="{% url 'list_homestays' %}"><button class="cta-button"><span>EXPLORE</span></button></a>
+                        <a href="{% url 'list' %}"><button class="cta-button"><span>EXPLORE</span></button></a>
                     </div>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                         BEST VACATION EXPERIENCE EVER
                     </div>
                     <div>
-                        <a href="{% url 'list_homestays' %}"><button class="cta-button"><span>EXPLORE</span></button></a>
+                        <a href="{% url 'list' %}"><button class="cta-button"><span>EXPLORE</span></button></a>
                     </div>
                 </div>
             </div>
@@ -59,7 +59,7 @@
                         COME AS A GUEST, LEAVE AS A FRIEND
                     </div>
                     <div>
-                        <a href="{% url 'list_homestays' %}"><button class="cta-button"><span>EXPLORE</span></button></a>
+                        <a href="{% url 'list' %}"><button class="cta-button"><span>EXPLORE</span></button></a>
                     </div>
                 </div>
             </div>
@@ -74,20 +74,24 @@
         </button>
     </div>
 </section>
-<section class="row" style="width: 100vw;">
+<section class="row about" id="about-us" style="width: 100vw;">
     <div class="about" style="display: flex; justify-content: center; margin-top: 100px;">
         <div style="height:75vh; width:35vw; padding: 65px;">
             <h1 style="font-family: 'Times New Roman', Times, serif; font-size: 65px;">Welcome Home!</h1>
             <h6 style="color: burlywood; margin-bottom: 45px;">SOME WORD ABOUT US</h6>
-            <h5 style="font-weight: 600; margin-bottom: 25px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit</h5>
-            <h5 style="font-weight: 200;"> incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur incididunt ut labore</h5>
+            <h5 style="font-weight: 200;"> At TravelNest, we believe in the warmth of home, the richness of cultural exchange, and the joy of connecting
+                with fellow travelers. Our platform is not just about providing a place to stay; it's about creating an
+                immersive and authentic experience that goes beyond the ordinary.
+                TravelNest is a platform for hosts to rent out their rooms to tourists seeking unique and personalized
+                accommodations. Hosts can list their available rooms, set pricing, and efficiently manage bookings. Travelers
+                can discover and book homestays that match their preferences, budget, and desired location.</h5>
         </div>
         <div>
-            <img src="{% static 'images/slider3.jpg' %}" style="height: 75vh; width: 35vw; object-fit: cover;"/>
+            <img src="{% static 'images/about.jpg' %}" style="height: 75vh; width: 35vw; object-fit: cover;"/>
         </div>
     </div>
     <div style="display: flex; flex-direction: column; align-items: center;">
-        <h1 style="font-family: 'Times New Roman', Times, serif; font-size: 65px; margin-top: 25px;">OUR SERVICES</h1>
+        <h1 style="font-family: 'Times New Roman', Times, serif; font-size: 60px; margin-top: 35px;">OUR SERVICES</h1>
         <div>
             <div class="choose">
                 <div class="about">
@@ -114,5 +118,6 @@
         </div>
     </div>
 </section>
+
 </body>
 {% endblock %}

@@ -8,4 +8,10 @@ urlpatterns = [
     path('guest/login/', views.guest_login, name='guest_login'),
     path('logout/', views.user_logout, name='logout'),
     path('', views.home, name='home'),
+    path('host/profile/', views.host_profile, name='host_profile'),
+    path('host/edit-profile/', views.edit_host_profile, name='edit_host_profile'),
+    path('host/change-password/', views.change_host_password, name='change_host_password'),
+    path('guest/profile/', views.guest_profile, name='guest_profile'),
+    path('guest/edit-profile/', views.edit_guest_profile, name='edit_guest_profile'),
+    path('guest/change-password/', views.change_guest_password, name='change_guest_password'),
 ]

@@ -1,226 +1,292 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages, auth
-from .models import Homestay
-from django.db import models
-from django.db.models import Q
+from django.contrib import messages
+from .models import HomeStay, Feature, HomeStayImage
+from django.http import JsonResponse
+from booking.models import Booking, Review
+from django.utils import timezone
+from django.db.models import Avg
+from django.db import connection
+from django.contrib.auth.models import User
+from django.db.models import Count
+
+
 
 
 # Create your views here.
 
 
-@login_required(login_url='home')  # Redirect to 'home' if not logged in
-def host(request):
-    if request.user.is_host:
-        return render(request, 'host.html')
-    else:
-        # Redirect to 'home' if the user is not a host
-        return redirect('home')
-    
+def home(request):
+    return render(request, 'home.html')
 
+def host_dashboard(request):
+    user = request.user
+    homestays = HomeStay.objects.filter(host=user)
 
-@login_required(login_url='home')
-def save_homestay_info(request):
+    # Get the status parameter from the URL
+    status = request.GET.get('status', 'approved')
+
+    # Filter homestays based on status
+    if status == 'approved':
+        homestays = homestays.filter(status='approved')
+    elif status == 'pending':
+        homestays = homestays.filter(status='pending')
+    elif status == 'unapproved':
+        homestays = homestays.filter(status='unapproved')
+
+    return render(request, 'host.html', {'user': user, 'homestays': homestays, 'status': status})
+
+@login_required
+def add(request):
     if request.method == 'POST':
-        homestay_name = request.POST.get('homestay_name')
-        address = request.POST.get('address')
+        host = request.user
+        name = request.POST.get('name')
         location = request.POST.get('location')
-        thumbnail_picture = request.FILES.get('thumbnail_picture')
-        citizenship_photo = request.FILES.get('citizenship_photo')
-        email = request.POST.get('email')
-        mobile_number = request.POST.get('mobile_number')
-        ownership_document_photo = request.FILES.get('ownership_document_photo')
-        features = request.POST.get('features')
+        num_guests = request.POST.get('num_guests')
+        price_per_night = request.POST.get('price_per_night')
+        ownership_documents = request.FILES.get('ownership_documents')
+        citizenship_documents = request.FILES.get('citizenship_documents')
+        thumbnail_image = request.FILES.get('thumbnail_image')
+        secondary_images = request.FILES.getlist('secondary_images')
+        description = request.POST.get('description')
+        features = request.POST.getlist('features')
+        status = 'pending'
 
-        if not (homestay_name and address and location and thumbnail_picture and citizenship_photo and email and mobile_number and ownership_document_photo):
-            messages.error(request, 'Please fill in all required fields.')
-            return redirect('home')
-
-        homestay = Homestay.objects.create(
-            homestay_name=homestay_name,
-            address=address,
+        homestay = HomeStay(
+            host=host,
+            name=name,
             location=location,
-            thumbnail_picture=thumbnail_picture,
-            citizenship_photo=citizenship_photo,
-            email=email,
-            mobile_number=mobile_number,
-            ownership_document_photo=ownership_document_photo,
-            features=features,  # Save features as a newline-separated string
-            status='approved'
+            num_guests=num_guests,
+            price_per_night=price_per_night,
+            ownership_documents=ownership_documents,
+            citizenship_documents=citizenship_documents,
+            thumbnail_image=thumbnail_image,
+            description=description,
+            status=status,
         )
+        homestay.save()
 
-        messages.success(request, 'Homestay information submitted successfully. It will be reviewed by the admin.')
-        return redirect('home')
+        # Add secondary images
+        for image in request.FILES.getlist('secondary_images'):
+            HomeStayImage.objects.create(homestay=homestay, image=image)
+
+        # Add features
+        for feature_id in features:
+            feature = Feature.objects.get(pk=feature_id)
+            homestay.features.add(feature)
+
+        # Redirect to a success page or do something else
+        return redirect('host_dashboard')  # Change 'success_page' to your desired success page URL
+
     else:
-        return render(request, 'host.html')
-    
+        features = Feature.objects.all()
+        return render(request, 'add.html', {'features': features})
 
-def list_homestays(request):
-    # Display all homestays with status 'approved'
-    homestays = Homestay.objects.filter(status='approved')
+def approved(request):
+    # Logic for handling "Add Approved" option
+    return render(request, 'approved.html')
+
+def pending(request):
+    # Logic for handling "Pending" option
+    return render(request, 'a.html')
+
+def unapproved(request):
+    # Logic for handling "Unapproved" option
+    return render(request, 'unapproved.html')
+
+def bookings(request):
+    # Logic for handling "Bookings" option
+    return render(request, 'bookings.html')
+
+def list(request):
+    homestays = HomeStay.objects.filter(status='approved')
+    for homestay in homestays:
+        average_rating = Review.objects.filter(homestay=homestay).aggregate(Avg('rating'))['rating__avg']
+        homestay.average_rating = round(average_rating, 1) if average_rating else None
     return render(request, 'list.html', {'homestays': homestays})
 
 @login_required
-def view_profile(request):
-    user = request.user
-    return render(request, 'profile.html')
-
-@login_required
-def edit_profile(request):
-    # Implement logic to edit user profile details
-    return render(request, 'edit_profile.html')
-
-@login_required
-def notifications(request):
-    # Implement logic to fetch and display user notifications
-    return render(request, 'notifications.html')
-
-@login_required
-def liked_items(request):
-    # Implement logic to fetch and display user liked items
-    return render(request, 'liked_items.html')
-
-@login_required
-def history(request):
-    # Implement logic to fetch and display user history
-    return render(request, 'history.html')
-
-def homestay_detail(request, pk):
-    homestay = get_object_or_404(Homestay, pk=pk)
-
-    return render(request, 'details.html', {'homestay': homestay})
-
-@login_required
 def like_homestay(request, homestay_id):
-    homestay = get_object_or_404(Homestay, id=homestay_id)
-    if request.user in homestay.likes.all():
-        # User has already liked, unlike it
-        homestay.likes.remove(request.user)
+    homestay = get_object_or_404(HomeStay, id=homestay_id)
+
+    if request.method == 'POST' and request.user.is_guest:
+        if homestay.liked_by_users.filter(id=request.user.id).exists():
+            homestay.liked_by_users.remove(request.user)
+        else:
+            homestay.liked_by_users.add(request.user)
+        return redirect('list')
+    if request.method == 'POST' and request.user.is_host:
+        messages.error('You are logged in as a host.')
     else:
-        # User hasn't liked, add a like
-        homestay.likes.add(request.user)
-    return render(request, 'list.html', {'homestays': Homestay.objects.all()})
+        return redirect('guest_login')
 
 
-@login_required
-def content_based_recommendation(request):
-    # Get the homestays liked by the user
-    liked_homestays = request.user.liked_homestays.all()
+def homestay_details(request, homestay_id):
+    homestay = get_object_or_404(HomeStay, id=homestay_id)
 
-    # Extract features from liked homestays
-    liked_features = set()
-    for homestay in liked_homestays:
-        features = homestay.features.lower().split()
-        liked_features.update(features)
+    if request.user.is_authenticated:
+        # Check if the user has booked the homestay in the past
+        today = timezone.now().date()
+        user_has_booked_homestay = Booking.objects.filter(
+            homestay=homestay,
+            user=request.user,
+            check_out_date__lt=today
+        ).exists()
 
-    # Get all homestays excluding the liked ones
-    all_homestays = Homestay.objects.exclude(id__in=[homestay.id for homestay in liked_homestays])
+        booked_dates = Booking.objects.filter(homestay=homestay).values_list('check_in_date', 'check_out_date')
 
-    # Recommend homestays based on content-based filtering
-    recommended_homestays = []
-    for homestay in all_homestays:
-        features = homestay.features.lower().split()
-        common_features = set(features) & liked_features
-        similarity = len(common_features) / len(liked_features)  # Jaccard similarity
+        reviews = Review.objects.filter(homestay=homestay).order_by('-created_at')
+        print("Homestay ID:", homestay_id)
+        print("User has booked homestay:", user_has_booked_homestay)
 
-        if similarity > 0.0:
-            recommended_homestays.append((homestay, similarity))
+        if request.method == 'POST':
+            # Handle form submission and create Booking instance
+            check_in_date = request.POST.get('check_in_date')
+            check_out_date = request.POST.get('check_out_date')
+            num_guests = request.POST.get('num_guests')
 
-    # Sort recommendations by similarity in descending order
-    recommended_homestays.sort(key=lambda x: x[1], reverse=True)
-    recommended_homestays = [(homestay, similarity) for homestay, similarity in recommended_homestays]
+            if request.user.is_authenticated:
+                # Check if the user is a host
+                if request.user.is_host:
+                    messages.error(request, 'Hosts cannot book their own homestays.')
+                else:
+                    # Create a Booking instance associated with the current user
+                    booking = Booking.objects.create(
+                        homestay=homestay,
+                        user=request.user,  # Associate the booking with the current user
+                        check_in_date=check_in_date,
+                        check_out_date=check_out_date,
+                        num_guests=num_guests
+                    )
+                    messages.success(request, 'Booking Confirmed.')
+                    booked_dates = Booking.objects.filter(homestay=homestay).values_list('check_in_date', 'check_out_date')
+            else:
+                messages.error(request, 'You need to be logged in to book a homestay.')
 
-    print("Liked Features:", liked_features)
-    print("Recommended Homestays:", recommended_homestays)
+        return render(request, 'details.html', {'homestay': homestay, 'booked_dates': booked_dates, 'reviews': reviews, 'user_has_booked_homestay': user_has_booked_homestay})
+    else:
+            return render(request, 'details.html', {'homestay': homestay})
+
+
+def bookings(request):
+    bookings = Booking.objects.filter(homestay__host=request.user)
+    return render(request, 'bookings.html', {'bookings': bookings})
+
+def add_review(request, homestay_id):
+    today = timezone.now().date()
+    print("Today's Date:", today)
+
+    homestay = get_object_or_404(HomeStay, id=homestay_id)
+
+    user_has_booked_homestay = Booking.objects.filter(
+    homestay=homestay,
+    user=request.user,
+    check_out_date__lte=today
+    ).exists()
+
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+
+        if request.user.is_authenticated and user_has_booked_homestay:
+            Review.objects.create(
+                homestay=homestay,
+                user=request.user,
+                rating=rating,
+                comment=comment
+            )
+            messages.success(request, 'Review submitted successfully.')
+        else:
+            messages.error(request, 'Unable to submit the review.')
+
+    reviews = Review.objects.filter(homestay=homestay).order_by('-created_at')
+    # Inside the add_review view
+    print("User has booked homestay:", user_has_booked_homestay)
+
+
+    return render(request, 'details.html', {'homestay': homestay, 'reviews': reviews, 'user_has_booked_homestay': user_has_booked_homestay})
+
+
+def cosine_similarity(set1, set2):
+    intersection = len(set1.intersection(set2))
+    union = len(set1.union(set2))
     
-    for homestay, similarity in recommended_homestays:
-        print(f"- {homestay.homestay_name}, Similarity: {similarity}")
+    # Avoid division by zero
+    if union == 0:
+        return 0
 
-    return render(request, 'recommendations.html', {'recommended_homestays': recommended_homestays})
+    return intersection / union
 
 @login_required
 def recommend_homestays(request):
-    # Get the homestays liked by the user
-    liked_homestays = request.user.liked_homestays.all()
+    # Get features liked by the user
+    liked_features = Feature.objects.filter(homestay__liked_by_users=request.user).distinct()
 
-    # Extract features from liked homestays
-    liked_features = set()
-    for homestay in liked_homestays:
-        features = homestay.features.lower().split()
-        liked_features.update(features)
+    # Get homestays excluding those liked by the user
+    homestays = HomeStay.objects.exclude(liked_by_users=request.user)
 
-    # Get user input
-    location = request.POST.get('location', '')
-    time = request.POST.get('time', '')
-    user_input = {
-        'location': location,
-        'time': time,
-        'features': set(request.POST.get('features', '').lower().split())
+    # Prepare data for similarity calculation
+    user_liked_feature_set = set(liked_features.values_list('name', flat=True))
+
+    recommendations = []
+    for homestay in homestays:
+        homestay_feature_set = set(homestay.features.values_list('name', flat=True))
+        similarity = cosine_similarity(user_liked_feature_set, homestay_feature_set)
+
+        # You can adjust the threshold as needed
+        if similarity > 0:
+            recommendations.append({
+                'homestay': homestay,
+                'similarity': similarity,
+                'similar_features': homestay_feature_set.intersection(user_liked_feature_set),
+            })
+
+    # Sort recommendations by similarity in descending order
+    recommendations = sorted(recommendations, key=lambda x: x['similarity'], reverse=True)
+
+    # Limit the number of recommendations
+    top_n = 5
+    recommendations = recommendations[:top_n]
+
+    # Print recommendations in the console
+    for recommendation in recommendations:
+        print(f"Recommended Homestay: {recommendation['homestay'].name}")
+        print(f"Similarity: {recommendation['similarity']}")
+        print("-" * 20)
+
+    context = {
+        'user': request.user,
+        'liked_features': liked_features,
+        'recommendations': recommendations,
     }
-    print("Request POST data:", request.POST)
 
-    # Get all homestays including liked ones
-    all_homestays = Homestay.objects.all()
-
-    # Recommend homestays based on content-based filtering for features
-    recommended_homestays = []
-
-    for homestay in all_homestays:
-        features = homestay.features.lower().split()
-
-        # Assign priorities based on matching criteria
-        if (
-            homestay.location.lower() == user_input['location'].lower()
-            and set(features) & liked_features
-            and set(features) & user_input['features']
-        ):
-            priority = 1  # Highest priority: Homestays matching location, input features, and features of liked homestays
-        elif (
-            homestay.location.lower() == user_input['location'].lower()
-            and set(features) & user_input['features']
-        ):
-            priority = 2  # Second priority: Homestays matching location and input features
-        elif (
-            homestay.location.lower() == user_input['location'].lower()
-            and set(features) & liked_features
-        ):
-            priority = 3  # Third priority: Homestays matching location and features of liked homestays
-        elif homestay.location.lower() == user_input['location'].lower():
-            priority = 4  # Last priority: Homestays matching location only
-        else:
-            continue  # Exclude other homestays
-
-        recommended_homestays.append((homestay, priority))
-
-    # Sort recommendations by priority in ascending order
-    recommended_homestays.sort(key=lambda x: x[1])
-
-    print("Liked Features:", liked_features)
-    print("User Input:", user_input)
-    print("Recommended Homestays:", recommended_homestays)
-
-    for homestay, _ in recommended_homestays:
-        print(f"- {homestay.homestay_name}")
-
-    return render(request, 'recommend.html', {'recommended_homestays': recommended_homestays})
+    return render(request, 'recommendations.html', context)
 
 
-
-
+def cosine_similarity1(set1, set2):
+    intersection = len(set1.intersection(set2))
+    union = len(set1.union(set2))
+    return intersection / union if union != 0 else 0
 
 def search_homestays(request):
-    query = request.GET.get('query', '')
-    homestays = Homestay.objects.filter(
-        models.Q(homestay_name__icontains=query) |
-        models.Q(location__icontains=query) |
-        models.Q(features__icontains=query)
-    )
+    # Process user input
+    location = request.GET.get('location')
+    num_guests = int(request.GET.get('guests', 0))  # Convert to int or handle appropriately
+    user_features = Feature.objects.filter(name__in=request.GET.getlist('features'))
 
-    return render(request, 'results.html', {'homestays': homestays, 'query': query})
+    # Filter homestays based on location and number of guests
+    homestays = HomeStay.objects.filter(location=location, num_guests__gte=num_guests)
 
-def booking(request,id):
-    step = 1
-    list_homestays = Homestay.objects.get(id=id)
-    
-    return render(request,'booking.html',  {'step': step},{'list_homestays':list_homestays})
+    # Calculate similarity and add a similarity score to each homestay
+    for homestay in homestays:
+        homestay_features = homestay.features.all()
+        similarity_score = cosine_similarity1(user_features, homestay_features)
+        homestay.similarity_score = similarity_score
 
+        print(f"Similarity Score for {homestay.name}: {similarity_score}")
+
+    # Sort homestays by similarity score
+    homestays = sorted(homestays, key=lambda x: x.similarity_score, reverse=True)
+
+    # Pass the homestays to the template
+    return render(request, 'results.html', {'recommended_homestays': homestays})

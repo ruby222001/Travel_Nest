@@ -1,92 +1,153 @@
-<!-- host.html -->
-
 {% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
+<style>
+  /* Custom CSS for Host Dashboard Page */
+  ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
 
+.list {
+  background-color: #ecf0f1;
+  border: 1px solid #dfe6e9;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
 
+/* Style for status label */
+.status-label {
+  font-weight: bold;
+  color: #3498db;
+}
 
-    <!-- Navbar and other content -->
+/* Apply different background colors based on status */
+li[data-status="approved"] {
+  background-color: #2ecc71;
+  color: #fff;
+}
 
-    <div class="container main-content">
-        <!-- Content specific to host.html -->
-        
-        <!-- Add a form to list homestay information -->
-        <form method="post" action="{% url 'save_homestay_info' %}" enctype="multipart/form-data">
-            {% csrf_token %}
-            
-            <!-- Name of the homestay -->
-            <div class="mb-3">
-                <label for="homestay_name">Homestay Name</label>
-                <input type="text" class="form-control" id="homestay_name" name="homestay_name" required>
-            </div>
-            
-            <!-- Address -->
-            <div class="mb-3">
-                <label for="address">Address</label>
-                <input type="text" class="form-control" id="address" name="address" required>
-            </div>
+li[data-status="pending"] {
+  background-color: #f39c12;
+  color: #fff;
+}
 
-            <!-- Location -->
-            <div class="mb-3">
-                <label for="location">Location</label>
-                <input type="text" class="form-control" id="location" name="location" required>
-            </div>
+li[data-status="unapproved"] {
+  background-color: #e74c3c;
+  color: #fff;
+}
+/* Main Content Area */
+.main-content {
+  margin-top: 20px;
+}
 
-            <!-- Thumbnail Picture -->
-            <div class="mb-3">
-                <label for="thumbnail_picture">Thumbnail Picture</label>
-                <input type="file" class="form-control" id="thumbnail_picture" name="thumbnail_picture" accept="image/*" required>
-            </div>
+/* Welcome Message */
+.welcome-message {
+  color: #3498db;
+}
 
-            <!-- Mobile Number -->
-            <div class="mb-3">
-                <label for="price">Price</label>
-                <input type="text" class="form-control" id="price" name="price" required>
-            </div>
+/* Add Homestay Heading */
+.add-homestay-heading {
+  margin-top: 20px;
+  color: #2ecc71;
+}
 
-            <!-- Secondary Picture -->
-            <!-- <div class="mb-3">
-                <label for="secondary_picture">Secondary Picture</label>
-                <input type="file" class="form-control" id="secondary_picture" name="secondary_picture" accept="image/*" required multiple>
-            </div> -->
+/* Sidebar Styles */
+.sidebar {
+  background-color: #ecf0f1;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-            <!-- Citizenship Photo -->
-            <div class="mb-3">
-                <label for="citizenship_photo">Citizenship Photo</label>
-                <input type="file" class="form-control" id="citizenship_photo" name="citizenship_photo" accept="image/*" required>
-            </div>
+.sidebar h3 {
+  color: #3498db;
+}
 
-            <!-- Email -->
-            <div class="mb-3">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" name="email" required>
-            </div>
+/* Sidebar List Styles */
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
 
-            <!-- Mobile Number -->
-            <div class="mb-3">
-                <label for="mobile_number">Mobile Number</label>
-                <input type="text" class="form-control" id="mobile_number" name="mobile_number" required>
-            </div>
+.sidebar li {
+  margin-bottom: 10px;
+}
 
-            <!-- Ownership Document Photo -->
-            <div class="mb-3">
-                <label for="ownership_document_photo">Ownership Document Photo</label>
-                <input type="file" class="form-control" id="ownership_document_photo" name="ownership_document_photo" accept="image/*" required>
-            </div>
+/* Sidebar Link Styles */
+.sidebar a {
+  text-decoration: none;
+  color: #2c3e50;
+}
 
-            <div class="mb-3">
-                <label for="features">Homestay Features</label>
-                <textarea class="form-control" id="features" name="features" rows="4" placeholder="Enter homestay features, each on a new line"></textarea>
-                <small id="featuresHelp" class="form-text text-muted">Separate features by new lines.</small>
-            </div>
-            
+.sidebar a:hover {
+  color: #3498db;
+}
 
-            <!-- Submit button -->
-            <button type="submit" class="btn btn-primary">Submit</button>
+</style>
+  <div class="container main-content">
+    <div class="row">
+      <!-- Main Content Area -->
+      <div class="col-md-9">
+        <h2>Welcome, {{ user.username }}!</h2>
+        <h3>Your Homestays</h3>
+
+        <!-- Filter dropdown with automatic form submission -->
+        <form method="get" action="{% url 'host_dashboard' %}" id="filterForm">
+          <label for="status">Filter by Status:</label>
+          <select name="status" id="status" onchange="document.getElementById('filterForm').submit()">
+            <option value="approved" {% if status == 'approved' %}selected{% endif %}>Approved</option>
+            <option value="pending" {% if status == 'pending' %}selected{% endif %}>Pending</option>
+            <option value="unapproved" {% if status == 'unapproved' %}selected{% endif %}>Unapproved</option>
+          </select>
+          <!-- Use a button to submit the form, you can style it as needed -->
+          <button type="submit" style="display: none;"></button>
         </form>
+
+        <!-- Display homestays -->
+        {% if homestays %}
+          <ul>
+            {% for homestay in homestays %}
+              <li class="list">{{ homestay.name }} - {{ homestay.location }} - {{ homestay.status }}</li>
+              <!-- Add other details you want to display -->
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No homestays found.</p>
+        {% endif %}
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-md-3">
+        <!-- Your existing sidebar content -->
+        <div class="sidebar">
+          <h3>Host Dashboard</h3>
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'add' %}">Add</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'host_dashboard' %}">Homestays</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'bookings' %}">Bookings</a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Footer and script links -->
+  <script>
+    // JavaScript to submit the form when dropdown value changes
+    document.getElementById('status').addEventListener('change', function() {
+      document.getElementById('filterForm').submit();
+    });
+  </script>
 
-    {% endblock %}
+{% endblock %}

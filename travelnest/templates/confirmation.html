@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extrastyle %}
+<link href="{% static 'css/style1.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+<br>
+
+<h1 class="booking-center-text">Booking Details</h1>
+<div class="progress-box">
+    <div class="step booking-step {% if step == 1 %}active{% endif %}">
+        <div class="step-circle booking-step-circle {% if step == 1 %}booking-active-step-circle{% endif %}">1</div>
+    </div>
+    <div class="line"></div>
+    <div class="step booking-step {% if step == 2 %}active{% endif %}">
+        <div class="step-circle booking-step-circle {% if step == 2 %}booking-active-step-circle{% endif %}">2</div>
+    </div>
+    <div class="line"></div>
+    <div class="step booking-step {% if step == 3 %}active{% endif %}">
+        <div class="step-circle booking-step-circle {% if step == 3 %}booking-active-step-circle{% endif %}">3</div>
+    </div>
+    <div class="progress-bar blue-progress-bar" id="progress"></div>
+  </div>
+  <br>
+<div class="reservation-info-box">
+  <center>
+    <h2>Confirm Details</h2>
+  </center><br>
+
+  <div>
+    <ul class="booking-list-style">
+        
+    
+
+      <h1>{{ list_homestays.name }}</h1>
+      <li><b>Arrival Date:     </b>  {{ arrival_date }}  </li>
+      <li><b>Departure Date:</b>  {{ departure_date }} </li>
+      <li><b>Total Guests: </b> {{ total_guests }}</li>
+      <li><b>Price:</b>  NRs.{{ list_homestays.price }}</li>
+      <li><b>Location:</b>  {{ list_homestays.location }}</li>
+      <li><b>Discount:</b>  Nill</li>
+      <li><b>Tax:</b>  Rs 200</li>
+      <li><b>Total:</b>  NRs.{{ total_price }}</li>
+  </div>
+<br>
+  <div class="center"style="text-align: center;">
+    <button id="redirect-button" style="display: inline-block;  margin-right: 10px;" onclick="confirmDetails()">Yes</button>
+    <button id="redirect-button"  style="display: inline-block;  margin-right: 10px;" onclick="cancelDetails()">No</button>
+  </div>
+</div>
+
+<script>
+  function confirmDetails() {
+    window.location.href = "{% url 'payment' %}";
+  }
+
+  function cancelDetails() {
+    history.back();
+  }
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    const progressBar = document.getElementById("progress");
+
+    if (step === 1) {
+        progressBar.style.width = "33.33%";
+    } else if (step === 2) {
+        progressBar.style.width = "66.66%";
+        document.querySelector(".step-circle.step-2").classList.add("active-step-circle");
+    } else if (step === 3) {
+        progressBar.style.width = "100%";
+        document.querySelector(".step-circle.step-3").classList.add("active-step-circle");
+    }
+
+    document.getElementById("redirect-button").addEventListener("click", function() {
+        step = 2;
+        progressBar.style.width = "66.66%";
+        document.querySelector(".step-circle.step-2").classList.add("active-step-circle");
+        window.location.href = "{% url 'payment' %}";
+    });
+</script>
+
+  
+
+
+{% endblock content %}
+

@@ -2,19 +2,18 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # ... (your existing patterns)
-    path('host/', views.host, name='host'),
-    path('save_homestay_info/', views.save_homestay_info, name='save_homestay_info'),
-    path('list_homestays/', views.list_homestays, name='list_homestays'),
-    path('profile/', views.view_profile, name='view_profile'),
-    path('profile/edit/', views.edit_profile, name='edit_profile'),
-    path('profile/notifications/', views.notifications, name='notifications'),
-    path('profile/liked_items/', views.liked_items, name='liked_items'),
-    path('profile/history/', views.history, name='history'),
-    path('homestay_detail/<int:pk>/', views.homestay_detail, name='homestay_detail'),
-    path('homestay/<int:homestay_id>/like/', views.like_homestay, name='like_homestay'),
-    path('content_based_recommendation/', views.content_based_recommendation, name='content_based_recommendation'),
-    path('recommend_homestays/', views.recommend_homestays, name='recommend_homestays'),
+    path('', views.home, name='home'),
+    path('host-dashboard/', views.host_dashboard, name='host_dashboard'),
+    path('add/', views.add, name='add'),
+    path('approved/', views.approved, name='approved'),
+    path('pending/', views.pending, name='pending'),
+    path('unapproved/', views.unapproved, name='unapproved'),
+    path('bookings/', views.bookings, name='bookings'),
+    path('list/', views.list, name='list'),
+    path('like_homestay/<int:homestay_id>/', views.like_homestay, name='like_homestay'),
+    path('homestay/<int:homestay_id>/', views.homestay_details, name='homestay_details'),
+    path('bookings/', views.bookings, name='bookings'),
+    path('add_review/<int:homestay_id>/', views.add_review, name='add_review'),
+    path('recommendations/', views.recommend_homestays, name='recommend_homestays'),
     path('search/', views.search_homestays, name='search_homestays'),
-    path('booking/<int:id>', views.booking, name='booking'),
 ]
