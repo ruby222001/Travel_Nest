@@ -2,7 +2,6 @@ from django.contrib import admin
 from .models import Feature, HomeStay, HomeStayImage
 
 
-# Register your models here.
 
 
 class FeatureAdmin(admin.ModelAdmin):

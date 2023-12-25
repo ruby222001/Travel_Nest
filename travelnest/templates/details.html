@@ -2,105 +2,151 @@
 {% load static %}
 
 {% block content %}
+<style>
+     .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4);
+    }
 
-    <div class="container-fluid main-content" style="margin-top: 65px;">
-        <div style="display: flex; justify-content: center; margin-left: 105px;">
-            <div>
-                <img src="{{ homestay.thumbnail_image.url }}" class=" mb-4" alt="{{ homestay.name }}" style="height: 65vh; width: 45vw; margin-right: 25px;">
-            </div>
-            <div>
-                {% if homestay.images.all %}
-                    <div style="display: flex; flex-wrap: wrap; width: 50vw;">
-                        {% for image in homestay.images.all %}
-                            <div style="margin-bottom: 25px; margin-right: 15px;">
-                                <img src="{{ image.image.url }}" class="img-fluid" alt="Secondary Image" style="height: 31vh; width: 20vw; object-fit: cover;">
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 60%;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        border-radius: 10px;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .close:hover {
+        color: black;
+    }
+
+    .confirmation-container {
+        text-align: center;
+    }
+
+    #confirmationDetails {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .button-container {
+        justify-content: center;
+    }
+
+    .btn {
+        margin: 0 10px;
+    }
+</style>
+<div class="container-fluid main-content" style="margin-top: 65px;">
+    <div style="display: flex; justify-content: center; margin-left: 105px;">
+        <div>
+            <img src="{{ homestay.thumbnail_image.url }}" class=" mb-4" alt="{{ homestay.name }}" style="height: 65vh; width: 45vw; margin-right: 25px;">
         </div>
-
-        <!-- Display Homestay Location, Price, etc. -->
-        <div class="container mt-5" style="display: flex; justify-content:space-between">
-            <div>
-                <h2 class="mt-3 mb-3">{{ homestay.name }} </h2>
-                <p><strong>Location:</strong> {{ homestay.location }}</p>
-                <p><strong>Price:</strong> Rs. {{ homestay.price_per_night }}/ night</p>
-                <p><strong>Number of Guests:</strong> Rs. {{ homestay.num_guests }}</p>
-                <p><strong>Hosted By:</strong> {{ homestay.host}}</p>
-                <div>
-                    <!-- <h4>Contact Host:</h4>
-                    <p><strong>{{ homestay.mobile}}</strong></p>
-                    <p><strong>{{ homestay.email}}:</strong></p> -->
+        <div>
+            {% if homestay.images.all %}
+                <div style="display: flex; flex-wrap: wrap; width: 50vw;">
+                    {% for image in homestay.images.all %}
+                        <div style="margin-bottom: 25px; margin-right: 15px;">
+                            <img src="{{ image.image.url }}" class="img-fluid" alt="Secondary Image" style="height: 31vh; width: 20vw; object-fit: cover;">
+                        </div>
+                    {% endfor %}
                 </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="container mt-5" style="display: flex; justify-content:space-between">
+        <div>
+            <h2 class="mt-3 mb-3">{{ homestay.name }} </h2>
+            <p><strong>Location:</strong> {{ homestay.location }}</p>
+            <p><strong>Price:</strong> Rs. {{ homestay.price_per_night }}/ night</p>
+            <p><strong>Number of Guests:</strong> {{ homestay.num_guests }}</p>
+            <p><strong>Hosted By:</strong> {{ homestay.host}}</p>
+        </div>
+        <div style="width: 35vw;">
+            <h4>About</h4>
+            <p>{{homestay.description}}</p>
+        </div>
+    </div>
+
+    <div class="container mt-5" style="display: flex; justify-content: space-between;">
+        <div>
+            {% if homestay.features.all %}
+                <h4 class="mt-4">Features</h4>
+                <ul>
+                    {% for feature in homestay.features.all %}
+                        <li>{{ feature.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div style="border: 1px solid gray; border-radius: 25px; padding: 25px;">
+            <h4 class="mt-4">Book Now</h4>
+            <form id="bookingForm" method="post" action="{% url 'homestay_details' homestay.id %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="check_in_date">Check-in Date:</label>
+                    <input type="date" name="check_in_date" id="id_check_in_date" min="{% now "Y-m-d" %}" required onchange="updateCheckoutDates()"><br/>
                 </div>
-                <div style="width: 35vw;">
-                    <h4>About</h4>
-                    <p>{{homestay.description}}</p>
+                <div class="mb-3">
+                    <label for="check_out_date">Check-out Date:</label>
+                    <input type="date" name="check_out_date" id="id_check_out_date"  min="{% now "Y-m-d" %}" required><br/>
                 </div>
-            </div>
-
-            <div class="container mt-5" style="display: flex; justify-content: space-between;">
-                <div>
-                    {% if homestay.features.all %}
-            <h4 class="mt-4">Features</h4>
-            <ul>
-                {% for feature in homestay.features.all %}
-                    <li>{{ feature.name }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+                <div class="mb-3">
+                    <label for="num_guests">Number of Guests:</label>
+                    <input type="number" name="num_guests" id="id_num_guests" required><br/>
                 </div>
-                <div style="border: 1px solid gray; border-radius: 25px; padding: 25px;">
-                    <h4 class="mt-4">Book Now</h4>
-<form id="bookingForm" method="post" action="{% url 'homestay_details' homestay.id %}">
-    {% csrf_token %}
-    <div class="mb-3">
-    <label for="check_in_date">Check-in Date:</label>
-    <input type="date" name="check_in_date" id="id_check_in_date" min="{% now "Y-m-d" %}" required onchange="updateCheckoutDates()"><br/>
-</div>
-
-    <div class="mb-3">
-    <label for="check_out_date">Check-out Date:</label>
-    <input type="date" name="check_out_date" id="id_check_out_date"  min="{% now "Y-m-d" %}" required><br/>
-</div>
-
-    <div class="mb-3">
-    <label for="num_guests">Number of Guests:</label>
-    <input type="number" name="num_guests" id="id_num_guests" required><br/>
-</div>
-
-    <button type="button" class="btn btn-primary mt-3" onclick="displayConfirmation()">Book Now</button>
-</form>
+                <div class="form-field">
+                    <label for="paymentMethod">Payment Method</label>
+                    <select name="paymentMethod" class="form1" id="id_paymentmethod">
+                        <option value="khalti">Khalti</option>
+                        <option value="arrival">Pay on Arrival</option>
+                    </select>
                 </div>
-            </div>
-        
+                <button type="button" id="payment-button" onclick="displayConfirmation()" class="btn btn-primary mt-3">Book Now</button>
+            </form>
+        </div>
+    </div>
 
-            <div class="container" style="margin-top: 20vh;">
-                {% if request.user.is_authenticated and user_has_booked_homestay %}
-                <h4 class="mt-4">Add Your Review</h4>
-                <form method="post" action="{% url 'add_review' homestay.id %}">
-                    {% csrf_token %}
-                    <div class="mb-3">
+    <div class="container" style="margin-top: 20vh;">
+        {% if request.user.is_authenticated and user_has_booked_homestay %}
+            <h4 class="mt-4">Add Your Review</h4>
+            <form method="post" action="{% url 'add_review' homestay.id %}">
+                {% csrf_token %}
+                <div class="mb-3">
                     <label for="rating">Rating (1-5):</label>
                     <input type="number" name="rating" id="id_rating" min="1" max="5" required><br/>
                 </div>
-
-                    <div class="mb-3">
+                <div class="mb-3">
                     <label for="comment">Your Comment:</label>
                     <textarea name="comment" id="id_comment" rows="4" required></textarea><br/>
                 </div>
+                <button type="submit" class="btn btn-primary mt-3">Submit Review</button>
+            </form>
+        {% endif %}
+    </div>
 
-                    <button type="submit" class="btn btn-primary mt-3">Submit Review</button>
-                </form>
-            {% endif %}
-            </div>
-
-            <div class="container" style="margin-top: 20vh;">
-                <h4 class="mt-4">Reviews and Ratings</h4>
-            <ul>
-                {% for review in reviews %}
+    <div class="container" style="margin-top: 20vh;">
+        <h4 class="mt-4">Reviews and Ratings</h4>
+        <ul>
+            {% for review in reviews %}
                 <div class="card" style="padding: 25px;">
                     <div style="display: flex;">
                         <div style="margin-right: 60px;">
@@ -117,67 +163,101 @@
                         <div>{{ review.created_at }}</div>
                     </div>
                 </div>
-                {% endfor %}
-            </ul>
+            {% endfor %}
+        </ul>
+    </div>
 
-                        </div>
-
-        <!-- Confirmation Popup -->
-        <div id="confirmationPopup" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeConfirmationPopup()">&times;</span>
-                <p id="confirmationDetails">Booking confirmation details go here...</p>
-                <button class="btn btn-success" onclick="confirmBooking('khalti')">Pay with Khalti</button>
-                <button class="btn btn-info" onclick="confirmBooking('arrival')">Pay on Arrival</button>
-            </div>
+    <div id="confirmationPopup" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeConfirmationPopup()">&times;</span>
+            <p id="confirmationDetails">Booking confirmation details go here...</p>
+            <button onclick="confirmBooking()">Confirm</button>
         </div>
+    </div>
+</div>
 
+<script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
 
-        <!-- JavaScript to handle the confirmation popup -->
-        <script>
-            function displayConfirmation() {
-                const checkInDate = document.getElementById('id_check_in_date').value;
+<script>
+    function displayConfirmation() {
+        const checkInDate = document.getElementById('id_check_in_date').value;
         const checkOutDate = document.getElementById('id_check_out_date').value;
         const numGuests = document.getElementById('id_num_guests').value;
+        const paymentmethod = document.getElementById('id_paymentmethod').value;
 
-        if (!checkInDate || !checkOutDate || !numGuests) {
+        if (!checkInDate || !checkOutDate || !numGuests || !paymentmethod) {
             alert('Please fill in all the required fields.');
             return;
         }
-                const confirmationPopup = document.getElementById('confirmationPopup');
-                const confirmationDetails = document.getElementById('confirmationDetails');
-                confirmationDetails.innerText = `Check-in Date: ${document.getElementById('id_check_in_date').value}\nCheck-out Date: ${document.getElementById('id_check_out_date').value}\nNumber of Guests: ${document.getElementById('id_num_guests').value}`;
-                confirmationPopup.style.display = 'block';
-            }
 
-            function closeConfirmationPopup() {
-                const confirmationPopup = document.getElementById('confirmationPopup');
-                confirmationPopup.style.display = 'none';
-            }
+        const confirmationPopup = document.getElementById('confirmationPopup');
+        const confirmationDetails = document.getElementById('confirmationDetails');
+        confirmationDetails.innerText = `Check-in Date: ${checkInDate}\nCheck-out Date: ${checkOutDate}\nNumber of Guests: ${numGuests}\nPayment Method: ${paymentmethod}`;
+        confirmationPopup.style.display = 'block';
 
-            function confirmBooking(paymentOption) {
-        if (paymentOption === 'khalti') {
-            // Handle payment with Khalti (you can redirect the user to the Khalti payment gateway)
+        if (paymentmethod === 'khalti') {
+            var config = {
+                "publicKey": "test_public_key_f359d2bd4ccc4bc2ad77916a0eba7199",
+                "productIdentity": "1234567890",
+                "productName": "TravelNest",
+                "productUrl": "http://127.0.0.1:8000/",
+                "paymentPreference": ["KHALTI"],
+                "eventHandler": {
+                    onSuccess: function (payload) {
+                        verifyPayment(payload);
+                    },
+                    onError: function (error) {
+                        console.log(error);
+                    },
+                    onClose: function () {
+                        console.log('widget is closing');
+                    }
+                }
+            };
+
+            var checkout = new KhaltiCheckout(config);
+            checkout.show({ amount: 1000 });
+        }
+    }
+
+    function closeConfirmationPopup() {
+        const confirmationPopup = document.getElementById('confirmationPopup');
+        confirmationPopup.style.display = 'none';
+    }
+
+    function confirmBooking() {
+        const paymentmethod = document.getElementById('id_paymentmethod').value;
+
+        if (paymentmethod === 'khalti') {
             // For demonstration purposes, let's assume the payment was successful
             alert('Payment with Khalti successful. Booking confirmed.');
-        } else if (paymentOption === 'arrival') {
-            // Handle booking confirmation for Pay on Arrival
+        } else if (paymentmethod === 'arrival') {
             document.getElementById('bookingForm').submit();
             alert('Booking confirmed. Payment on arrival.');
         }
 
-        // You can also submit the form or perform other actions as needed
         document.getElementById('bookingForm').submit();
     }
 
-            function resetFormFields() {
-                // Reset the form fields to their initial values or clear them
-                document.getElementById('id_check_in_date').value = '';
-                document.getElementById('id_check_out_date').value = '';
-                document.getElementById('id_num_guests').value = '';
+    function verifyPayment(payload) {
+        $.ajax({
+            url: "{% url 'verify_payment' %}",
+            type: "POST",
+            data: payload,
+            dataType: 'json',
+            success: function (response) {
+                if (response.status === 'success') {
+                    alert(response.message);
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function (error) {
+                alert('Error verifying payment.');
+                console.log(error);
             }
+        });
+    }
+</script>
 
-        
-        </script>
-    </div>
 {% endblock %}

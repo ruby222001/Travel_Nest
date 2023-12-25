@@ -1,6 +1,8 @@
+from http.client import PAYMENT_REQUIRED
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+import requests
 from .models import HomeStay, Feature, HomeStayImage
 from django.http import JsonResponse
 from booking.models import Booking, Review
@@ -9,6 +11,7 @@ from django.db.models import Avg
 from django.db import connection
 from django.contrib.auth.models import User
 from django.db.models import Count
+from django.views.decorators.csrf import csrf_exempt
 
 
 
@@ -144,7 +147,7 @@ def homestay_details(request, homestay_id):
             check_in_date = request.POST.get('check_in_date')
             check_out_date = request.POST.get('check_out_date')
             num_guests = request.POST.get('num_guests')
-
+            payment_method = request.POST.get('paymentMethod')
             if request.user.is_authenticated:
                 # Check if the user is a host
                 if request.user.is_host:
@@ -156,7 +159,8 @@ def homestay_details(request, homestay_id):
                         user=request.user,  # Associate the booking with the current user
                         check_in_date=check_in_date,
                         check_out_date=check_out_date,
-                        num_guests=num_guests
+                        num_guests=num_guests,
+                        paymentMethod =payment_method
                     )
                     messages.success(request, 'Booking Confirmed.')
                     booked_dates = Booking.objects.filter(homestay=homestay).values_list('check_in_date', 'check_out_date')
@@ -290,3 +294,57 @@ def search_homestays(request):
 
     # Pass the homestays to the template
     return render(request, 'results.html', {'recommended_homestays': homestays})
+
+
+def details(request):
+    if request.method == 'POST':
+        username = request.POST.get('fullInput')
+        email = request.POST.get('email')
+        phone_number = request.POST.get('number')
+        payment_method = request.POST.get('paymentMethod')
+
+        payment_instance = PAYMENT_REQUIRED.objects.create(
+            GuestFullName=username,
+            Email=email,
+            PhoneNumber=phone_number,
+            paymentMethod=payment_method,
+        )
+
+        return redirect('details')
+
+    else:
+        return render(request, 'details.html')
+@csrf_exempt
+def verify_payment(request):
+    try:
+        if request.method == 'POST':
+          data = request.POST
+          product_id = data.get('product_identity')
+          token = data.get('token')
+          amount = data.get('amount')
+
+          url = "https://khalti.com/api/v2/payment/verify/"
+          verify_payload = {
+            "token": token,
+            "amount": amount,
+        }
+
+          headers = {
+  "Authorization": "Key test_secret_key_f59e8b7d18b4499ca40f68195a846e9b"
+        }
+
+        response = requests.post(url, json=verify_payload, headers=headers)
+        response_data = response.json()
+
+        if response.status_code == 200:
+            return JsonResponse({'status': 'success', 'message': 'Payment verified', 'data': response_data})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Payment verification failed', 'data': response_data}, status=500)
+
+    
+    except Exception as e:
+        print(f"Exception: {e}") 
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
+    
+
+

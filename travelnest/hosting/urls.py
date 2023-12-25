@@ -16,4 +16,7 @@ urlpatterns = [
     path('add_review/<int:homestay_id>/', views.add_review, name='add_review'),
     path('recommendations/', views.recommend_homestays, name='recommend_homestays'),
     path('search/', views.search_homestays, name='search_homestays'),
+     path('details/',views.details,name='details'),
+    path('verify_payment/',views.verify_payment,name='verify_payment'),
+
 ]

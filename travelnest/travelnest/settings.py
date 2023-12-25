@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'accounts',
     'hosting',
     'booking',
+    'chatbot',
 ]
 
 MIDDLEWARE = [
