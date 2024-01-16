@@ -3,7 +3,7 @@
 
 {% block content %}
 <style>
-     .modal {
+    .modal {
         display: none;
         position: fixed;
         z-index: 1;
@@ -12,7 +12,7 @@
         width: 100%;
         height: 100%;
         overflow: auto;
-        background-color: rgba(0,0,0,0.4);
+        background-color: rgba(0, 0, 0, 0.4);
     }
 
     .modal-content {
@@ -21,7 +21,7 @@
         padding: 20px;
         border: 1px solid #888;
         width: 60%;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         border-radius: 10px;
     }
 
@@ -57,7 +57,7 @@
 <div class="container-fluid main-content" style="margin-top: 65px;">
     <div style="display: flex; justify-content: center; margin-left: 105px;">
         <div>
-            <img src="{{ homestay.thumbnail_image.url }}" class=" mb-4" alt="{{ homestay.name }}" style="height: 65vh; width: 45vw; margin-right: 25px;">
+            <img src="{{ homestay.thumbnail_image.url }}" class="mb-4" alt="{{ homestay.name }}" style="height: 65vh; width: 45vw; margin-right: 25px;">
         </div>
         <div>
             {% if homestay.images.all %}
@@ -72,7 +72,7 @@
         </div>
     </div>
 
-    <div class="container mt-5" style="display: flex; justify-content:space-between">
+    <div class="container mt-5" style="display: flex; justify-content: space-between">
         <div>
             <h2 class="mt-3 mb-3">{{ homestay.name }} </h2>
             <p><strong>Location:</strong> {{ homestay.location }}</p>
@@ -82,7 +82,7 @@
         </div>
         <div style="width: 35vw;">
             <h4>About</h4>
-            <p>{{homestay.description}}</p>
+            <p>{{ homestay.description }}</p>
         </div>
     </div>
 
@@ -103,11 +103,11 @@
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="check_in_date">Check-in Date:</label>
-                    <input type="date" name="check_in_date" id="id_check_in_date" min="{% now "Y-m-d" %}" required onchange="updateCheckoutDates()"><br/>
+                    <input type="date" name="check_in_date" id="id_check_in_date" min="{% now 'Y-m-d' %}" required onchange="updateCheckoutDates()"><br/>
                 </div>
                 <div class="mb-3">
                     <label for="check_out_date">Check-out Date:</label>
-                    <input type="date" name="check_out_date" id="id_check_out_date"  min="{% now "Y-m-d" %}" required><br/>
+                    <input type="date" name="check_out_date" id="id_check_out_date" min="{% now 'Y-m-d' %}" required><br/>
                 </div>
                 <div class="mb-3">
                     <label for="num_guests">Number of Guests:</label>
@@ -153,7 +153,7 @@
                             {{ review.user.username }}
                         </div>
                         <div>
-                            <div>{{ review.rating }}  <i class="bi-star-fill"></i> </div>
+                            <div>{{ review.rating }} <i class="bi-star-fill"></i> </div>
                         </div>
                     </div>
                     <div style="display: flex; justify-content: space-between;">
@@ -179,6 +179,8 @@
 <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
 
 <script>
+    const csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+
     function displayConfirmation() {
         const checkInDate = document.getElementById('id_check_in_date').value;
         const checkOutDate = document.getElementById('id_check_out_date').value;
@@ -229,16 +231,18 @@
         const paymentmethod = document.getElementById('id_paymentmethod').value;
 
         if (paymentmethod === 'khalti') {
-            // For demonstration purposes, let's assume the payment was successful
+            
             alert('Payment with Khalti successful. Booking confirmed.');
+
         } else if (paymentmethod === 'arrival') {
-            document.getElementById('bookingForm').submit();
-            alert('Booking confirmed. Payment on arrival.');
-        }
+        
+        
+            alert('Payment with Khalti successful. Booking confirmed.');
 
-        document.getElementById('bookingForm').submit();
-    }
+        };
 
+    document.getElementById('bookingForm').submit();
+}
     function verifyPayment(payload) {
         $.ajax({
             url: "{% url 'verify_payment' %}",
@@ -258,6 +262,7 @@
             }
         });
     }
+
 </script>
 
 {% endblock %}

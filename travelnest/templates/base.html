@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
-<head>
+<h>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TravelNest</title>
@@ -18,6 +18,64 @@
   
     <!-- Typeahead.js (or other autocomplete library) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px; /* Adjust the maximum width for larger screens if needed */
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .footer-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .footer-row > div {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .name1, .topic {
+            font-size: 1.5em;
+        }
+
+        .type1, .type {
+            font-size: 1em;
+        }
+
+        .icon i {
+            margin-right: 10px;
+            font-size: 1.5em;
+        }
+
+        .footer-bottom {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* Media Query for Mobile View */
+        @media only screen and (max-width: 767px) {
+            .footer-row > div {
+                width: 100%;
+            }
+        }
+
+        /* Media Query for Computer View */
+        @media only screen and (min-width: 768px) {
+            .footer-row > div {
+                width: calc(25% - 20px);
+            }
+        }
+    </style>
+
 </head>
 <body {% block body_class %}{% endblock %}>
     <div>
@@ -61,7 +119,7 @@
                         </a>
                     </div>
                     <div>
-                        <a href="#about-us">
+                        <a href="{% url 'about' %}">
                         About Us
                     </a>
                     </div>
@@ -290,26 +348,26 @@
                 <div class="footer-row">
                 <div>
                     <h1 class="name1">TravelNest</h1>
-                    <p class="type1">Lorem Ipsum Lorem Ipsum <br/> Lorem Ipsum Lorem Ipsum <br/>Lorem Ipsum Lorem Ipsum</p>
+                    <p class="type1">TravelNest is a platform for hosts to rent out their rooms to tourists seeking unique and 
+                         personalized accommodations.</p>
                 </div>
                 <div>
                     <h1 class="topic">Quick Links</h2>
                     <ul style="list-style: none; padding-left: 0;" class="type">
-                    <li>About</li>
-                    <li>Shop</li>
-                    <li>Contact</li>
+                        <li><a href="{% url 'about' %}" style="text-decoration: none; color: black;">About Us</a></li>
+                        <li><a href="{% url 'list' %}" style="text-decoration: none; color: black;">Places to stay</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h1 class="topic">Contact Info</h2>
+                    <h1 class="topic">Contacts </h2>
                     <ul style="list-style: none; padding-left: 0;" class="type">
                     <li>Mangalbazar, Lalitpur, Nepal</li>
                     <li>+977 9874 651 230</li>
-                    <li>travelnest@gmail.com</li>
+                    <li>travelnest18@gmail.com</li>
                     </ul>
                 </div>
                 <div>
-                    <h1 class="topic">Social Info</h2>
+                    <h1 class="topic">Socials</h2>
                     <p class="type1">You can follow us on our social <br/>platforms to get updates.</p>
                     <div class="icon">
                     <i class="fa fa-facebook-f"></i>

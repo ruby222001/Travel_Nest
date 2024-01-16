@@ -12,6 +12,13 @@ from django.db import connection
 from django.contrib.auth.models import User
 from django.db.models import Count
 from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import send_mail
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.views.decorators.csrf import csrf_exempt
 
 
 
@@ -21,6 +28,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 def home(request):
     return render(request, 'home.html')
+def about(request):
+    return render(request,'about.html')
 
 def host_dashboard(request):
     user = request.user
@@ -315,7 +324,7 @@ def details(request):
     else:
         return render(request, 'details.html')
 @csrf_exempt
-def verify_payment(request):
+def verifypayment(request):
     try:
         if request.method == 'POST':
           data = request.POST
@@ -330,7 +339,7 @@ def verify_payment(request):
         }
 
           headers = {
-  "Authorization": "Key test_secret_key_f59e8b7d18b4499ca40f68195a846e9b"
+  "Authorization": "Key test_secret_key_b3552578ccbb4e02b7c3f1877bfedd4f"
         }
 
         response = requests.post(url, json=verify_payload, headers=headers)
@@ -346,5 +355,4 @@ def verify_payment(request):
         print(f"Exception: {e}") 
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
     
-
 

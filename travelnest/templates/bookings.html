@@ -2,34 +2,40 @@
 {% load static %}
 
 {% block content %}
-  <div class="container main-content">
-    <h2>Your Homestay Bookings</h2>
+<div class="container main-content">
+  <h2>Your Homestay Bookings</h2>
 
-    {% if bookings %}
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Homestay Name</th>
-            <th>Check-in Date</th>
-            <th>Check-out Date</th>
-            <th>Number of Guests</th>
-            <!-- Add more columns as needed -->
-          </tr>
-        </thead>
-        <tbody>
-          {% for booking in bookings %}
-            <tr>
-              <td>{{ booking.homestay.name }}</td>
-              <td>{{ booking.check_in_date }}</td>
-              <td>{{ booking.check_out_date }}</td>
-              <td>{{ booking.num_guests }}</td>
-              <!-- Add more columns as needed -->
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% else %}
-      <p>No bookings found for your homestays.</p>
-    {% endif %}
-  </div>
+  {% if bookings %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Homestay Name</th>
+        <th>Check-in Date</th>
+        <th>Check-out Date</th>
+        <th>Number of Guests</th>
+        <th>Payment Method</th>
+        <th>Price per night</th>
+        <th>Total Price</th>
+        <!-- Add more columns as needed -->
+      </tr>
+    </thead>
+    <tbody>
+      {% for booking in bookings %}
+      <tr>
+        <td>{{ booking.homestay.name }}</td>
+        <td>{{ booking.check_in_date }}</td>
+        <td>{{ booking.check_out_date }}</td>
+        <td>{{ booking.num_guests }}</td>
+        <td>{{ booking.paymentMethod }}</td>
+        <td>{{ booking.price_per_night}}</td>
+        <td>{{ booking.total_price_per_night }}</td>
+        <!-- Add more columns as needed -->
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No bookings found for your homestays.</p>
+  {% endif %}
+</div>
 {% endblock %}

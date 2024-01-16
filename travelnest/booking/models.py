@@ -16,7 +16,15 @@ class Booking(models.Model):
     check_in_date = models.DateField()
     check_out_date = models.DateField()
     num_guests = models.IntegerField()
+    price_per_night=models.IntegerField()
+    
     paymentMethod = models.CharField(max_length=255, choices=PAYMENT_METHOD_CHOICES, ) 
+    @property
+    def price_per_night(self):
+        return self.homestay.price_per_night
+    @property
+    def total_price_per_night(self):
+        return self.price_per_night * (self.check_out_date - self.check_in_date).days
     def __str__(self):
         return f"{self.user.username} - {self.paymentMethod}"
 

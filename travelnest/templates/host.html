@@ -137,17 +137,75 @@ li[data-status="unapproved"] {
             <li class="nav-item">
               <a class="nav-link" href="{% url 'bookings' %}">Bookings</a>
             </li>
+
           </ul>
+
         </div>
+        <button type="submit" id="payment-button" class="btn btn-primary mt-3">Pay to Admin</button>
+
       </div>
+      
     </div>
   </div>
+
+  <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
   <script>
     // JavaScript to submit the form when dropdown value changes
     document.getElementById('status').addEventListener('change', function() {
       document.getElementById('filterForm').submit();
     });
+      function verifyPayment(payload) {
+        $.ajax({
+            url: "{% url 'verifypayment' %}",
+            type: "POST",
+            data: payload,
+            dataType: 'json',
+            success: function (response) {
+                if (response.status === 'success') {
+                    alert(response.message);
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function (error) {
+                alert('Error verifying payment.');
+                console.log(error);
+            }
+        });
+    }
+
+      var config = {
+            "publicKey": "test_public_key_d486e3b6505743d4896f0f5f59ef50f1",
+            "productIdentity": "1",
+            "productName": "travelnest",
+            "productUrl": "http://127.0.0.1:8000/",
+            "paymentPreference": [
+                "KHALTI",
+                "EBANKING",
+                "MOBILE_BANKING",
+                "CONNECT_IPS",
+                "SCT",
+                ],
+            "eventHandler": {
+              onSuccess: function (payload) {
+                        verifyPayment(payload);
+                    },
+                    onError: function (error) {
+                        console.log(error);
+                    },
+                    onClose: function () {
+                        console.log('widget is closing');
+                    }
+                }
+            };
+        var checkout = new KhaltiCheckout(config);
+        var btn = document.getElementById("payment-button");
+        btn.onclick = function () {
+            // minimum transaction amount must be 10, i.e 1000 in paisa.
+            checkout.show({amount: 2000});
+        };
   </script>
 
 {% endblock %}

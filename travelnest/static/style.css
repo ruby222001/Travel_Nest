@@ -1,4 +1,5 @@
 /* Navbar */
+
 header.row {
     color: black;
     margin: auto;
@@ -43,6 +44,15 @@ a {
     color: black;
 }
 
+.about-container {
+  justify-content: center;
+  margin-top: 100px;
+}
+
+.services-container {
+  margin-top: 200px;
+  padding: 20px;
+}
 
 /* Footer */
 .footer-row {

@@ -1,8 +1,11 @@
 from http.client import PAYMENT_REQUIRED
+
+import requests
+from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
-import requests
 from django.views.decorators.csrf import csrf_exempt
+
 
 
 def home(request):
@@ -58,7 +61,3 @@ def verify_payment(request):
         print(f"Exception: {e}") 
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
     
-
-
-
-
