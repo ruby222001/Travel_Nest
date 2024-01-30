@@ -1,0 +1,15 @@
+<!-- your_template.html -->
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Recommended Homestays</h2>
+    <ul>
+        {% for homestay in recommended_homestays %}
+            <li>
+                {{ homestay.name }} - 
+                Location: {{ homestay.location }} - 
+                Guests: {{ homestay.num_guests }} - 
+                Similarity Score: {{ homestay.similarity_score }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

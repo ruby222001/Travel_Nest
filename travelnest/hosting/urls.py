@@ -1,14 +1,19 @@
 from django.urls import path
-from hosting import views
 from . import views
 
 urlpatterns = [
-    path('host', views.host, name="host"),
-    path('add_homestay/', views.add_homestay, name='add_homestay'),
-    path('list_homestays/', views.list_homestays, name='list_homestays'),
-    path('show',views.show_homestay),
-    path('showsingle/<id>',views.show_singleproperty, name='showsingle'),
-    path('booking/<int:id>/', views.booking, name='booking'),
-path('confirmation/<int:homestay_id>/', views.confirmation, name='confirmation')
-
+    path('', views.home, name='home'),
+    path('host-dashboard/', views.host_dashboard, name='host_dashboard'),
+    path('add/', views.add, name='add'),
+    path('approved/', views.approved, name='approved'),
+    path('pending/', views.pending, name='pending'),
+    path('unapproved/', views.unapproved, name='unapproved'),
+    path('bookings/', views.bookings, name='bookings'),
+    path('list/', views.list, name='list'),
+    path('like_homestay/<int:homestay_id>/', views.like_homestay, name='like_homestay'),
+    path('homestay/<int:homestay_id>/', views.homestay_details, name='homestay_details'),
+    path('bookings/', views.bookings, name='bookings'),
+    path('add_review/<int:homestay_id>/', views.add_review, name='add_review'),
+    path('recommendations/', views.recommend_homestays, name='recommend_homestays'),
+    path('search/', views.search_homestays, name='search_homestays'),
 ]

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Typeahead CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.min.css">
+</head>
+<body>
+    <input type="text" id="locationInput" class="typeahead" placeholder="Type location...">
+    <div id="suggestions"></div>
+
+    <!-- Typeahead script -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var locations = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.whitespace,
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                local: [],  // Initialize with an empty array
+                limit: 10    // Limit the number of suggestions
+            });
+
+            $('#locationInput.typeahead').typeahead({
+                minLength: 1, // Minimum characters to trigger suggestions
+                highlight: true
+            }, {
+                name: 'locations',
+                source: locations,
+                display: function (data) {
+                    return data.display_name;
+                },
+                templates: {
+                    suggestion: function (data) {
+                        return '<div>' + data.display_name + '</div>';
+                    }
+                }
+            });
+
+            // Mock data for demonstration purposes
+            var mockData = [
+                { display_name: 'Kathmandu, Nepal' },
+                { display_name: 'Pokhara, Nepal' },
+                { display_name: 'Bhaktapur, Nepal' },
+                // Add more locations as needed
+            ];
+
+            // Update Bloodhound with the mock data
+            locations.clear();
+            locations.local = mockData;
+            locations.initialize(true);
+
+            // Handle input events to update suggestions
+            $('#locationInput').on('input', function () {
+                var query = $(this).val();
+                var suggestions = mockData.filter(function (item) {
+                    return item.display_name.toLowerCase().includes(query.toLowerCase());
+                });
+                $('#suggestions').empty();
+                suggestions.forEach(function (suggestion) {
+                    $('#suggestions').append('<div>' + suggestion.display_name + '</div>');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
