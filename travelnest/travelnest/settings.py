@@ -29,23 +29,30 @@ SECRET_KEY = 'django-insecure-(cnvjmcsz*vj3h2akxcl0pkl!7grf*r+f--x366dti*uzlq375
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'accounts.User'
 
 # Application definition
 
 INSTALLED_APPS = [
+     'jazzmin',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'homestay',
+    'listing',
+    'contents',
     'accounts',
     'hosting',
-    'booking',
+  
+   
+    
+ 
 ]
 
 MIDDLEWARE = [
@@ -76,6 +83,9 @@ TEMPLATES = [
             ],
         },
     },
+]
+TEMPLATE_DIRS = [
+    os.path.join(BASE_DIR, 'templates'),
 ]
 
 WSGI_APPLICATION = 'travelnest.wsgi.application'
@@ -124,6 +134,9 @@ USE_I18N = True
 
 USE_TZ = True
 
+
+LOGIN_URL = 'home'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -135,6 +148,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 CKEDITOR_UPLOAD_PATH = 'ck_uploads'
 
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

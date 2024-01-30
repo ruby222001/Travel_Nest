@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extrastyle %}
+    <link href="{% static 'css/style1.css' %}" rel="stylesheet" />
+    <style>
+        .popup-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            text-align: center;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 900;
+        }
+        .payment-button {
+            height: 10px;
+            width: 10px;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <br>
+    <h1 class="booking-center-text">Booking Details</h1>
+    <div class="progress-box">
+        <div class="step booking-step {% if step == 1 %}active{% endif %}">
+            <div class="step-circle booking-step-circle {% if step == 1 %}booking-active-step-circle{% endif %}">1</div>
+        </div>
+        <div class="line"></div>
+        <div class="step booking-step {% if step == 2 %}active{% endif %}">
+            <div class="step-circle booking-step-circle {% if step == 2 %}booking-active-step-circle{% endif %}">2</div>
+        </div>
+        <div class="line"></div>
+        <div class="step booking-step {% if step == 3 %}active{% endif %}">
+            <div class="step-circle booking-step-circle {% if step == 3 %}booking-active-step-circle{% endif %}">3</div>
+        </div>
+        <div class="progress-bar blue-progress-bar" id="progress"></div>
+    </div>
+
+    <div class="reservation-info-box">
+        <h2 style="text-align: center;">Payment</h2>
+        <br>
+        <form  action="{% url 'payment' %}" method="post" onsubmit="return validateForm()">
+
+            {% csrf_token %}
+
+            <div>
+                <label for="fullname">User name</label>
+                <input type="text" id="fullname" class="form1" name="fullInput">
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="text" name="email" class="form1" id="email">
+            </div>
+            <div class="form-group">
+                <div class="form-field">
+                    <label for="paymentMethod">Payment Method</label>
+                    <select name="paymentMethod" class="form1" id="paymentMethod">
+                        <option value="khalti">Khalti</option>
+                        <option value="arrival">Pay on Arrival</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="number">Phone Number:</label>
+                    <input type="text" name="number" class="form1" id="number">
+                </div>
+            </div><br>
+            <div style="text-align: center;">
+                <button type="submit" id="redirect-button">Submit</button>
+            </div>
+        </form>
+
+        <div id="khalti-payment-option" class="popup-container" style="padding: 80px;" >
+            <p>Thank you for choosing Khalti payment.</p>
+            <button id="payment-button" >Pay with khalti</button>
+            <button id="closeKhaltiPopup">Close</button>
+
+        </div>
+
+        <div id="pay-on-arrival-message" class="popup-container"style="padding: 80px;">
+            <p>Thank you for choosing Pay on Arrival.Your homestay has been booked.</p>
+            <button id="closePayOnArrivalPopup">Close</button>
+        </div>
+
+        <div class="overlay" id="overlay"></div>
+    </div>
+    <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function validateForm() {
+            var fullname = $("#fullname").val();
+            var email = $("#email").val();
+            var paymentMethod = $("#paymentMethod").val();
+            var number = $("#number").val();
+            if (fullname === "" || email === "" || number === "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please fill in all the fields!',
+                });
+                return false;
+            }
+
+
+            return true;
+        }
+        $(document).ready(function () {
+    function showKhaltiPopup() {
+        $("#khalti-payment-option").show();
+        $("#overlay").show();
+    }
+
+    function showPayOnArrivalPopup() {
+        $("#pay-on-arrival-message").show();
+        $("#overlay").show();
+    }
+
+    $("#redirect-button").on("click", function (event) {
+        event.preventDefault();
+
+        if (validateForm()) {
+            var selectedPaymentMethod = $("#paymentMethod").val();
+
+            if (selectedPaymentMethod === "khalti") {
+                showKhaltiPopup();
+            } else if (selectedPaymentMethod === "arrival") {
+                showPayOnArrivalPopup();
+            }
+        }
+    });
+
+    $("#closeKhaltiPopup").on("click", function () {
+        $("#khalti-payment-option").hide();
+        $("#overlay").hide();
+    });
+
+    $("#closePayOnArrivalPopup").on("click", function () {
+        $("#pay-on-arrival-message").hide();
+        $("#overlay").hide();
+    });
+
+    function verifyPayment(payload) {
+        $.ajax({
+            url: "{% url 'verify_payment' %}",
+            type: "POST",
+            data: payload,
+            dataType: 'json',
+            success: function (response) {
+                if (response.status === 'true') {
+                    alert(response.message);
+                } else {
+                    alert(response.message);
+                }
+            },
+        });
+    }
+
+    var config = {
+        "publicKey": "test_public_key_f359d2bd4ccc4bc2ad77916a0eba7199",
+        "productIdentity": "1234567890",
+        "productName": "TravelNest",
+        "productUrl": "http://127.0.0.1:8000/",
+        "paymentPreference": ["KHALTI"],
+        "eventHandler": {
+            onSuccess: function (payload) {
+                console.log(payload);
+                verifyPayment(payload);
+            },
+            onError: function (error) {
+                console.log(error);
+            },
+            onClose: function () {
+                console.log('widget is closing');
+            }
+        }
+    };
+
+    var checkout = new KhaltiCheckout(config);
+    $("#payment-button").on("click", function () {
+        checkout.show({ amount: 1000 });
+    });
+});
+</script>
+{% endblock %}

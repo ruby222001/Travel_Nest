@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extrastyle %}
+<link href="{% static 'css/style1.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+<div class="container">
+    <br>
+    <center>
+        <h1>ABOUT US</h1>
+        <br>
+    </center>
+    <div style="text-align: center;">
+        <img src="{% static 'images/about.jpg' %}" alt="image">
+    </div>
+    <br><br>
+    <p style="font-size:160%;">
+        At TravelNest, we believe in the warmth of home, the richness of cultural exchange, and the joy of connecting
+        with fellow travelers. Our platform is not just about providing a place to stay; it's about creating an
+        immersive and authentic experience that goes beyond the ordinary.
+        TravelNest is a platform for hosts to rent out their rooms to tourists seeking unique and personalized
+        accommodations. Hosts can list their available rooms, set pricing, and efficiently manage bookings. Travelers
+        can discover and book homestays that match their preferences, budget, and desired location.
+
+        <br><br><br>
+        <b>Our Hosts</b><br>
+        Our hosts are the heartbeat of our community. Handpicked for their warmth,
+        hospitality, and genuine love for sharing their culture, they take pride in offering more than just a place to
+        sleep.
+        Expect personalized recommendations, home-cooked meals, and insights into local life that you won't find in any
+        guidebook. <br><br><br>
+      <b>  Diversity and Inclusivity</b><br>
+        We celebrate diversity and believe in the power of inclusivity. Our homestays are as diverse as our global
+        community of travelers. From bustling city apartments to serene countryside retreats, each homestay reflects the
+        unique flavor of its location, ensuring a truly enriching experience for our guests.
+<br><br>
+      <b>  A Commitment to Quality</b><br>
+        Quality is non-negotiable for us. We meticulously vet each homestay to ensure it meets our high standards of
+        cleanliness, comfort, and safety. Our commitment to quality extends to every aspect of your experience, from
+        user-friendly booking processes to responsive customer support.
+    </p>
+</div>
+<div>
+
+</div>
+{% endblock %}

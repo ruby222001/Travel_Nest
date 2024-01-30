@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extrastyle %}
+<link href="{% static 'css/style1.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+<br>
+<script>
+  function validateBooking() {
+    var arrivalDate = document.getElementById('arrival-date').value;
+    var departureDate = document.getElementById('departure-date').value;
+    var totalGuests = document.getElementById('number').value;
+
+    // Check if arrival date, departure date, and total guests are filled in
+    if (!arrivalDate || !departureDate || !totalGuests) {
+      alert('Please select arrival date, departure date, and enter the number of guests.');
+      return false;
+    }
+
+    // Convert date strings to Date objects for comparison
+    var arrivalDateObj = new Date(arrivalDate);
+    var departureDateObj = new Date(departureDate);
+
+    // Check if departure date is after arrival date
+    if (arrivalDateObj >= departureDateObj) {
+      alert('Departure date must be after arrival date.');
+      return false;
+    }
+
+    // Check if the number of guests is a valid positive integer
+    if (isNaN(totalGuests) || totalGuests <= 0 || Math.floor(totalGuests) !== +totalGuests) {
+      alert('Please enter a valid number of guests.');
+      return false;
+    }
+
+
+    window.location.href = "{% url 'confirmation' homestay_id=list_homestays.id %}?arrival_date=" + arrivalDate + "&departure_date=" + departureDate + "&total_guests=" + totalGuests;
+    return false;
+
+  }
+</script>
+
+<h1 class="booking-center-text">Booking Details</h1>
+
+<div class="progress-box">
+  <div class="step booking-step {% if step == 1 %}active{% endif %}">
+    <div class="step-circle booking-step-circle {% if step == 1 %}booking-active-step-circle{% endif %}">1</div>
+  </div>
+  <div class="line"></div>
+  <div class="step booking-step {% if step == 2 %}active{% endif %}">
+    <div class="step-circle booking-step-circle {% if step == 2 %}booking-active-step-circle{% endif %}">2</div>
+  </div>
+  <div class="line"></div>
+  <div class="step booking-step {% if step == 3 %}active{% endif %}">
+    <div class="step-circle booking-step-circle {% if step == 3 %}booking-active-step-circle{% endif %}">3</div>
+  </div>
+  <div class="progress-bar blue-progress-bar" id="progress"></div>
+</div>
+
+
+<div class="reservation-info-box">
+  <center>
+    <h2>Reservation Info</h2>
+  </center><br>
+
+  <div>
+    <div class="reservation-image">
+      <img src="{{ list_homestays.photo.url }}" alt="" class="image" style="object-fit: cover;" />
+    </div>
+    <div class="reservation-details">
+      <ul class="booking-list-style">
+        <h1>{{ list_homestays.name }}</h1>
+        <li><b>Arrival Date: </b> <input type="date" id="arrival-date" name="arrival-date"></li>
+        <li><b>Departure Date:</b> <input type="date" id="departure-date" name="departure-date"></li>
+        <li><b>Total Guests:</b><input type="number" id="number" name="number"></li>
+        <li><b>Price:</b> NRs.{{ list_homestays.price }}</li>
+        <li><b>Location:</b> {{ list_homestays.location }}</li>
+        <li><b>Discount:Nill</b></li>
+        <li><b>Tax:</b> Rs 200</li>
+        <li><b>Total:</b> NRs.{{ list_homestays.price | default_if_none:0 | add:200 }}</li>
+      </ul>
+    </div>
+  </div>
+  <div>
+    <button id="redirect-button" onclick="return validateBooking()">Next Step</button>
+  </div>
+</div>
+
+<script>
+  const progressBar = document.getElementById("redirect-button");
+
+  if (step === 1) {
+    progressBar.style.width = "33.33%";
+  } else if (step === 2) {
+    progressBar.style.width = "66.66%";
+    document.querySelector(".step-circle.step-2").classList.add("active-step-circle");
+  } else if (step === 3) {
+    progressBar.style.width = "100%";
+    document.querySelector(".step-circle.step-3").classList.add("active-step-circle");
+  }
+
+  document.getElementById("redirect-button").addEventListener("click", function () {
+    step = 2;
+    progressBar.style.width = "66.66%";
+    document.querySelector(".step-circle.step-2").classList.add("active-step-circle");
+    window.location.href = "{% url 'payment' %}";
+  })
+</script>
+
+{% endblock content %}
