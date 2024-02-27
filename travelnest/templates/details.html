@@ -213,24 +213,8 @@
             document.getElementById('paymentForm').innerHTML = paymentForm;
         }
     }
-    function submitFormAndReturn() {
-    // Append the form to the body
-    document.body.insertAdjacentHTML('beforeend', paymentForm);
-
-    // Submit the form
-    const form = document.getElementById('khaltiForm');
-    form.submit();
-
-    // After submission, return to the previous page
-    window.history.back();
-}
-
-// Call the function when needed
-submitFormAndReturn();
-    function closeConfirmationPopup() {
-        const confirmationPopup = document.getElementById('confirmationPopup');
-        confirmationPopup.style.display = 'none';
-    }
+    
+    
 
     function confirmBooking() {
         const paymentmethod = document.getElementById('id_paymentmethod').value;

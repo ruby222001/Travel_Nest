@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+
+import booking
 from . import settings
 from hosting import views
 
@@ -27,6 +29,8 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('hosting/', include('hosting.urls')),
     path('booking/', include('booking.urls')),
+    path('verify_payment/', include('booking.urls')),  # Update this line with the correct app name
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

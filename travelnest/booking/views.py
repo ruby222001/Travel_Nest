@@ -6,7 +6,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
-
+from django.http import HttpResponseBadRequest
 
 def home(request):
     return render(request, 'home.html')
@@ -72,8 +72,9 @@ def initkhalti(request):
     
 
 
+
+
 def verify_payment(request):
-    
     url = "https://a.khalti.com/api/v2/epayment/lookup/"
     if request.method == 'GET':
         headers = {
@@ -81,28 +82,51 @@ def verify_payment(request):
             'Content-Type': 'application/json',
         }
         pidx = request.GET.get('pidx')
-        data = json.dumps({
-            'pidx':pidx
-        })
-        res = requests.request('POST',url,headers=headers,data=data)
-        print(res)
-        print(res.text)
+        transaction_id = request.GET.get('transaction_id')
+        tidx = request.GET.get('tidx')
+        amount = request.GET.get('amount')
+        total_amount = request.GET.get('total_amount')
+        mobile = request.GET.get('mobile')
+        status = request.GET.get('status')
+        purchase_order_id = request.GET.get('purchase_order_id')
+        purchase_order_name = request.GET.get('purchase_order_name')
 
-        new_res = json.loads(res.text)
-        print(new_res)
-        
+        data = {
+            'pidx': pidx,
+            'transaction_id': transaction_id,
+            'tidx': tidx,
+            'amount': amount,
+            'total_amount': total_amount,
+            'mobile': mobile,
+            'status': status,
+            'purchase_order_id': purchase_order_id,
+            'purchase_order_name': purchase_order_name,
+        }
 
-        if new_res['status'] == 'Completed':
-            # user = request.user
-            # user.has_verified_dairy = True
-            # user.save()
-            # perform your db interaction logic
-            pass
-        
-        # else:
-        #     # give user a proper error message
-        #     raise BadRequest("sorry ")
+        try:
+            res = requests.post(url, headers=headers, data=json.dumps(data))
+            print(res)
+            print(res.text)
 
-        return redirect('home')
+            new_res = res.json()
+            print(new_res)
 
-    
+            if new_res.get('status') == 'Completed':
+                # Payment successful, update your logic accordingly
+                # For example:
+                # user = request.user
+                # user.has_verified = True
+                # user.save()
+
+                # Redirect to a success page or wherever you need
+                return redirect('home')
+            else:
+                # Payment not successful, handle as needed
+                # For example, show an error message
+                return HttpResponseBadRequest("Payment not successful")
+        except Exception as e:
+            # Handle any exceptions or errors that might occur during the request
+            print("Error verifying payment:", e)
+            return HttpResponseBadRequest("Error verifying payment")
+
+    return HttpResponseBadRequest("Invalid request")
