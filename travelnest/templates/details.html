@@ -171,6 +171,8 @@
         <div class="modal-content">
             <span class="close" onclick="closeConfirmationPopup()">&times;</span>
             <p id="confirmationDetails">Booking confirmation details go here...</p>
+            <div id="paymentForm"></div>
+
             <button onclick="confirmBooking()">Confirm</button>
         </div>
     </div>
@@ -198,30 +200,33 @@
         confirmationPopup.style.display = 'block';
 
         if (paymentmethod === 'khalti') {
-            var config = {
-                "publicKey": "test_public_key_f359d2bd4ccc4bc2ad77916a0eba7199",
-                "productIdentity": "1234567890",
-                "productName": "TravelNest",
-                "productUrl": "http://127.0.0.1:8000/",
-                "paymentPreference": ["KHALTI"],
-                "eventHandler": {
-                    onSuccess: function (payload) {
-                        verifyPayment(payload);
-                    },
-                    onError: function (error) {
-                        console.log(error);
-                    },
-                    onClose: function () {
-                        console.log('widget is closing');
-                    }
-                }
-            };
-
-            var checkout = new KhaltiCheckout(config);
-            checkout.show({ amount: 1000 });
+        
+            const paymentForm = `
+                <form id="khaltiForm" action="{% url 'initiate' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="purchase_order_id" value="1" id="pid">
+                    <input type="hidden" name="amount" value= "{{ homestay.price_per_night }}" id="amt">
+                    <input type="hidden" name="return_url" value="http://127.0.0.1:8000/verify_payment">
+                    <button type="submit">Pay With Khalti</button>
+                </form>
+            `;
+            document.getElementById('paymentForm').innerHTML = paymentForm;
         }
     }
+    function submitFormAndReturn() {
+    // Append the form to the body
+    document.body.insertAdjacentHTML('beforeend', paymentForm);
 
+    // Submit the form
+    const form = document.getElementById('khaltiForm');
+    form.submit();
+
+    // After submission, return to the previous page
+    window.history.back();
+}
+
+// Call the function when needed
+submitFormAndReturn();
     function closeConfirmationPopup() {
         const confirmationPopup = document.getElementById('confirmationPopup');
         confirmationPopup.style.display = 'none';
@@ -243,6 +248,8 @@
 
     document.getElementById('bookingForm').submit();
 }
+
+
     function verifyPayment(payload) {
         $.ajax({
             url: "{% url 'verify_payment' %}",

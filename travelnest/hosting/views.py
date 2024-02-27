@@ -149,13 +149,14 @@ def homestay_details(request, homestay_id):
 
         reviews = Review.objects.filter(homestay=homestay).order_by('-created_at')
         print("Homestay ID:", homestay_id)
-        print("User has booked homestay:", user_has_booked_homestay)
+        print("Homestay_Name:",homestay)
 
         if request.method == 'POST':
             # Handle form submission and create Booking instance
             check_in_date = request.POST.get('check_in_date')
             check_out_date = request.POST.get('check_out_date')
             num_guests = request.POST.get('num_guests')
+
             payment_method = request.POST.get('paymentMethod')
             if request.user.is_authenticated:
                 # Check if the user is a host
@@ -323,36 +324,3 @@ def details(request):
 
     else:
         return render(request, 'details.html')
-@csrf_exempt
-def verifypayment(request):
-    try:
-        if request.method == 'POST':
-          data = request.POST
-          product_id = data.get('product_identity')
-          token = data.get('token')
-          amount = data.get('amount')
-
-          url = "https://khalti.com/api/v2/payment/verify/"
-          verify_payload = {
-            "token": token,
-            "amount": amount,
-        }
-
-          headers = {
-  "Authorization": "Key test_secret_key_b3552578ccbb4e02b7c3f1877bfedd4f"
-        }
-
-        response = requests.post(url, json=verify_payload, headers=headers)
-        response_data = response.json()
-
-        if response.status_code == 200:
-            return JsonResponse({'status': 'success', 'message': 'Payment verified', 'data': response_data})
-        else:
-            return JsonResponse({'status': 'error', 'message': 'Payment verification failed', 'data': response_data}, status=500)
-
-    
-    except Exception as e:
-        print(f"Exception: {e}") 
-        return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
-    
-

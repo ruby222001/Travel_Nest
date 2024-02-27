@@ -1,3 +1,4 @@
+import json
 from http.client import PAYMENT_REQUIRED
 
 import requests
@@ -5,7 +6,6 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
-
 
 
 def home(request):
@@ -29,35 +29,80 @@ def details(request):
 
     else:
         return render(request, 'details.html')
+    
+
 @csrf_exempt
-def verify_payment(request):
-    try:
-        if request.method == 'POST':
-          data = request.POST
-          product_id = data.get('product_identity')
-          token = data.get('token')
-          amount = data.get('amount')
+def initkhalti(request):
+    if request.method == 'POST':
+        url = "https://a.khalti.com/api/v2/epayment/initiate/"
+        return_url = request.POST.get('return_url')
+        amount = request.POST.get('amount')
+        purchase_order_id = request.POST.get('purchase_order_id')
 
-          url = "https://khalti.com/api/v2/payment/verify/"
-          verify_payload = {
-            "token": token,
-            "amount": amount,
+        user=request.user
+        print("return_url",return_url)
+        print("amount",amount)
+        print("purchase_order_id",purchase_order_id)
+        payload = json.dumps({
+        "return_url": return_url,
+        "website_url" : "http://127.0.0.1:8000",
+        "amount": amount,
+        "purchase_order_id": purchase_order_id,
+        "purchase_order_name": "test",
+        "customer_info": {
+            "name": user.username,
+            "email": "test@gmail.com",
+            "phone": "9800000005",
         }
+        })
 
-          headers = {
-            "Authorization": "Key test_secret_key_5e4c4d2114a54d119fbb859d4086947b"
-        }
+        headers = {
+    'Authorization': 'key f6a457f2166d415e9172144907325c3d',
+        'Content-Type': 'application/json',
+    }
 
-        response = requests.post(url, json=verify_payload, headers=headers)
-        response_data = response.json()
+        response = requests.post(url, headers=headers, data=payload)
+        print(response.text)
+        new_res =json.loads(response.text)
 
-        if response.status_code == 200:
-            return JsonResponse({'status': 'success', 'message': 'Payment verified', 'data': response_data})
-        else:
-            return JsonResponse({'status': 'error', 'message': 'Payment verification failed', 'data': response_data}, status=500)
+        print(new_res)
+        return redirect(new_res['payment_url'])
+    
 
     
-    except Exception as e:
-        print(f"Exception: {e}") 
-        return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
+
+
+def verify_payment(request):
+    
+    url = "https://a.khalti.com/api/v2/epayment/lookup/"
+    if request.method == 'GET':
+        headers = {
+            'Authorization': 'key f6a457f2166d415e9172144907325c3d',
+            'Content-Type': 'application/json',
+        }
+        pidx = request.GET.get('pidx')
+        data = json.dumps({
+            'pidx':pidx
+        })
+        res = requests.request('POST',url,headers=headers,data=data)
+        print(res)
+        print(res.text)
+
+        new_res = json.loads(res.text)
+        print(new_res)
+        
+
+        if new_res['status'] == 'Completed':
+            # user = request.user
+            # user.has_verified_dairy = True
+            # user.save()
+            # perform your db interaction logic
+            pass
+        
+        # else:
+        #     # give user a proper error message
+        #     raise BadRequest("sorry ")
+
+        return redirect('home')
+
     

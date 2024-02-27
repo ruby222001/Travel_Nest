@@ -17,7 +17,6 @@ urlpatterns = [
     path('recommendations/', views.recommend_homestays, name='recommend_homestays'),
     path('search/', views.search_homestays, name='search_homestays'),
      path('details/',views.details,name='details'),
-    path('verifypayment/',views.verifypayment,name='verifypayment'),
     path('about/',views.about,name='about'),
 
 ]
