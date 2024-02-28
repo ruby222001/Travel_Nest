@@ -1,0 +1,57 @@
+/* base.html */
+/* Navbar */
+header .row {
+    color: black;
+    margin: auto;
+}
+header .navbar {
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    height: 70px;
+    padding: 10px 80px;
+    align-items: center;
+    font-size: 24px;
+    z-index: 100;
+    left: 0;
+    right: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    background-color: white;
+}
+header .navbar .menu {
+    display: flex;
+    gap: 25px;
+}
+a {
+    color: inherit !important;
+    text-decoration: none !important;
+}
+.menu-toggle {
+    display: none;
+}
+
+/* Footer */
+footer {
+    width: 100%;
+    background-color: rgb(87, 87, 87);
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    color: white;
+    padding:35px 0px; 
+}
+footer .heading{
+    color: bisque;
+    font-size: 30px;
+}
+.footer-content {
+    display: flex;
+    justify-content: center;
+    gap: 15vw;
+}
+.footer-content .first {
+    width: 400px;
+}
+footer .copyright {
+    display: flex;
+    justify-content: center;
+    margin-top: 35px;
+}
