@@ -1,29 +1,213 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block homepage_navbar_bg %}
+    <style>
+        header .navbar {
+            background-color: transparent;
+            color: white;
+            box-shadow: none;
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+        }
+        @media (max-width: 768px) {
+            header .navbar {
+                background-color: white;
+                color: black;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            }
+        }
+        .scrolled {
+            background-color: white !important;
+            color: black !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+        }
+    </style>
+{% endblock %}
 {% block content %}
 
 
-What is Lorem Ipsum?
+<div>
 
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-Why do we use it?
+    <section class="slider">
+        <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active slider">
+                    <img src="{% static 'images/slider1.jpg' %}" class="d-block w-100 h-100" alt="Slider 1">
+                    <div class="carousel-caption ">
+                        <div class="slider-text text-center">
+                            STAY WITH US, FEEL AT HOME
+                        </div>
+                        <div>
+                            <a href=""><button class="cta-button"><span>EXPLORE</span></button></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item slider">
+                    <img src="{% static 'images/slider2.jpg' %}" class="d-block w-100 h-100" alt="Slider 2">
+                    <div class="carousel-caption">
+                        <div class="slider-text">
+                            BEST VACATION EXPERIENCE EVER
+                        </div>
+                        <div>
+                            <a href=""><button class="cta-button"><span>EXPLORE</span></button></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item slider">
+                    <img src="{% static 'images/slider3.jpg' %}" class="d-block w-100 h-100" alt="SLider 3">
+                    <div class="carousel-caption">
+                        <div class="slider-text">
+                            COME AS A GUEST, LEAVE AS A FRIEND
+                        </div>
+                        <div>
+                            <a href=""><button class="cta-button"><span>EXPLORE</span></button></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </section>
 
-It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+    <div class="search">
+        <form method="GET" action="">
+            {% csrf_token %}
+            <div class="search-form">
+                <i id="search-icon" class="bi bi-search"></i>
+                <input id="search-input" type="text" name="query" placeholder="Enter your query" style="display: none;">
+                <button type="submit" class="search-icon" style="display: none;">
+                    Search
+                </button>
+            </div>
+        </form>
+    </div>
 
-Where does it come from?
+    <div class="availability-search">
+        <div class="search">
+            <form method="GET" action="">
+                {% csrf_token %}
+                <div class="search-form">
+                    <div class="component">
+                        <label for="location">Location</label>
+                        <input type="text" name="location" required>
+                    </div>
+                    <div class="component">
+                        <label for="checkin_date">Check In</label>
+                        <input type="date" name="checkin_date">
+                    </div>
+                    <div class="component">
+                        <label for="checkout_date">Check Out</label>
+                        <input type="date" name="checkout_date">
+                    </div>
+                    <div class="component">
+                        <button type="submit">Check Availability</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
-Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+    <section class="welcome">
+        <div class="welcome-body effect">
+            <div class="welcome-text">
+                <div class="text">
+                    <div class="welcome-heading">Welcome Home!</div>
+                    <div class="welcome-content">
+                        TravelNest – your guide to unforgettable travel experiences. Explore distinctive accommodations, create lasting bonds, and embark on extraordinary adventures with us. From charming countryside cottages to vibrant urban lofts, our curated selection offers something for every traveler.
+                    </div>
+                </div>
+            </div>
+            <div class="welcome-image">
+                <img src="{% static 'images/about.jpg' %}"/>
+            </div>
+        </div>
+    </section>
 
-The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
-Where can I get some?
+    <section class="services">
+        <div class="service-content">
+            <div>
+                <div class="section-title">WHAT WE DO</div>
+                <div class="section-sub-title">Discover Our Services</div>
+            </div>
+            <div class="service">
+                <div>
+                    <i class="bi bi-headset"></i>
+                    <div class="service-heading">All-Time Support</div>
+                    <div class="heading-content">Is there something you don't understand? Feel free to chat with us. Get all your queries answered.</div>
+                </div>
+                <div>
+                    <i class="bi bi-house-fill"></i>
+                    <div class="service-heading">Become a host</div>
+                    <div class="heading-content">Rent your properties and welcome guests. Make use of your Property.</div>
+                </div>
+                <div>
+                    <i class="bi bi-search"></i>
+                    <div class="service-heading">Simple Search</div>
+                    <div class="heading-content">Find your homestay according to  your taste and convenience.</div>
+                </div>
+                <div>
+                    <i class="bi bi-piggy-bank"></i>
+                    <div class="service-heading">Bodget Friendly</div>
+                    <div class="heading-content">We have a lot of them. Find homestay within your budget.</div>
+                </div>
+                <div>
+                    <img src="{% static 'images/dog.png' %}"/>
+                    <div class="service-heading">Pet Friendly</div>
+                    <div class="heading-content">Don't leave your furry friends behind! Explore our pet-friendly accommodations for a hassle-free vacation.</div>
+                </div>
+                <div>
+                    <i class="bi bi-person-workspace"></i>
+                    <div class="service-heading">Work-Friendly Options</div>
+                    <div class="heading-content">eed to work remotely? Discover our work-friendly accommodations equipped with everything you need for a productive stay.</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.
-	
-	paragraphs
-	words
-	bytes
-	lists
-		Start with 'Lorem
-ipsum dolor sit amet...'
-	
+    <section class="explore">
+        Explore Section
+    </section>
+</div>
+
+<script>
+    window.addEventListener('scroll', function() {
+        var navbar = document.querySelector('header .navbar');
+        if (window.scrollY > 0) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+        var welcomeSection = document.querySelector('.effect');
+        var sectionPosition = welcomeSection.getBoundingClientRect().top;
+        var screenHeight = window.innerHeight;
+        
+        if (sectionPosition < screenHeight * 0.75) {
+            welcomeSection.classList.add('slide');
+        } else {
+            welcomeSection.classList.remove('slide');
+        }
+    });
+
+    document.getElementById('search-icon').addEventListener('click', function() {
+        var searchInput = document.getElementById('search-input');
+        var searchButton = document.querySelector('.search-icon');
+
+        if (searchInput.style.display === 'none') {
+            searchInput.style.display = 'inline-block';
+            searchButton.style.display = 'inline-block';
+        } else {
+            searchInput.style.display = 'none';
+            searchButton.style.display = 'none';
+        }
+    });
+
+
+</script>
+
 {% endblock %}

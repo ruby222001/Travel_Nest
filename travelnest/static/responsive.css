@@ -81,4 +81,60 @@
     .footer-content .first {
         width:80vw;
     }
+
+
+    /* index: .html */
+    /* Slider */
+    .carousel-caption .slider-text {
+        font-size: 35px;
+        width: 70vw;
+    }
+    
+    /* Availability Search */
+    .availability-search .search {
+        width: 100%;
+        top: 90%;
+    }
+    .availability-search .search-form {
+        margin: 0px;
+    }
+    .availability-search .search-form input {
+        width: 80vw;
+    }
+    .availability-search .search button {
+        width: 80vw;
+    }
+
+    /* Welcome */
+    .welcome-body {
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+        padding: 400px 15px 50px 15px;
+    }
+    .welcome-text {
+        display: flex;
+        justify-content: center;
+    }
+    .welcome .text {
+        width: 100%;
+        padding: 0px 15px 0px 25px;
+    }
+    .welcome-heading {
+        font-size: 40px;
+    }
+    .welcome-image img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    /* Services */
+    .section-sub-title {
+        padding: 0 15px;
+    }
+    .services .service {
+        gap: 30px;
+    }
 }
