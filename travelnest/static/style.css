@@ -142,17 +142,17 @@ footer .copyright {
     left: 4%;
     z-index: 1;
 }
-.search .search-form {
+.search .search-form1 {
     display: flex;
     align-items: center;
 }
-.search .search-form i{
+.search .search-form1 i{
     font-size: 45px;
     color: white;
     cursor: pointer;
     margin-right: 7px;
 }
-.search .search-form input {
+.search .search-form1 input {
     width: 230px;
     height: 50px;
     border-radius: 5px;
@@ -162,7 +162,7 @@ footer .copyright {
     background-color: rgba(0, 0, 0, 0.295);
     color: white;
 }
-.search .search-form button {
+.search .search-form1 button {
     font-size: 16px;
     background-color: rgb(87, 87, 87);
     width: 75px;

@@ -137,4 +137,9 @@
     .services .service {
         gap: 30px;
     }
+
+    /* Search */
+    .search {
+        top: 10%;
+    }
 }
