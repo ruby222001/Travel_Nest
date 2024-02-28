@@ -17,7 +17,14 @@
     {% block homepage_navbar_bg %}
     <style>
         header .navbar {
-            background-color: white; /* Change to the desired background color */
+            background-color: white;
+        }
+    </style>
+    {% endblock %}
+    {% block hostpage_navbar_bg %}
+    <style>
+        header .navbar{
+            visibility: visible;
         }
     </style>
     {% endblock %}
@@ -105,26 +112,26 @@
                         <ul class="dropdown-menu" aria-labelledby="loginDropdown">
                             {% if user.is_host %}
                                 <li><a class="dropdown-item" href="" data-bs-toggle="modal">Profile</a></li>
-                                <li><a class="dropdown-item" href="">Logout</a></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                             {% elif user.is_guest %}
                                 <li><a class="dropdown-item" href="" data-bs-toggle="modal">Profile</a></li>
-                                <li><a class="dropdown-item" href="">Logout</a></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                             {% else %}
-                                <li><a class="dropdown-item" href="">Logout</a></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                             {% endif %}
                         </ul>
                     </div>
                 {% else %}
                     <div>
-                        <a href="">Become a Host</a>
+                        <a href="{% url 'host' %}">Become a Host</a>
                     </div>
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="guestDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             Login/Register
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="guestDropdown">
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#guestsignupModal">Sign Up</a></li>
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#guestloginModal">Login</a></li>
+                            <li><a class="dropdown-item" href="{% url 'signup_guest' %}">Sign Up</a></li>
+                            <li><a class="dropdown-item" href="{% url 'login_guest' %}">Login</a></li>
                         </ul>
                     </div>
                 {% endif %}

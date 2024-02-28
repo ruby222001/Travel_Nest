@@ -142,4 +142,16 @@
     .search {
         top: 10%;
     }
+
+
+    /* Form */
+    .form {
+        max-width: 100%;
+    }
+    .user-details .input-box input{
+        width: 90vw;
+    }
+    .user-details .input-box.login input{
+        width: 330px;
+    }
 }

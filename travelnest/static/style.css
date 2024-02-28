@@ -324,3 +324,120 @@ footer .copyright {
 .services .service img {
     width: 95px;
 }
+
+
+/* host.html */
+/* header */
+.host-header {
+    width: 100%;
+    position: fixed;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 34px;
+    padding: 15px 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.host-button {
+    font-size: 18px;
+}
+.host-button button {
+    font-size: 18px;
+    background-color: rgb(87, 87, 87);
+    border-radius: 10px;
+    color: white;
+    border: none;
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 10px;
+}
+.host-description {
+    padding-top: 75px;
+}
+
+
+/* Form */
+.form-main {
+    display: flex;
+    justify-content: center;
+    padding: 140px 0px 70px 0px;
+    background-color: #f2f4fb;
+}
+.form {
+    background-color: #fff;
+    padding: 25px 30px 25px 25px;
+    border-radius: 5px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+    max-width: 740px;
+}
+.form .form-title{
+    font-size: 25px;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+.form .form-content form .user-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+form .user-details .input-box{
+    margin-bottom: 15px;
+}
+form .input-box span.details{
+    display: block;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+.user-details .input-box input{
+    height: 45px;
+    width: 330px;
+    outline: none;
+    font-size: 16px;
+    border-radius: 5px;
+    padding-left: 15px;
+    border: 1px solid #ccc;
+    border-bottom-width: 2px;
+    transition: all 0.3s ease;
+}
+.user-details .input-box input:focus,
+.user-details .input-box input:valid{
+    border-color: #636363;
+}
+form .button{
+    height: 45px;
+    margin: 35px 0px 15px 0px;
+}
+form .button input{
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #71b7e6, #9b59b6);
+}
+form .button input:hover{
+    /* transform: scale(0.99); */
+    background: linear-gradient(-135deg, #71b7e6, #9b59b6);
+}
+.form-footer {
+    display: flex;
+    gap: 2px;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+.form-link {
+    color: #bc2cf5;
+}
+.form-main.login {
+    padding: 163px 0px 83px 0px;
+}
+.form.login {
+    max-width: 400px;
+}
