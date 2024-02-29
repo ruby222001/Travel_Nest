@@ -156,7 +156,7 @@
             <div class="modal-body">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="payOnArrivalBtn">Pay on Arrival</button>
-                    <button type="button" class="btn btn-primary" id="payOnKhaltiBtn">Pay with Khalti</button>
+                    <button type="button"id="paymentForm"  class="btn btn-primary" >Pay with Khalti</button>
                 </div>
             </div>
             <div class="modal-footer">
@@ -204,7 +204,44 @@
         initializeMap();
     });
 </script>
+<script>
+     const paymentForm = `
+                <form id="khaltiForm" action="{% url 'initiate' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="purchase_order_id" value="1" id="pid">
+                    <input type="hidden" name="amount" value= "{{ homestay.price_per_night }}" id="amt">
+                    <input type="hidden" name="return_url" value="http://127.0.0.1:8000/verify__payment">
+                    <button type="submit">Pay With Khalti</button>
+                </form>
+            `;
+            document.getElementById('paymentForm').innerHTML = paymentForm;
+       
 
+
+        
+
+</script>
+<script>
+     function verifyPayment(payload) {
+        $.ajax({
+            url: "{% url 'verify_payment' %}",
+            type: "POST",
+            data: payload,
+            dataType: 'json',
+            success: function (response) {
+                if (response.status === 'success') {
+                    alert(response.message);
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function (error) {
+                alert('Error verifying payment.');
+                console.log(error);
+            }
+        });
+    }
+</script>
 
 <script>
     function openSecondaryImagesModal() {
@@ -294,9 +331,12 @@
         });
 
         // Add event listener for "Pay with Khalti" button
-        document.getElementById('payOnKhaltiBtn').addEventListener('click', function () {
+        document.getElementById('paymentForm').addEventListener('click', function () {
             // Set the payment option value to "Khalti"
             document.getElementById('payment-option-input').value = 'Khalti';
+            paymentModal.hide();
+            bookingForm.submit();
+
             // For now, do nothing on click
         });
         document.getElementById('book').addEventListener('click', function () {

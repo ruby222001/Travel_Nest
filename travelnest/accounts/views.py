@@ -17,6 +17,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 import os
 from booking.models import Booking
 
+
 # Create your views here.
 
 
