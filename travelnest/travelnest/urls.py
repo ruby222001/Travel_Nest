@@ -25,6 +25,7 @@ urlpatterns = [
     path('',views.show_home, name='home'),
     path('accounts/', include('accounts.urls')),
     path('hosting/', include('hosting.urls')),
+    path('homestay/', include('homestay.urls')),
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -14,6 +14,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
+    <!-- Include Leaflet.js library -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <!-- CSS and JS files for Search Box -->
+    <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+    <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.css">
+
+    
+
     {% block homepage_navbar_bg %}
     <style>
         header .navbar {
@@ -100,7 +112,7 @@
                 {% if user.is_authenticated %}
                     {% if user.is_host %}
                         <div>
-                            <a href="">Host</a>
+                            <a href="{% url 'host' %}">Host</a>
                         </div>
                     {% endif %}
                 {% endif %}
@@ -123,7 +135,7 @@
                     </div>
                 {% else %}
                     <div>
-                        <a href="{% url 'host' %}">Become a Host</a>
+                        <a href="{% url 'hosting' %}">Become a Host</a>
                     </div>
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="guestDropdown" data-bs-toggle="dropdown" aria-expanded="false">
