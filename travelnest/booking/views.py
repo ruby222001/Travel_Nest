@@ -77,7 +77,7 @@ def add_review(request, homestay_id):
     user_has_booked_homestay = Booking.objects.filter(
     homestay=homestay,
     user=request.user,
-    check_out_date__lte=today
+
     ).exists()
 
     if request.method == 'POST':

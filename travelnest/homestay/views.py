@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.core.serializers.json import DjangoJSONEncoder
 import json
 from django.contrib import messages
+from .recommendations import RecommendationSystem
 
 
 # Create your views here.
@@ -12,7 +13,18 @@ from django.contrib import messages
 
 def list(request):
     homestays = HomeStay.objects.filter(status='approved')
-    return render(request,'list.html',{'homestays':homestays})
+
+    # Assuming you have a logged-in user
+    if request.user.is_authenticated:
+        user_liked_homestays = request.user.liked_homestays.all()
+        user_past_bookings = Booking.objects.filter(user=request.user)
+        recommendation_system = RecommendationSystem(homestays)
+        recommendations = recommendation_system.recommend_homestays(user_liked_homestays, user_past_bookings)
+        
+    else:
+        recommendations = []
+
+    return render(request, 'list.html', {'homestays': homestays, 'recommendations': recommendations})
 
 
 def detail(request, homestay_id):

@@ -1,15 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<link href="{% static 'responsive.css' %}" rel="stylesheet" />
 
 <link href="{% static 'responsive.css' %}" rel="stylesheet" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-<div class="container mt-70 pt-70 detail">
-    <div class="mb-3">
+<div class=" container detail">
+    <div class="">
         <div class="row">
             <div class="title">{{ homestay.name }}</div>
             <div class="image">
@@ -18,14 +17,21 @@
                 </div>
                 <div class="secondary-image d-none d-md-block">
                     {% if homestay.images.all %}
-                            <div class="image-list">
-                                {% for image in homestay.images.all %}
+                        <div class="image-list">
+                            {% for image in homestay.images.all %}
+                                {% if forloop.counter <= 4 %}
                                     <div class="list-image">
                                         <img src="{{ image.image.url }}" class="" alt="Secondary Image">
                                     </div>
-                                {% endfor %}
-                            </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% if homestay.images.count > 4 %}
+                            <button onclick="openSecondaryImagesModal()">View All Secondary Images</button>
                         {% endif %}
+                    {% else %}
+                        No secondary images available.
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -162,6 +168,20 @@
 
 </div>
 
+<!-- Secondary Images Modal -->
+<div id="secondaryImagesModal" class="modal secondary">
+    <div class="modal-content">
+        <span class="close exit" onclick="closeSecondaryImagesModal()">&times;</span>
+        <div class="image-container">
+            {% for image in homestay.images.all %}
+                <img src="{{ image.image.url }}" class="secondary-image" alt="Secondary Image">
+            {% endfor %}
+        </div>
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+</div>
+
 <script>
     function initializeMap() {
         var mapContainer = document.querySelector('.map-container');
@@ -187,6 +207,16 @@
 
 
 <script>
+    function openSecondaryImagesModal() {
+        var modal = document.getElementById('secondaryImagesModal');
+        modal.style.display = "block";
+    }
+
+    function closeSecondaryImagesModal() {
+        var modal = document.getElementById('secondaryImagesModal');
+        modal.style.display = "none";
+    }
+    
     document.addEventListener('DOMContentLoaded', function () {
         var bookingForm = document.getElementById('booking-form');
         var confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
