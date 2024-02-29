@@ -154,4 +154,7 @@
     .user-details .input-box.login input{
         width: 330px;
     }
+    .user-details .input-box textarea{
+        width: 90vw;
+    }
 }

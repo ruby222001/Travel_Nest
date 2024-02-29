@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<link href="{% static 'responsive.css' %}" rel="stylesheet" />
+  <div class="container mt-70">
+    <h2>Homestay List</h2>
+    <ul>
+      {% for homestay in homestays %}
+        <li><a href="{% url 'homestay_detail' homestay.id %}">{{ homestay.name }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+
+
+  <div><a href="{% url 'add_homestay' %}">Add</a></div>
+{% endblock %}

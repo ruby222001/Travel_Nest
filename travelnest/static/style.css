@@ -441,3 +441,56 @@ form .button input:hover{
 .form.login {
     max-width: 400px;
 }
+.user-details .input-box textarea{
+    height: 100px;
+    width: 680px;
+    outline: none;
+    font-size: 16px;
+    border-radius: 5px;
+    padding-left: 15px;
+    border: 1px solid #ccc;
+    border-bottom-width: 2px;
+    transition: all 0.3s ease;
+}
+.user-details .input-box textarea:focus,
+.user-details .input-box textarea:valid{
+    border-color: #636363;
+}
+.admin-login {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f2f4fb;
+}
+
+
+/* Custom Admin Panel */
+.sidebar {
+    margin-top: 70px;
+    width: 250px;
+    min-height: 100vh;
+    position: fixed;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.sidebar .sidebar-menu {
+    text-align: center;
+    padding: 15px 0px;
+}
+.sidebar .sidebar-menu div {
+    padding: 25px 0px;
+    font-size: 20px;
+}
+.main-admin{
+    margin-top: 100px;
+    margin-left: 270px;
+}
+.main-admin .head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+.main-admin .head input {
+    margin-right: 35px;
+    width: 250px;
+}
