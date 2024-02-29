@@ -1,0 +1,352 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link href="{% static 'responsive.css' %}" rel="stylesheet" />
+
+<link href="{% static 'responsive.css' %}" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<div class="container mt-70 pt-70 detail">
+    <div class="mb-3">
+        <div class="row">
+            <div class="title">{{ homestay.name }}</div>
+            <div class="image">
+                <div class="main-img">
+                    <img src="{{ homestay.thumbnail_image.url }}" class="" alt="{{ homestay.name }}">
+                </div>
+                <div class="secondary-image d-none d-md-block">
+                    {% if homestay.images.all %}
+                            <div class="image-list">
+                                {% for image in homestay.images.all %}
+                                    <div class="list-image">
+                                        <img src="{{ image.image.url }}" class="" alt="Secondary Image">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="segment">
+            <div class="left">
+                <div class="">
+                    <div class="homestay-detail">
+                        <div class="name">{{ homestay.location }}</div>
+                        <div class="guest">{{ homestay.num_guests }} guest</div>
+                        <div class="price" data-price="{{ homestay.price_per_night }}">Rs.{{ homestay.price_per_night }}/night</div>
+                        <div class="description"><b>Description:</b><br/> {{ homestay.description }}</div>
+                        <div class="feature-heading">Features</div>
+                        {% for features in homestay.features.all %}
+                        <div class="features">
+                            <li>{{ features }}</li>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- Add a div for the map -->
+                <div class="map-heading">Where you will be</div>
+                <div class="map-container detail" data-latitude="{{ homestay.latitude }}" data-longitude="{{ homestay.longitude }}" style="height: 300px;"></div>
+            </div>
+
+            <!-- Booking form -->
+            <div class="book-form-main">
+                {% if request.user.is_authenticated %}
+                {% if request.user.is_guest %}
+                <div class="book-form-heading">Book Now</div>
+                    <form id="booking-form" action="{% url 'book_homestay' homestay.id %}" method="post" enctype="multipart/form-data" class="book-form">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="check-in-date" class="form-label">Check-in Date</label>
+                            <input type="text" class="form-control" id="checkindate" name="check_in_date" bookeddates="{{ bookeddates }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="check-out-date" class="form-label">Check-out Date</label>
+                            <input type="text" class="form-control" id="checkoutdate" name="check_out_date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="num-guests" class="form-label">Number of Guests</label>
+                            <input type="number" class="form-control" id="num-guests" name="num_guests" min="1" max="{{ homestay.num_guests }}" required>
+                        </div>
+                        <input type="hidden" id="payment-option-input" name="payment_option">
+                        <input type="hidden" id="formatted-checkin-date" name="formatted_check_in_date">
+                        <input type="hidden" id="formatted-checkout-date" name="formatted_check_out_date">
+                        <input type="hidden" id="totalAmount" name="totalAmount">
+                        <button type="submit" class="btn btn-primary">Book</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+            </div>
+        </div>
+
+        {% if request.user.is_authenticated %}
+            {% if user_has_booked_homestay %}
+                <form id="review-form" action="{% url 'add_review' homestay.id %}" method="post" class="mt-70">
+                    {% csrf_token %}
+                    <!-- Add fields for rating and comment -->
+                    <div class="mb-3">
+                        <label for="rating" class="form-label">Rating</label>
+                        <select class="form-select" id="rating" name="rating">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Comment</label>
+                        <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                </form>
+            {% endif %}
+        {% endif %}
+
+    <!-- Display all reviews -->
+    <h2 class="mt-4">Reviews</h2>
+    <div id="reviews">
+        {% for review in reviews %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ review.user.username }} - {{ review.rating }} stars</h5>
+                    <p class="card-text">{{ review.comment }}</p>
+                    <p class="card-text"><small class="text-muted">{{ review.created_at }}</small></p>
+                </div>
+            </div>
+        {% empty %}
+            <p>No reviews yet.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Modals for confirmation -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Booking Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Display booking details here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="confirmBookingBtn">Confirm Booking</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="paymentModalLabel">Select Payment Method</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="payOnArrivalBtn">Pay on Arrival</button>
+                    <button type="button" class="btn btn-primary" id="payOnKhaltiBtn">Pay with Khalti</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script>
+    function initializeMap() {
+        var mapContainer = document.querySelector('.map-container');
+        var latitude = mapContainer.getAttribute('data-latitude');
+        var longitude = mapContainer.getAttribute('data-longitude');
+
+        // Check if latitude and longitude are available
+        if (latitude !== 'None' && longitude !== 'None') {
+            var map = L.map(mapContainer).setView([latitude, longitude], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            L.marker([latitude, longitude]).addTo(map);
+        } else {
+            console.log("Invalid latitude or longitude for this homestay.");
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        initializeMap();
+    });
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var bookingForm = document.getElementById('booking-form');
+        var confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+        var paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+        var book = document.getElementById('book');
+
+        function calculateTotalDays(checkInDate, checkOutDate) {
+            // Convert check-in and check-out dates to Date objects
+            var checkIn = new Date(checkInDate);
+            var checkOut = new Date(checkOutDate);
+
+            // Calculate the difference in time between the two dates
+            var differenceInTime = checkOut.getTime() - checkIn.getTime();
+
+            // Calculate the number of days by dividing the difference by the number of milliseconds in a day
+            var differenceInDays = differenceInTime / (1000 * 3600 * 24);
+
+            // Return the rounded number of days plus 1 to include the check-in date
+            return Math.round(differenceInDays) + 1;
+        }
+
+        bookingForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var formData = new FormData(bookingForm);
+            var checkInDate = formData.get('check_in_date');
+            var formattedCheckInDate = formatDate(checkInDate);
+            
+            var checkOutDate = formData.get('check_out_date');
+            var formattedCheckOutDate = formatDate(checkOutDate);
+
+            var numGuests = formData.get('num_guests');
+
+            var pricePerNight = parseFloat(document.querySelector('.price').getAttribute('data-price'));
+            var totalDays = calculateTotalDays(checkInDate, checkOutDate);
+            var totalAmount = pricePerNight * totalDays;
+            
+
+            document.getElementById('totalAmount').value = totalAmount;
+            document.getElementById('formatted-checkin-date').value = formattedCheckInDate;
+            document.getElementById('formatted-checkout-date').value = formattedCheckOutDate;
+
+            // Display booking details in confirmation modal
+            var modalBody = document.querySelector('#confirmationModal .modal-body');
+            modalBody.innerHTML = `
+            <p>Check-in Date: ${formattedCheckInDate}</p>
+            <p>Check-out Date: ${formattedCheckOutDate}</p>
+            <p>Number of Guests: ${numGuests}</p>
+            <p>Total Amount: Rs.${totalAmount}</p>
+            `;
+
+            function formatDate(dateString) {
+                var parts = dateString.split('/');
+                return parts[2] + '-' + parts[0].padStart(2, '0') + '-' + parts[1].padStart(2, '0');
+            }
+
+            // Show confirmation modal
+            confirmationModal.show();
+
+            // Handle confirmation of booking
+            document.getElementById('confirmBookingBtn').addEventListener('click', function () {
+                // Display payment modal
+                confirmationModal.hide();
+                paymentModal.show();
+            });
+        });
+        
+        // Add event listener for "Pay on Arrival" button
+        document.getElementById('payOnArrivalBtn').addEventListener('click', function () {
+            // Set the payment option value to "Pay on Arrival"
+            document.getElementById('payment-option-input').value = 'Pay on Arrival';
+            // Close payment modal
+            paymentModal.hide();
+            // Submit the booking form
+            bookingForm.submit();
+        });
+
+        // Add event listener for "Pay with Khalti" button
+        document.getElementById('payOnKhaltiBtn').addEventListener('click', function () {
+            // Set the payment option value to "Khalti"
+            document.getElementById('payment-option-input').value = 'Khalti';
+            // For now, do nothing on click
+        });
+        document.getElementById('book').addEventListener('click', function () {
+            // Submit the booking form
+            bookingForm.submit();
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    var bookedDates = JSON.parse('{{ bookeddates | escapejs }}');
+    console.log(bookedDates);
+
+    function disableSpecificDates(date) {
+        var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+        // var checkIn = bookedDates[0].check_in_date;
+        // if (date == checkIn) {
+        //     console.log("Check-in Date:", date);
+        //         return [false];
+        //     }
+        console.log("Check-in Date:", checkIn);
+        for (var i = 0; i < bookedDates.length; i++) {
+            var checkInDate = new Date(bookedDates[i].check_in_date);
+            var checkOutDate = new Date(bookedDates[i].check_out_date);
+            var checkIn = bookedDates[0].check_in_date;
+            if (date >= checkInDate && date <= checkOutDate) {
+                return [false];
+            }
+        }
+        return [true];
+    }
+
+    $("#checkindate").datepicker({
+        beforeShowDay: disableSpecificDates,
+        minDate: 1,
+        onSelect: function (selectedDate) {
+            var minDate = $(this).datepicker('getDate');
+            if (minDate) {
+                minDate.setDate(minDate.getDate() + 1);
+            }
+            $("#checkoutdate").datepicker('option', 'minDate', minDate || 1);
+        }
+    });
+
+    $("#checkoutdate").datepicker({
+        beforeShowDay: disableSpecificDates,
+        minDate: 1,
+        onSelect: function (selectedDate) {
+            var maxDate = $(this).datepicker('getDate');
+            if (maxDate) {
+                maxDate.setDate(maxDate.getDate() - 1);
+            }
+            $("#checkindate").datepicker('option', 'maxDate', maxDate);
+        }
+    });
+});
+</script>
+<!-- <p>Date: <input type="text" id="datepicker"></p> -->
+
+<!-- <script>
+$(function() {
+    var disabledDates = ["2024-02-15", "2024-02-20", "2024-02-25"];
+    
+    function disableSpecificDates(date) {
+        var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+        return [disabledDates.indexOf(string) === -1];
+    }
+    
+    $("#checkindate").datepicker({
+        beforeShowDay: function(date) {
+            var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+            if (disabledDates.indexOf(string) !== -1) {
+                return [false, "disabled-date", "This date is disabled"];
+            }
+            return [true];
+        }
+    });
+});
+</script> -->
+
+
+{% endblock %}
