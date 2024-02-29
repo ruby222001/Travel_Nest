@@ -20,12 +20,13 @@ from django.conf.urls.static import static
 from . import settings
 from contents import views
 urlpatterns = [
-    path('django-admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
 
     path('',views.show_home, name='home'),
     path('accounts/', include('accounts.urls')),
     path('hosting/', include('hosting.urls')),
     path('homestay/', include('homestay.urls')),
+    path('custom-admin/', include('custom_admin.urls')),
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

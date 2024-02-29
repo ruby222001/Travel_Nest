@@ -1,0 +1,77 @@
+{% extends 'admin_home.html' %}
+{% load static %}
+{% block content %}
+<div class="main-admin">
+    <div class="head">
+        <h2>All Users</h2>
+        <input type="text" id="myInput" onkeyup="filterTable()" placeholder="Search for users..." title="Type in a name">
+    </div>
+    <table class="table" id="myTable">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Username</th>
+                <th scope="col">Full Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone Number</th>
+                <th scope="col">Address</th>
+                <th scope="col">User Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            {% if user.is_host or user.is_guest %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.first_name }} {{ user.last_name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.mobile }}</td>
+                <td>{{ user.address }}</td>
+                <td>
+                    {% if user.is_host %}
+                        Host
+                    {% elif user.is_guest %}
+                        Guest
+                    {% endif %}
+                </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function filterTable() {
+        var input, filter, table, tr, td, i, j, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            if (tr[i].getElementsByTagName("th").length > 0) {
+                // Skip the header row
+                continue;
+            }
+            // Loop through all the cells in the current row
+            var found = false;
+            for (j = 0; j < tr[i].cells.length; j++) {
+                td = tr[i].cells[j];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        break; // Break the inner loop if a match is found in any cell
+                    }
+                }
+            }
+            if (found) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+    </script>
+{% endblock %}

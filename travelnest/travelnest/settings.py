@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'accounts',
     'hosting',
     'homestay',
+    'custom_admin',
 
 ]
 
