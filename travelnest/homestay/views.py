@@ -1,11 +1,16 @@
-from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
-from .models import HomeStay, Feature, HomeStayImage
-from booking.models import Booking, Review
-from django.utils import timezone
-from django.core.serializers.json import DjangoJSONEncoder
 import json
-from django.contrib import messages
 
+import requests
+from django.contrib import messages
+from django.core.serializers.json import DjangoJSONEncoder
+from django.http import JsonResponse
+from django.shortcuts import HttpResponse, get_object_or_404, redirect, render
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+
+from booking.models import Booking, Review
+
+from .models import Feature, HomeStay, HomeStayImage
 
 # Create your views here.
 
@@ -59,3 +64,40 @@ def like_homestay(request, homestay_id):
     
     # Redirect the user back to the previous page
     return redirect(request.META.get('HTTP_REFERER'))
+
+
+
+# //to admin
+
+@csrf_exempt
+def verifyy_payment(request):
+    try:
+        if request.method == 'POST':
+          data = request.POST
+          product_id = data.get('product_identity')
+          token = data.get('token')
+          amount = data.get('amount')
+
+          url = "https://khalti.com/api/v2/payment/verifyy_payment/"
+          verify_payload = {
+            "token": token,
+            "amount": amount,
+        }
+
+          headers = {
+  "Authorization": "Key test_secret_key_f59e8b7d18b4499ca40f68195a846e9b"
+        }
+
+        response = requests.post(url, json=verify_payload, headers=headers)
+        response_data = response.json()
+
+        if response.status_code == 200:
+            return JsonResponse({'status': 'success', 'message': 'Payment verified', 'data': response_data})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Payment verification failed', 'data': response_data}, status=500)
+
+    
+    except Exception as e:
+        print(f"Exception: {e}") 
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
+    
