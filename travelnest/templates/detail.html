@@ -255,6 +255,7 @@
     }
     
     document.addEventListener('DOMContentLoaded', function () {
+        var bookingData = {};
         var bookingForm = document.getElementById('booking-form');
         var confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
         var paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
@@ -295,6 +296,54 @@
             document.getElementById('formatted-checkin-date').value = formattedCheckInDate;
             document.getElementById('formatted-checkout-date').value = formattedCheckOutDate;
 
+            
+            var bookingData = {
+        checkInDate: formattedCheckInDate,
+        checkOutDate: formattedCheckOutDate,
+        numGuests: numGuests,
+        totalAmount: totalAmount,
+        user: '{{request.user.id}}',
+        homestay: '{{homestay.id}}'
+    };
+
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+    // Send an AJAX request to store the booking data in the session
+    var csrftoken = getCookie('csrftoken');
+
+$.ajax({
+    url: '/booking/store-booking-data/',
+    type: 'POST',
+    headers: {
+        'X-CSRFToken': csrftoken
+    },
+    data: {
+        'booking_data': JSON.stringify(bookingData)
+    },
+    dataType: 'json',
+    success: function (response) {
+        console.log(response.message);
+        // Proceed with other actions
+    },
+    error: function (xhr, status, error) {
+        console.error('Error storing booking data:', error);
+    }
+});
+
             // Display booking details in confirmation modal
             var modalBody = document.querySelector('#confirmationModal .modal-body');
             modalBody.innerHTML = `
@@ -315,6 +364,7 @@
             // Handle confirmation of booking
             document.getElementById('confirmBookingBtn').addEventListener('click', function () {
                 // Display payment modal
+                
                 confirmationModal.hide();
                 paymentModal.show();
             });
@@ -335,9 +385,8 @@
             // Set the payment option value to "Khalti"
             document.getElementById('payment-option-input').value = 'Khalti';
             paymentModal.hide();
-            bookingForm.submit();
 
-            // For now, do nothing on click
+
         });
         document.getElementById('book').addEventListener('click', function () {
             // Submit the booking form

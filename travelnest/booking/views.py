@@ -15,6 +15,10 @@ from django.views.decorators.csrf import csrf_exempt
 from homestay.models import HomeStay
 
 from .models import Booking, Review
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.contrib.sessions.models import Session
+from django.contrib import messages
 
 # Create your views here.
 
@@ -127,7 +131,7 @@ def initkhalti(request):
         "purchase_order_id": purchase_order_id,
         "purchase_order_name": "test",
         "customer_info": {
-            # host vako view tira rakhda access garna milxa hola 
+            
             "name": "ram",
             "eamil": "email@gmail.com",
             "phone": "9800000005",
@@ -205,7 +209,19 @@ def verify_payment(request):
         except Exception as e:
             # Handle any exceptions or errors that might occur during the request
             print("Error verifying payment:", e)
-            return HttpResponseBadRequest("Error verifying payment")
+            # Attempt to create the booking instance from session data
+            booking_data = request.session.get('booking_data')
+            messages.success(request,'Booking Sucessful.')
+            return redirect('home')
 
     return HttpResponseBadRequest("Invalid request")
 
+
+
+def store_booking_data(request):
+    if request.method == 'POST':
+        booking_data = request.POST.get('booking_data')
+        request.session['booking_data'] = booking_data
+        return JsonResponse({'message': 'Booking data stored successfully.'})
+    else:
+        return JsonResponse({'error': 'Invalid request method.'}, status=400)
