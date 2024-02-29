@@ -1,0 +1,23 @@
+{% extends 'admin_home.html' %}
+{% load static %}
+{% block content %}
+<div class="main-admin">
+    <h2>Homestay Requests</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Homestay Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for homestay in pending_homestays %}
+            <tr>
+                <td><a href="{% url 'homestay_details' homestay.id %}">{{ homestay.name }}</a></td>
+                <td><a href="{% url 'homestay_details' homestay.id %}">View Details</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

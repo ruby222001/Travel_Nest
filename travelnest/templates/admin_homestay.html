@@ -1,0 +1,29 @@
+{% extends 'admin_home.html' %}
+{% load static %}
+{% block content %}
+<div class="main-admin">
+    <h1>Approved Homestays</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Number of Guests</th>
+                <th>Price per Night</th>
+                <th>Host</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for homestay in approved_homestays %}
+            <tr>
+                <td>{{ homestay.name }}</td>
+                <td>{{ homestay.location }}</td>
+                <td>{{ homestay.num_guests }}</td>
+                <td>{{ homestay.price_per_night }}</td>
+                <td>{{ homestay.host.username }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
