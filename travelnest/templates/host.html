@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block hostpage_navbar_bg %}
+    <style>
+        header .navbar {
+            visibility: hidden;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+
+    <div>
+
+        <div class="host-header">
+            <div>
+                <a href="/">TravelNest</a>
+            </div>
+            <div class="host-button">
+                <button class="btn dropdown-toggle"  id="hostDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-house-fill"></i>Host Your Homestay</button>
+                <ul class="dropdown-menu" aria-labelledby="hostDropdown">
+                    <li><a class="dropdown-item" href="{% url 'signup_host' %}">Sign Up</a></li>
+                    <li><a class="dropdown-item" href="{% url 'login_host' %}">Login</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="host-description">
+            <div>
+                <div>
+                    Host Your Homestay
+                </div>
+            </div>
+            <div>
+                <img src="{% static 'images/about.jpg' %}"/>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

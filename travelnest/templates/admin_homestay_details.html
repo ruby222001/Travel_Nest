@@ -1,0 +1,131 @@
+{% extends 'admin_home.html' %}
+{% load static %}
+{% block content %}
+<div class="main-admin">
+    <h1>HomeStay Details</h1>
+    <ul>
+        <!-- HomeStay details -->
+        <li><strong>Host:</strong> {{ homestay.host }}</li>
+        <li><strong>Name:</strong> {{ homestay.name }}</li>
+        <li><strong>Location:</strong> {{ homestay.location }}</li>
+        <li><strong>Number of Guests:</strong> {{ homestay.num_guests }}</li>
+        <li><strong>Price per Night:</strong> {{ homestay.price_per_night }}</li>
+        <li><strong>Ownership Documents:</strong> <a href="{{ homestay.ownership_documents.url }}" target="_blank">View</a></li>
+        <li><strong>Citizenship Documents:</strong> <a href="{{ homestay.citizenship_documents.url }}" target="_blank">View</a></li>
+        <li><strong>Thumbnail Image:</strong> <img src="{{ homestay.thumbnail_image.url }}" alt="Thumbnail Image"></li>
+        <li><strong>Secondary Images:</strong> 
+            {% if homestay.images.all %}
+                <button onclick="openSecondaryImagesModal()">View Secondary Images</button>
+            {% else %}
+                No secondary images available.
+            {% endif %}
+        </li>
+        <li><strong>Description:</strong> {{ homestay.description }}</li>
+        <li><strong>Status:</strong> {{ homestay.get_status_display }}</li>
+        <li><strong>Latitude:</strong> {{ homestay.latitude }}</li>
+        <li><strong>Longitude:</strong> {{ homestay.longitude }}</li>
+        <li><strong>Features:</strong> 
+            <ul>
+                {% for feature in homestay.features.all %}
+                <li>{{ feature.name }}</li>
+                {% endfor %}
+            </ul>
+        </li>
+    </ul>
+
+    <!-- Form to change status -->
+    <h2>Change Status</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="status">Status:</label>
+        <select name="status" id="status">
+            <option value="pending" {% if homestay.status == 'pending' %}selected{% endif %}>Pending</option>
+            <option value="approved" {% if homestay.status == 'approved' %}selected{% endif %}>Approved</option>
+            <option value="unapproved" {% if homestay.status == 'unapproved' %}selected{% endif %}>Unapproved</option>
+        </select>
+        <button type="submit">Save</button>
+    </form>
+
+    <!-- Map -->
+    <h2>Map</h2>
+    <div class="map-container detail" data-latitude="{{ homestay.latitude }}" data-longitude="{{ homestay.longitude }}" style="height: 300px;"></div>
+    
+
+    <!-- Secondary Images Modal -->
+    <div id="secondaryImagesModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeSecondaryImagesModal()">&times;</span>
+            <div class="image-container">
+                {% for image in homestay.images.all %}
+                    <img src="{{ image.image.url }}" class="secondary-image" alt="Secondary Image">
+                {% endfor %}
+            </div>
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // JavaScript to initialize the map
+    function initializeMap() {
+        var mapContainer = document.querySelector('.map-container');
+        var latitude = mapContainer.getAttribute('data-latitude');
+        var longitude = mapContainer.getAttribute('data-longitude');
+
+        // Check if latitude and longitude are available
+        if (latitude !== 'None' && longitude !== 'None') {
+            var map = L.map(mapContainer).setView([latitude, longitude], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            L.marker([latitude, longitude]).addTo(map);
+        } else {
+            console.log("Invalid latitude or longitude for this homestay.");
+        }
+    }
+
+    function openSecondaryImagesModal() {
+        var modal = document.getElementById('secondaryImagesModal');
+        modal.style.display = "block";
+    }
+
+    function closeSecondaryImagesModal() {
+        var modal = document.getElementById('secondaryImagesModal');
+        modal.style.display = "none";
+    }
+
+    // Close Document Functionality
+    function closeDocument(documentType) {
+        var documentSection = document.getElementById(documentType + "-document-section");
+        documentSection.style.display = "none";
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        initializeMap();
+    });
+
+    // JavaScript for image slideshow
+    var slideIndex = 1;
+    showSlides(slideIndex);
+
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+        showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+        var i;
+        var slides = document.getElementsByClassName("secondary-image");
+        if (n > slides.length) {slideIndex = 1}    
+        if (n < 1) {slideIndex = slides.length}
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";  
+        }
+        slides[slideIndex-1].style.display = "block";  
+    }
+</script>
+{% endblock %}

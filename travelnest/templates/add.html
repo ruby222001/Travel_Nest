@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="form-main">
+    <div class="form">
+        <div class="form-title">Add Homestay</div>
+        <div class="form-content">
+            <form action="{% url 'add_homestay' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="user-details">
+                    <div class="input-box">
+                        <span class="details">Name</span>
+                        <input type="text" name="name" placeholder="Enter the name of the homestay." required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Location</span>
+                        <input type="text" name="location" placeholder="Enter its location." required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Number of Guests</span>
+                        <input type="number" name="num_guests" placeholder="Enter no. of guests." required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Price per Night</span>
+                        <input type="number" name="price_per_night" placeholder="Enter price per night." required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Ownership Documents</span>
+                        <input type="file" name="ownership_documents" placeholder="Upload a copy of ownership documents." required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Citizenship Documents</span>
+                        <input type="file" name="citizenship_documents" placeholder="Upload a copy of your citizenhip." required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Thumbnail Image</span>
+                        <input type="file" name="thumbnail_image" placeholder="Upload thumbnail image." required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Secondary Image Image</span>
+                        <input type="file" name="secondary_images" placeholder="Upload secondary images." multiple required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Description</span>
+                        <textarea name="description" placeholder="Description of homestay." required></textarea>
+                    </div>
+                    <div class="">
+                        <span class="details">Features</span>
+                        {% for category, features in organized_features.items %}
+                            <div class="category">
+                                <h3>{{ category }}</h3>
+                                <ul>
+                                    {% for feature in features %}
+                                        <li>
+                                            <input type="checkbox" name="features" value="{{ feature.id }}">
+                                            <span>{{ feature.name }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                    {% endfor %}
+                    </div>
+                </div>
+                <div>
+                    <div>Select Location</div>
+                    <div id="map" style="height: 400px; z-index: 0;"></div>
+                    <!-- Hidden form fields to store latitude and longitude -->
+                    <input type="hidden" id="latitude" name="latitude">
+                    <input type="hidden" id="longitude" name="longitude">
+                    </div>
+                <div class="button">
+                    <input type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('.form form');
+        const name = document.querySelector('input[name="name"]');
+        const location = document.querySelector('input[name="location"]');
+        const numGuests = document.querySelector('input[name="num_guests"]');
+        const pricePerNight = document.querySelector('input[name="price_per_night"]');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Regular expressions for numeric values
+            const numRegex = /^[0-9]+$/;
+
+            // Validation checks
+            if (!name.value.trim()) {
+                alert("Name is required.");
+                return;
+            }
+            if (!location.value.trim()) {
+                alert("Location is required.");
+                return;
+            }
+            if (!numGuests.value.trim()) {
+                alert("Number of guests is required.");
+                return;
+            }
+            if (!numRegex.test(numGuests.value.trim())) {
+                alert("Number of guests must contain only numeric values.");
+                return;
+            }
+            if (!pricePerNight.value.trim()) {
+                alert("Price per night is required.");
+                return;
+            }
+            if (isNaN(pricePerNight.value.trim())) {
+                alert("Price per night must contain only numeric values.");
+                return;
+            }
+
+            // If all validations pass, submit the form
+            form.submit();
+        });
+    });
+
+
+    var map = L.map('map').setView([28.3949, 84.124], 7); // Set initial coordinates and zoom level for Nepal
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map); // Add base tile layer
+
+    var marker;
+    var searchMarker; // Reference to the search marker
+    map.on('click', function(e) {
+        if (searchMarker) {
+            map.removeLayer(searchMarker); // Remove the search marker if it exists
+        }
+        if (marker) {
+            map.removeLayer(marker);
+        }
+        marker = L.marker(e.latlng).addTo(map);
+        // Retrieve latitude and longitude of the selected location and store it in hidden form fields
+        document.getElementById('latitude').value = e.latlng.lat;
+        document.getElementById('longitude').value = e.latlng.lng;
+    });
+
+    // Start adding controls as follow... L.controlName().addTo(map);
+    // Control 1: This add the OpenStreetMap background tile
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Control 2: This add a scale to the map
+    L.control.scale().addTo(map);
+
+    // Control 3: This add a Search bar
+    var searchControl = new L.esri.Controls.Geosearch().addTo(map);
+    var results = new L.LayerGroup().addTo(map);
+
+    searchControl.on('results', function(data){
+        results.clearLayers();
+        for (var i = data.results.length - 1; i >= 0; i--) {
+            searchMarker = L.marker(data.results[i].latlng).addTo(map); // Store the search marker reference
+            results.addLayer(searchMarker);
+        }
+    });
+
+    
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="form-main login">
+    <div class="form login">
+        <div class="form-title">Login</div>
+        <div class="form-content">
+            <form action="{% url 'guest_login' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="user-details">
+                    <div class="input-box login">
+                        <span class="details">Username</span>
+                        <input type="text" name="username" placeholder="Enter your username" required>
+                    </div>
+                    <div class="input-box login">
+                        <span class="details">Password</span>
+                        <input type="password" name="password" placeholder="Enter your password." required>
+                    </div>
+                </div>
+                <div class="button">
+                    <input type="submit" value="Login">
+                </div>
+            </form>
+            <div class="form-footer">
+                <div>Not a member?</div>
+                <div class="form-link"><a href="{% url 'signup_guest' %}">Signup Now</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('.form form');
+        const username = document.querySelector('input[name="username"]');
+        const password = document.querySelector('input[name="password"]');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Validation checks
+            if (!username.value.trim()) {
+                alert("Username is required.");
+                return;
+            }
+            if (!password.value.trim()) {
+                alert("Password is required.");
+                return;
+            }
+
+            // If all validations pass, submit the form
+            form.submit();
+        });
+    });
+</script>
+
+
+{% endblock %}
