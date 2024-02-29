@@ -210,7 +210,7 @@
                     {% csrf_token %}
                     <input type="hidden" name="purchase_order_id" value="1" id="pid">
                     <input type="hidden" name="amount" value= "{{ homestay.price_per_night }}" id="amt">
-                    <input type="hidden" name="return_url" value="http://127.0.0.1:8000/verify__payment">
+                    <input type="hidden" name="return_url" value="http://127.0.0.1:8000/booking/verify_payment">
                     <button type="submit">Pay With Khalti</button>
                 </form>
             `;
