@@ -1,0 +1,64 @@
+{
+  "intents": [
+      {
+          "tag": "greeting",
+          "patterns": ["hello", "hi", "hey"],
+          "responses": ["Hello! How can I help you?", "Hi there! What can I do for you today?"]
+      },
+      {
+          "tag": "goodbye",
+          "patterns": ["bye", "goodbye", "see you"],
+          "responses": ["Goodbye! Have a great day.", "See you later!"]
+      },
+      {
+          "tag": "thanks",
+          "patterns": ["thank you", "thanks", "appreciate it"],
+          "responses": ["You're welcome!", "Glad I could help."]
+      },
+      {
+          "tag": "amenities",
+          "patterns": ["what amenities are available", "facilities", "features"],
+          "responses": ["The ammmenites of eack hoemsaty are listed in its detaisl page. You can check the ammenties of your desired hoemstay in their details page."]
+      },
+      {
+          "tag": "pricing",
+          "patterns": ["how much does it cost", "pricing details", "rates"],
+          "responses": ["The pricing varies based on the homestay and the duration of your stay. Please check the specific homestay page for accurate pricing information."]
+      },
+      {
+          "tag": "check-in",
+          "patterns": ["check-in time", "arrival", "when can I check in"],
+          "responses": ["The standard check-in time is at 12:00 PM. If you need to check in earlier or later, please let us know in advance and it may differ according to the hoemstay you are staying. Make sure to read the terms and conditions of the hoemsaty that you are booking."]
+      },
+      {
+          "tag": "check-out",
+          "patterns": ["check-out time", "departure", "when do I need to leave"],
+          "responses": ["Check-out time is at 11:00 AM. If you require a late check-out, please inform us in advance."]
+      },
+      {
+          "tag": "local-info",
+          "patterns": ["local attractions", "what to do nearby", "places to visit"],
+          "responses": ["Our homestay is located near popular attractions such as [Attraction 1], [Attraction 2], and [Attraction 3]. We'd be happy to provide recommendations!"]
+      },
+      {
+          "tag": "homestay-details",
+          "patterns": ["tell me about homestay", "details about accommodation", "homestay information"],
+          "responses": ["Certainly! Could you please specify the name or location of the homestay you're interested in?"]
+      },
+      {
+          "tag": "host-add",
+          "patterns": ["add my homestay", "list", "hosting"],
+          "responses": ["Great! To add your homestay, please register yourself as a host. After sucessful login, you can add your send request to add you homestay with the necessary documents. Then we will review your request. If it is up to our standard then we will notify you about it."]
+      },
+      {
+        "tag": "booking",
+        "patterns": ["find", "book", "booking", "recommend", "recommendation", "reserve"],
+        "responses": ["aa"]
+    },
+      {
+          "tag": "default",
+          "patterns": ["default"],
+          "responses": ["I'm sorry, I didn't understand that. Can you please rephrase?"]
+      }
+  ]
+}
