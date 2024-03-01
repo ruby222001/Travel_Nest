@@ -87,28 +87,29 @@
         </div>
 
         {% if request.user.is_authenticated %}
-            {% if user_has_booked_homestay %}
-                <form id="review-form" action="{% url 'add_review' homestay.id %}" method="post" class="mt-70">
-                    {% csrf_token %}
-                    <!-- Add fields for rating and comment -->
-                    <div class="mb-3">
-                        <label for="rating" class="form-label">Rating</label>
-                        <select class="form-select" id="rating" name="rating">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="comment" class="form-label">Comment</label>
-                        <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit Review</button>
-                </form>
-            {% endif %}
-        {% endif %}
+    {% if user_has_booked_homestay %}
+        <form id="review-form" action="{% url 'add_review' homestay.id %}" method="post" class="mt-70">
+            {% csrf_token %}
+            <!-- Add fields for rating and comment -->
+            <div class="mb-3">
+                <label class="form-label">Rating</label>
+                <div class="star-rating">
+                    <span class="star" data-rating="1">&#9733;</span>
+                    <span class="star" data-rating="2">&#9733;</span>
+                    <span class="star" data-rating="3">&#9733;</span>
+                    <span class="star" data-rating="4">&#9733;</span>
+                    <span class="star" data-rating="5">&#9733;</span>
+                    <input type="hidden" name="rating" id="rating" value="0">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="comment" class="form-label">Comment</label>
+                <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Review</button>
+        </form>
+    {% endif %}
+{% endif %}
 
     <!-- Display all reviews -->
     <h2 class="mt-4">Reviews</h2>
@@ -177,8 +178,6 @@
                 <img src="{{ image.image.url }}" class="secondary-image" alt="Secondary Image">
             {% endfor %}
         </div>
-        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-        <a class="next" onclick="plusSlides(1)">&#10095;</a>
     </div>
 </div>
 
@@ -220,6 +219,25 @@
 
         
 
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const stars = document.querySelectorAll('.star');
+
+    stars.forEach(star => {
+        star.addEventListener('click', function () {
+            const rating = this.getAttribute('data-rating');
+            document.getElementById('rating').value = rating;
+            stars.forEach(s => {
+                if (parseInt(s.getAttribute('data-rating')) <= rating) {
+                    s.classList.add('rated');
+                } else {
+                    s.classList.remove('rated');
+                }
+            });
+        });
+    });
+});
 </script>
 <script>
      function verifyPayment(payload) {
@@ -295,54 +313,6 @@
             document.getElementById('totalAmount').value = totalAmount;
             document.getElementById('formatted-checkin-date').value = formattedCheckInDate;
             document.getElementById('formatted-checkout-date').value = formattedCheckOutDate;
-
-            
-            var bookingData = {
-        checkInDate: formattedCheckInDate,
-        checkOutDate: formattedCheckOutDate,
-        numGuests: numGuests,
-        totalAmount: totalAmount,
-        user: '{{request.user.id}}',
-        homestay: '{{homestay.id}}'
-    };
-
-    function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
-    // Send an AJAX request to store the booking data in the session
-    var csrftoken = getCookie('csrftoken');
-
-$.ajax({
-    url: '/booking/store-booking-data/',
-    type: 'POST',
-    headers: {
-        'X-CSRFToken': csrftoken
-    },
-    data: {
-        'booking_data': JSON.stringify(bookingData)
-    },
-    dataType: 'json',
-    success: function (response) {
-        console.log(response.message);
-        // Proceed with other actions
-    },
-    error: function (xhr, status, error) {
-        console.error('Error storing booking data:', error);
-    }
-});
 
             // Display booking details in confirmation modal
             var modalBody = document.querySelector('#confirmationModal .modal-body');

@@ -102,8 +102,10 @@ def add_review(request, homestay_id):
                 comment=comment
             )
             messages.success(request, 'Review submitted successfully.')
+            return redirect('detail', homestay_id=homestay.id)
         else:
             messages.error(request, 'Unable to submit the review.')
+            return redirect('detail', homestay_id=homestay.id)
 
     reviews = Review.objects.filter(homestay=homestay).order_by('-created_at')
     # Inside the add_review view
@@ -164,57 +166,42 @@ def verify_payment(request):
             'Content-Type': 'application/json',
         }
         pidx = request.GET.get('pidx')
-        transaction_id = request.GET.get('transaction_id')
-        tidx = request.GET.get('tidx')
-        amount = request.GET.get('amount')
-        total_amount = request.GET.get('total_amount')
-        mobile = request.GET.get('mobile')
-        status = request.GET.get('status')
-        purchase_order_id = request.GET.get('purchase_order_id')
-        purchase_order_name = request.GET.get('purchase_order_name')
-
         data = json.dumps({
-            'pidx': pidx,
-            'transaction_id': transaction_id,
-            'tidx': tidx,
-            'amount': amount,
-            'total_amount': total_amount,
-            'mobile': mobile,
-            'status': status,
-            'purchase_order_id': purchase_order_id,
-            'purchase_order_name': purchase_order_name,
+            'pidx':pidx
         })
+        res = requests.request('POST',url,headers=headers,data=data)
+        print(res)
+        print(res.text)
 
-        try:
-            res = requests.post(url, headers=headers, data=json.dumps(data))
-            print(res)
-            print(res.text)
+        new_res = json.loads(res.text)
+        print(new_res)
+        
 
-            new_res = res.json.loads(res.text)
-            print(new_res)
+        if new_res['status'] == 'Completed':
+            # user = request.user
+            # user.has_verified_dairy = True
+            # user.save()
+            # perform your db interaction logic
+            booking_data = request.session.get('booking_data', None)  # Example if stored in session
 
-            if new_res.get('status') == 'Completed':
-                # Payment successful, update your logic accordingly
-                # For example:
-                # user = request.user
-                # user.has_verified = True
-                # user.save()
+            if booking_data:
+                # Create a new booking instance
+                booking = Booking.objects.create(
+                    homestay_id=booking_data['homestay'],
+                    user_id=booking_data['user'],
+                    check_in_date=booking_data['checkInDate'],
+                    check_out_date=booking_data['checkOutDate'],
+                    num_guests=booking_data['numGuests'],
+                    amount=booking_data['totalAmount'],
+                    # Add any other fields as needed
+                )
+            messages.success(request, 'You have booked successfully')
+        
+        # else:
+        #     # give user a proper error message
+        #     raise BadRequest("sorry ")
 
-                # Redirect to a success page or wherever you need
-                return redirect('home')  # Ensure 'home' is the correct URL name
-            else:
-                # Payment not successful, handle as needed
-                # For example, show an error message
-                return HttpResponseBadRequest("Payment not successful")
-        except Exception as e:
-            # Handle any exceptions or errors that might occur during the request
-            print("Error verifying payment:", e)
-            # Attempt to create the booking instance from session data
-            booking_data = request.session.get('booking_data')
-            messages.success(request,'Booking Sucessful.')
-            return redirect('home')
-
-    return HttpResponseBadRequest("Invalid request")
+        return redirect('home')
 
 
 
