@@ -364,6 +364,35 @@
         }
     });
 });
+function handlePaymentResponse(response) {
+        if (response.status === 'success') {
+            alert('Payment Successful!');
+            // Redirect or do anything else you need upon successful payment
+            window.location.href = "{% url 'home' %}";
+        } else {
+            alert('Payment Failed: ' + response.message);
+            // Handle payment failure, show message, etc.
+        }
+    }
+
+    // This assumes you have a form with id="paymentForm" that sends a POST request to initkhalti
+    // You can modify this to fit your actual form
+    document.getElementById("khaltiForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        var form = event.target;
+        var formData = new FormData(form);
+
+        fetch(form.action, {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => handlePaymentResponse(data))
+        .catch(error => console.error('Error:', error));
+    });
+
+   
+    
 </script>
 <!-- <p>Date: <input type="text" id="datepicker"></p> -->
 

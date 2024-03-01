@@ -197,7 +197,7 @@ def verify_payment(request):
                 # user.save()
 
                 # Redirect to a success page or wherever you need
-                return redirect('detail')
+                return JsonResponse({'status': 'success'})
             else:
                 # Payment not successful, handle as needed
                 # For example, show an error message
