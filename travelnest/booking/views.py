@@ -121,6 +121,25 @@ def initkhalti(request):
         return_url = request.POST.get('return_url')
         amount = request.POST.get('amount')
         purchase_order_id = request.POST.get('purchase_order_id')
+        host_user = request.POST.get('host_user')
+        host_email = request.POST.get('host_email')
+        host_mobile = request.POST.get('host_mobile')
+        homestay_id = request.POST.get('homestay_id')
+        homestay_id = request.POST.get('homestay_name')
+        check_in_date = request.POST.get('check_in')
+        check_out_date = request.POST.get('check_out')
+        num_guests = request.POST.get('num_guest')
+        payment_type = request.POST.get('payment_type')
+        
+        # Store values in session
+        request.session['host_name'] = host_user
+        request.session['host_email'] = host_email
+        request.session['homestay_id'] = homestay_id
+        request.session['check_in_date'] = check_in_date
+        request.session['check_out_date'] = check_out_date
+        request.session['num_guests'] = num_guests
+        request.session['total_amount'] = amount
+        request.session['payment_type'] = payment_type
 
         user=request.user
         print("return_url",return_url)
@@ -133,10 +152,7 @@ def initkhalti(request):
         "purchase_order_id": purchase_order_id,
         "purchase_order_name": "test",
         "customer_info": {
-            
-            "name": "ram",
-            "eamil": "email@gmail.com",
-            "phone": "9800000005",
+            "name": host_mobile,
         }
         })
 
@@ -178,23 +194,18 @@ def verify_payment(request):
         
 
         if new_res['status'] == 'Completed':
+            host_name = request.session.get('host_name')
+            host_email = request.session.get('host_email')
+            homestay_id = request.session.get('homestay_id')
+            check_in_date = request.session.get('check_in_date')
+            check_out_date = request.session.get('check_out_date')
+            num_guests = request.session.get('num_guests')
+            total_amount = request.session.get('total_amount')
+            payment_type = request.session.get('payment_type')
             # user = request.user
             # user.has_verified_dairy = True
             # user.save()
             # perform your db interaction logic
-            booking_data = request.session.get('booking_data', None)  # Example if stored in session
-
-            if booking_data:
-                # Create a new booking instance
-                booking = Booking.objects.create(
-                    homestay_id=booking_data['homestay'],
-                    user_id=booking_data['user'],
-                    check_in_date=booking_data['checkInDate'],
-                    check_out_date=booking_data['checkOutDate'],
-                    num_guests=booking_data['numGuests'],
-                    amount=booking_data['totalAmount'],
-                    # Add any other fields as needed
-                )
             messages.success(request, 'You have booked successfully')
         
         # else:

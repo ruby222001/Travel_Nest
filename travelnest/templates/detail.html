@@ -208,7 +208,16 @@
                 <form id="khaltiForm" action="{% url 'initiate' %}" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="purchase_order_id" value="1" id="pid">
-                    <input type="hidden" name="amount" value= "{{ homestay.price_per_night }}" id="amt">
+                    <input type="hidden" name="amount" value= "{{ totalAmount }}" id="amt">
+                    <input type="hidden" name="host_user" value= "{{ homestay.host.username }}" id="hostuser">
+                    <input type="hidden" name="host_email" value= "{{ homestay.host.email }}" id="email">
+                    <input type="hidden" name="host_mobile" value= "{{ homestay.host.mobile }}" id="mobile">
+                    <input type="hidden" name="homestay_id" value= "{{ homestay.id }}" id="hostid">
+                    <input type="hidden" name="homestay_name" value= "{{ homestay.name }}" id="hostname">
+                    <input type="hidden" name="check_in" value= "{{ formattedCheckInDate }}" id="in">
+                    <input type="hidden" name="check_out" value= "{{ formattedCheckOutDate }}" id="out">
+                    <input type="hidden" name="payment_type" value= "Khalti" id="khalti">
+                    <input type="hidden" name="num_guest" value= "{{ numGuests }}" id="guest">
                     <input type="hidden" name="return_url" value="http://127.0.0.1:8000/booking/verify_payment">
                     <button type="submit">Pay With Khalti</button>
                 </form>
@@ -313,6 +322,11 @@
             document.getElementById('totalAmount').value = totalAmount;
             document.getElementById('formatted-checkin-date').value = formattedCheckInDate;
             document.getElementById('formatted-checkout-date').value = formattedCheckOutDate;
+            document.getElementById('amt').value = totalAmount;
+            document.getElementById('in').value = formattedCheckInDate;
+            document.getElementById('out').value = formattedCheckOutDate;
+            document.getElementById('guest').value = numGuests;
+
 
             // Display booking details in confirmation modal
             var modalBody = document.querySelector('#confirmationModal .modal-body');
