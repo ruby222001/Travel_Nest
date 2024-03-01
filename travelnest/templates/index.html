@@ -76,7 +76,7 @@
     </section>
 
     <div class="search">
-        <form method="GET" action="{% url 'search' %}">
+        <form method="GET" action="">
             {% csrf_token %}
             <div class="search-form1">
                 <i id="search-icon" class="bi bi-search"></i>
@@ -90,7 +90,7 @@
 
     <div class="availability-search">
         <div class="search">
-            <form method="GET" action="{% url 'search_input' %}">
+            <form method="GET" action="">
                 {% csrf_token %}
                 <div class="search-form">
                     <div class="component">
@@ -99,11 +99,11 @@
                     </div>
                     <div class="component">
                         <label for="checkin_date">Check In</label>
-                        <input type="date" name="checkin_date" required>
+                        <input type="date" name="checkin_date">
                     </div>
                     <div class="component">
                         <label for="checkout_date">Check Out</label>
-                        <input type="date" name="checkout_date" required>
+                        <input type="date" name="checkout_date">
                     </div>
                     <div class="component">
                         <button type="submit">Check Availability</button>

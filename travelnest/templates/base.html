@@ -127,10 +127,10 @@
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="loginDropdown">
                             {% if user.is_host %}
-                                <li><a class="dropdown-item" href="{% url 'host_profile' %}">Profile</a></li>
+                                <li><a class="dropdown-item" href="" data-bs-toggle="modal">Profile</a></li>
                                 <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                             {% elif user.is_guest %}
-                                <li><a class="dropdown-item" href="{% url 'guest_profile' %}">Profile</a></li>
+                                <li><a class="dropdown-item" href="" data-bs-toggle="modal">Profile</a></li>
                                 <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                             {% else %}
                                 <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
@@ -154,10 +154,6 @@
             </div>
         </div>
     </header>
-
-    <div class="chatbot-container">
-        {% include 'chatbot.html' %}
-    </div>
 
     {% block content %}
 

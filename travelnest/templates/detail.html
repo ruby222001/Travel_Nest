@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<link href="{% static 'responsive.css' %}" rel="stylesheet" />
 
 <link href="{% static 'responsive.css' %}" rel="stylesheet" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-<div class=" container detail">
-    <div class="">
+<div class="container mt-70 pt-70 detail">
+    <div class="mb-3">
         <div class="row">
             <div class="title">{{ homestay.name }}</div>
             <div class="image">
@@ -17,21 +18,14 @@
                 </div>
                 <div class="secondary-image d-none d-md-block">
                     {% if homestay.images.all %}
-                        <div class="image-list">
-                            {% for image in homestay.images.all %}
-                                {% if forloop.counter <= 4 %}
+                            <div class="image-list">
+                                {% for image in homestay.images.all %}
                                     <div class="list-image">
                                         <img src="{{ image.image.url }}" class="" alt="Secondary Image">
                                     </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                        {% if homestay.images.count > 4 %}
-                            <button onclick="openSecondaryImagesModal()">View All Secondary Images</button>
+                                {% endfor %}
+                            </div>
                         {% endif %}
-                    {% else %}
-                        No secondary images available.
-                    {% endif %}
                 </div>
             </div>
         </div>
@@ -87,29 +81,28 @@
         </div>
 
         {% if request.user.is_authenticated %}
-    {% if user_has_booked_homestay %}
-        <form id="review-form" action="{% url 'add_review' homestay.id %}" method="post" class="mt-70">
-            {% csrf_token %}
-            <!-- Add fields for rating and comment -->
-            <div class="mb-3">
-                <label class="form-label">Rating</label>
-                <div class="star-rating">
-                    <span class="star" data-rating="1">&#9733;</span>
-                    <span class="star" data-rating="2">&#9733;</span>
-                    <span class="star" data-rating="3">&#9733;</span>
-                    <span class="star" data-rating="4">&#9733;</span>
-                    <span class="star" data-rating="5">&#9733;</span>
-                    <input type="hidden" name="rating" id="rating" value="0">
-                </div>
-            </div>
-            <div class="mb-3">
-                <label for="comment" class="form-label">Comment</label>
-                <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit Review</button>
-        </form>
-    {% endif %}
-{% endif %}
+            {% if user_has_booked_homestay %}
+                <form id="review-form" action="{% url 'add_review' homestay.id %}" method="post" class="mt-70">
+                    {% csrf_token %}
+                    <!-- Add fields for rating and comment -->
+                    <div class="mb-3">
+                        <label for="rating" class="form-label">Rating</label>
+                        <select class="form-select" id="rating" name="rating">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Comment</label>
+                        <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                </form>
+            {% endif %}
+        {% endif %}
 
     <!-- Display all reviews -->
     <h2 class="mt-4">Reviews</h2>
@@ -169,18 +162,6 @@
 
 </div>
 
-<!-- Secondary Images Modal -->
-<div id="secondaryImagesModal" class="modal secondary">
-    <div class="modal-content">
-        <span class="close exit" onclick="closeSecondaryImagesModal()">&times;</span>
-        <div class="image-container">
-            {% for image in homestay.images.all %}
-                <img src="{{ image.image.url }}" class="secondary-image" alt="Secondary Image">
-            {% endfor %}
-        </div>
-    </div>
-</div>
-
 <script>
     function initializeMap() {
         var mapContainer = document.querySelector('.map-container');
@@ -208,6 +189,7 @@
                 <form id="khaltiForm" action="{% url 'initiate' %}" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="purchase_order_id" value="1" id="pid">
+<<<<<<< HEAD
                     <input type="hidden" name="amount" value= "{{ totalAmount }}" id="amt">
                     <input type="hidden" name="host_user" value= "{{ homestay.host.username }}" id="hostuser">
                     <input type="hidden" name="host_email" value= "{{ homestay.host.email }}" id="email">
@@ -219,6 +201,10 @@
                     <input type="hidden" name="payment_type" value= "Khalti" id="khalti">
                     <input type="hidden" name="num_guest" value= "{{ numGuests }}" id="guest">
                     <input type="hidden" name="return_url" value="http://127.0.0.1:8000/booking/verify_payment">
+=======
+                    <input type="hidden" name="amount" value= "{{ homestay.price_per_night }}" id="amt">
+                    <input type="hidden" name="return_url" value="http://127.0.0.1:8000/verify__payment">
+>>>>>>> 16eadb10f6d1c4ce206db4ee515db73c97ad3a84
                     <button type="submit">Pay With Khalti</button>
                 </form>
             `;
@@ -228,25 +214,6 @@
 
         
 
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-    const stars = document.querySelectorAll('.star');
-
-    stars.forEach(star => {
-        star.addEventListener('click', function () {
-            const rating = this.getAttribute('data-rating');
-            document.getElementById('rating').value = rating;
-            stars.forEach(s => {
-                if (parseInt(s.getAttribute('data-rating')) <= rating) {
-                    s.classList.add('rated');
-                } else {
-                    s.classList.remove('rated');
-                }
-            });
-        });
-    });
-});
 </script>
 <script>
      function verifyPayment(payload) {
@@ -271,18 +238,7 @@
 </script>
 
 <script>
-    function openSecondaryImagesModal() {
-        var modal = document.getElementById('secondaryImagesModal');
-        modal.style.display = "block";
-    }
-
-    function closeSecondaryImagesModal() {
-        var modal = document.getElementById('secondaryImagesModal');
-        modal.style.display = "none";
-    }
-    
     document.addEventListener('DOMContentLoaded', function () {
-        var bookingData = {};
         var bookingForm = document.getElementById('booking-form');
         var confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
         var paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
@@ -348,7 +304,6 @@
             // Handle confirmation of booking
             document.getElementById('confirmBookingBtn').addEventListener('click', function () {
                 // Display payment modal
-                
                 confirmationModal.hide();
                 paymentModal.show();
             });
@@ -369,8 +324,9 @@
             // Set the payment option value to "Khalti"
             document.getElementById('payment-option-input').value = 'Khalti';
             paymentModal.hide();
+            bookingForm.submit();
 
-
+            // For now, do nothing on click
         });
         document.getElementById('book').addEventListener('click', function () {
             // Submit the booking form
@@ -427,6 +383,35 @@
         }
     });
 });
+function handlePaymentResponse(response) {
+        if (response.status === 'success') {
+            alert('Payment Successful!');
+            // Redirect or do anything else you need upon successful payment
+            window.location.href = "{% url 'home' %}";
+        } else {
+            alert('Payment Failed: ' + response.message);
+            // Handle payment failure, show message, etc.
+        }
+    }
+
+    // This assumes you have a form with id="paymentForm" that sends a POST request to initkhalti
+    // You can modify this to fit your actual form
+    document.getElementById("khaltiForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        var form = event.target;
+        var formData = new FormData(form);
+
+        fetch(form.action, {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => handlePaymentResponse(data))
+        .catch(error => console.error('Error:', error));
+    });
+
+   
+    
 </script>
 <!-- <p>Date: <input type="text" id="datepicker"></p> -->
 

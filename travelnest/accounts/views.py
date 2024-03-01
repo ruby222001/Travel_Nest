@@ -15,7 +15,6 @@ from django.utils import timezone
 from datetime import timedelta
 from django.core.serializers.json import DjangoJSONEncoder
 import os
-from booking.models import Booking
 
 
 # Create your views here.
@@ -173,19 +172,7 @@ def host_profile(request):
 
 @login_required
 def guest_profile(request):
-    # Retrieve liked homestays, past bookings, and upcoming bookings
-    liked_homestays = request.user.liked_homestays.all()
-    past_bookings = Booking.objects.filter(user=request.user, check_out_date__lt=timezone.now().date())
-    upcoming_bookings = Booking.objects.filter(user=request.user, check_in_date__gt=timezone.now().date())
-
-    context = {
-        'user': request.user,
-        'liked_homestays': liked_homestays,
-        'past_bookings': past_bookings,
-        'upcoming_bookings': upcoming_bookings,
-    }
-
-    return render(request, 'guest_profile.html', context)
+    return render(request, 'guest_profile.html')
 
 
 @login_required

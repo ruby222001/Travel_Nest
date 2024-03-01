@@ -28,7 +28,6 @@ urlpatterns = [
     path('homestay/', include('homestay.urls')),
     path('custom-admin/', include('custom_admin.urls')),
     path('booking/', include('booking.urls')),
-    path('chatbot/', include('chatbot.urls')),
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
