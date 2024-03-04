@@ -9,4 +9,5 @@ urlpatterns = [
     path('homestay-requests/', views.homestay_requests, name='homestay_requests'),
     path('homestay/<int:homestay_id>/', views.homestay_details_request, name='homestay_details'),
     path('approved_homestays/', views.approved_homestays, name='approved_homestays'),
+    path('users/', views.filter_and_search_users, name='filter_and_search_users'),
 ]

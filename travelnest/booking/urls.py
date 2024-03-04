@@ -7,5 +7,6 @@ urlpatterns = [
     path('homestay/<int:homestay_id>/add_review/', views.add_review, name='add_review'),
     path('initiate',views.initkhalti,name="initiate"),
     path('verify_payment/', views.verify_payment, name='verify_payment'),
-
-    ]
+    path('store-booking-data/', views.store_booking_data, name='store_booking_data'),
+    path('all_bookings/', views.all_bookings, name='all_bookings'),
+]

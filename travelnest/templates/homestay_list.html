@@ -1,26 +1,56 @@
 
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
-<link href="{% static 'responsive.css' %}" rel="stylesheet" />
-  <div class="container mt-70">
-    <h2>Homestay List</h2>
-    <ul>
+
+<div class="list-main mb-120">
+  <div class="homestay-add"><div class="add-homestay"><a href="{% url 'add_homestay' %}">Add</a></div></div>
+  <div class="list">
       {% for homestay in homestays %}
-        <li><a href="{% url 'homestay_detail' homestay.id %}">{{ homestay.name }}</a></li>
+        <div class="homestay">
+                <a href="{% url 'homestay_detail' homestay.id %}">
+                    <div class="position-relative">
+                        <img src="{{ homestay.thumbnail_image.url }}" class="" alt="{{ homestay.name }}">
+                    </div>
+                </a>
+                <div class="rate">
+                    <div class="homestay-content">
+                        <div class="name">{{ homestay.name }}</div>
+                        <div class="location">{{ homestay.location }}</div>
+                        <div class="price">Rs.{{ homestay.price_per_night }}/night</div>
+                    </div>
+                    {% if homestay.average_rating %}
+                                        <p><i class="bi bi-star-fill" style="color: gold; font-size: 20px;"></i> {{ homestay.average_rating }}</p>
+                                        {% else %}
+                                            <p><i class="bi bi-star" style="font-size: 20px;"></i></p>
+                                        {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <p>No homestay found.</p>
       {% endfor %}
-    </ul>
+    </div>
+    <div class="homestay-add">
+      <button  id="paymentbutton" class="btn btn-primary mt-3 add-homestay">Pay</button> 
+    </div>
   </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.like-button.host-error').forEach(function (button) {
+            button.addEventListener('click', function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'You are logged in as a host.',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            });
+        });
+    });
+</script>
 
-  <div><a href="{% url 'add_homestay' %}">Add</a></div>
-
-
-  <div>
-    <button  id="paymentbutton" class="btn btn-primary mt-3">Pay to Admin</button>
-
-  </div>
   <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 

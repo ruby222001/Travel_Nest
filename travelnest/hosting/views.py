@@ -3,6 +3,7 @@ from homestay.models import HomeStay, HomeStayImage, Feature
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from itertools import groupby
+from booking.models import Booking
 
 # Create your views here.
 
@@ -95,3 +96,11 @@ def homestay_list(request):
     user = request.user 
     homestays = HomeStay.objects.filter(host=user) 
     return render(request, 'homestay_list.html', {'homestays': homestays}) 
+
+
+def view_bookings(request, homestay_id):
+    # Retrieve all bookings associated with the homestay
+    bookings = Booking.objects.filter(homestay_id=homestay_id)
+
+    # Pass bookings data to the template
+    return render(request, 'bookings.html', {'bookings': bookings})

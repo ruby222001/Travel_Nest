@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'homestay',
     'custom_admin',
     'booking',
+    'chatbot',
 
 ]
 

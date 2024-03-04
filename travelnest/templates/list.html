@@ -1,53 +1,115 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<link href="{% static 'responsive.css' %}" rel="stylesheet" />
 
-<div class="mt-70 pt-70">
-    <div class=" homestay-list">
-        <div class="list">
-            {% for homestay in homestays %}
-                <div class="homestay">
-                    <a href="{% url 'detail' homestay.id %}">
-                        <div class="position-relative">
-                            <img src="{{ homestay.thumbnail_image.url }}" class="" alt="{{ homestay.name }}">
-                            <form id="like-form-{{ homestay.id }}" method="post" action="{% url 'like_homestay' homestay.id %}" class="like-button position-absolute top-0 end-0 pt-3 pe-3"> <!-- Add position-absolute, top-0, end-0, pt-3, pe-3 classes -->
-                                {% csrf_token %}
-                                {% if request.user.is_authenticated %}
-                                    {% if request.user.is_guest %}
-                                        <button type="submit" class="like-button" style="border:none; background-color: transparent;">
-                                            {% if homestay in request.user.liked_homestays.all %}
-                                                <i class="bi bi-heart-fill text-danger" style="font-size: 25px;"></i>
-                                            {% else %}
-                                                <i class="bi bi-heart" style="font-size: 25px; color: black;"></i>
-                                            {% endif %}
-                                            <span id="likes-count-{{ homestay.id }}" style="font-size: 24px; color: black;">{{ homestay.liked_by_users.count }}</span>
-                                        </button>
-                                    {% else %}
-                                        <button type="button" class="like-button host-error" style="border:none; background-color: transparent;">
-                                            <i class="bi bi-heart" style="font-size: 15px;"></i>
-                                            <span id="likes-count-{{ homestay.id }}" style="font-size: 24px;">{{ homestay.liked_by_users.count }}</span>
-                                        </button>
-                                    {% endif %}
+<div class="list-main">
+    {% if request.user.is_authenticated %}
+    {% if request.user.is_guest %}
+    <div class="title">Top Picks For You</div>
+    {% endif %}
+    {% endif %}
+    <div class="list">
+        {% if request.user.is_authenticated %}
+        {% for recommendation in filtered_recommendation %}
+            <div class="homestay">
+                <a href="{% url 'detail' recommendation.homestay.id %}">
+                    <div class="position-relative">
+                        <img src="{{ recommendation.homestay.thumbnail_image.url }}" class="" alt="{{ recommendation.homestay.name }}">
+                        <form id="like-form-{{ recommendation.homestay.id }}" method="post" action="{% url 'like_homestay' recommendation.homestay.id %}" class="like-button position-absolute top-0 end-0 pt-3 pe-3"> <!-- Add position-absolute, top-0, end-0, pt-3, pe-3 classes -->
+                            {% csrf_token %}
+                            {% if request.user.is_authenticated %}
+                                {% if request.user.is_guest %}
+                                    <button type="submit" class="like-button" style="border:none; background-color: transparent;">
+                                        {% if recommendation.homestay in request.user.liked_homestays.all %}
+                                            <i class="bi bi-heart-fill text-danger" style="font-size: 25px;"></i>
+                                        {% else %}
+                                            <i class="bi bi-heart" style="font-size: 25px; color: black;"></i>
+                                        {% endif %}
+                                        <span id="likes-count-{{ recommendation.homestay.id }}" style="font-size: 24px; color: black;">{{ recommendation.homestay.liked_by_users.count }}</span>
+                                    </button>
                                 {% else %}
-                                    <p>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#guestloginModal"><i class="bi bi-heart" style="color: white; font-size: 20px; "></i></a>
-                                        <span id="likes-count-{{ homestay.id }}" style="font-size: 24px; color: white;">{{ homestay.liked_by_users.count }}</span>
-                                    </p>
+                                    <button type="button" class="like-button host-error" style="border:none; background-color: transparent;">
+                                        <i class="bi bi-heart" style="font-size: 15px;"></i>
+                                        <span id="likes-count-{{ recommendation.homestay.id }}" style="font-size: 24px;">{{ recommendation.homestay.liked_by_users.count }}</span>
+                                    </button>
                                 {% endif %}
-                            </form>
-                        </div>
-                    </a>
+                            {% else %}
+                                <p>
+                                    <a href="#" data-bs-toggle="modal"><i class="bi bi-heart" style="color: white; font-size: 20px; "></i></a>
+                                    <span id="likes-count-{{ recommendation.homestay.id }}" style="font-size: 24px; color: white;">{{ recommendation.homestay.liked_by_users.count }}</span>
+                                </p>
+                            {% endif %}
+                        </form>
+                    </div>
+                </a>
+                <div class="rate">
+                    <div class="homestay-content">
+                        <div class="name">{{ recommendation.homestay.name }}</div>
+                        <div class="location">{{ recommendation.homestay.location }}</div>
+                        <div class="price">Rs.{{ recommendation.homestay.price_per_night }}/night</div>
+                    </div>
+                    {% if recommendation.homestay.average_rating %}
+                                        <p><i class="bi bi-star-fill" style="color: gold; font-size: 20px;"></i> {{ recommendation.homestay.average_rating }}</p>
+                                        {% else %}
+                                            <p><i class="bi bi-star" style="font-size: 20px;"></i></p>
+                                        {% endif %}
+                </div>
+            </div>
+        {% empty %}
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    <hr>
+    <div class="list">
+        {% for homestay in homestays %}
+            <div class="homestay">
+                <a href="{% url 'detail' homestay.id %}">
+                    <div class="position-relative">
+                        <img src="{{ homestay.thumbnail_image.url }}" class="" alt="{{ homestay.name }}">
+                        <form id="like-form-{{ homestay.id }}" method="post" action="{% url 'like_homestay' homestay.id %}" class="like-button position-absolute top-0 end-0 pt-3 pe-3"> <!-- Add position-absolute, top-0, end-0, pt-3, pe-3 classes -->
+                            {% csrf_token %}
+                            {% if request.user.is_authenticated %}
+                                {% if request.user.is_guest %}
+                                    <button type="submit" class="like-button" style="border:none; background-color: transparent;">
+                                        {% if homestay in request.user.liked_homestays.all %}
+                                            <i class="bi bi-heart-fill text-danger" style="font-size: 25px;"></i>
+                                        {% else %}
+                                            <i class="bi bi-heart" style="font-size: 25px; color: black;"></i>
+                                        {% endif %}
+                                        <span id="likes-count-{{ homestay.id }}" style="font-size: 24px; color: black;">{{ homestay.liked_by_users.count }}</span>
+                                    </button>
+                                {% else %}
+                                    <button type="button" class="like-button host-error" style="border:none; background-color: transparent;">
+                                        <i class="bi bi-heart" style="font-size: 15px;"></i>
+                                        <span id="likes-count-{{ homestay.id }}" style="font-size: 24px;">{{ homestay.liked_by_users.count }}</span>
+                                    </button>
+                                {% endif %}
+                            {% else %}
+                                <p>
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#guestloginModal"><i class="bi bi-heart" style="color: white; font-size: 20px; "></i></a>
+                                    <span id="likes-count-{{ homestay.id }}" style="font-size: 24px; color: white;">{{ homestay.liked_by_users.count }}</span>
+                                </p>
+                            {% endif %}
+                        </form>
+                    </div>
+                </a>
+                <div class="rate">
                     <div class="homestay-content">
                         <div class="name">{{ homestay.name }}</div>
                         <div class="location">{{ homestay.location }}</div>
                         <div class="price">Rs.{{ homestay.price_per_night }}/night</div>
                     </div>
+                    {% if homestay.average_rating %}
+                                        <p><i class="bi bi-star-fill" style="color: gold; font-size: 20px;"></i> {{ homestay.average_rating }}</p>
+                                        {% else %}
+                                            <p><i class="bi bi-star" style="font-size: 20px;"></i></p>
+                                        {% endif %}
                 </div>
-            {% empty %}
-                <p>No homestay found.</p>
-            {% endfor %}
-        </div>
+            </div>
+        {% empty %}
+            <p>No homestay found.</p>
+        {% endfor %}
     </div>
 </div>
 

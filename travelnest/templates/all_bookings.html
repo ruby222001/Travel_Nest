@@ -1,0 +1,38 @@
+{% extends 'admin_home.html' %}
+{% load static %}
+{% block content %}
+
+<div class="main-admin">
+    <h2 class="mt-100">All Bookings</h2>
+        {% if bookings %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Homestay</th>
+                <th>User</th>
+                <th>Check-in Date</th>
+                <th>Check-out Date</th>
+                <th>Payment Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.homestay.name }}</td>
+                <td>{{ booking.user.username }}</td>
+                <td>{{ booking.check_in_date }}</td>
+                <td>{{ booking.check_out_date }}</td>
+                <td>{{ booking.payment_type }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+            <p>No bookings found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+
+  

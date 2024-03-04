@@ -80,6 +80,9 @@
             <div>
                 <a href="{% url 'admin_home' %}">TravelNest</a>
             </div>
+<div>
+                <a href="{% url 'login' %}"><i class="bi bi-box-arrow-right"></i></a>
+            </div>
     </header>
 
 
@@ -88,8 +91,7 @@
             <div><a href="{% url 'all_users' %}">Users</a></div>
             <div><a href="{% url 'approved_homestays' %}">Homestay</a></div>
             <div><a href="{% url 'homestay_requests' %}">Homestay Request</a></div>
-            <div>Booking</div>
-            <div>Transactions</div>
+            <div><a href="{% url 'all_bookings' %}">Booking</a></div>
         </div>
     </div>
 

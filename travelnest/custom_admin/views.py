@@ -59,3 +59,26 @@ def approved_homestays(request):
     # Retrieve all approved homestays
     approved_homestays = HomeStay.objects.filter(status='approved')
     return render(request, 'admin_homestay.html', {'approved_homestays': approved_homestays})
+
+
+def filter_and_search_users(request):
+    user_type = request.GET.get('user_type')
+    search_query = request.GET.get('search_query')
+    users = User.objects.all()
+
+    # Filter users by user type if specified
+    if user_type in ['guest', 'host']:
+        users = users.filter(is_guest=(user_type == 'guest'), is_host=(user_type == 'host'))
+
+    # Perform search if search query is provided
+    if search_query:
+        users = users.filter(
+            Q(username__icontains=search_query) |
+            Q(first_name__icontains=search_query) |
+            Q(last_name__icontains=search_query) |
+            Q(email__icontains=search_query) |
+            Q(mobile__icontains=search_query) |
+            Q(address__icontains=search_query)
+        )
+
+    return render(request, 'users.html', {'users': users})

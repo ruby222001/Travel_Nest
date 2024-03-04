@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .input-box.login {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    }
+    .input-box.login input {
+        width: calc(100%/6 - 5px);
+        max-width: 50px;
+        text-align: center;
+    }
+</style>
+<div class="form-main">
+    <div class="form login">
+        <div class="form-title">Verify Pin</div>
+        <div class="form-content">
+            <form id="pinForm" action="{% url 'verify1_pin' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="pin" id="pinHidden">
+                <div class="user-details">
+                    <div class="input-box login">
+                        <input type="text" name="pin1" id="pin1" maxlength="1" oninput="moveToNext(this)">
+                        <input type="text" name="pin2" id="pin2" maxlength="1" oninput="moveToNext(this)">
+                        <input type="text" name="pin3" id="pin3" maxlength="1" oninput="moveToNext(this)">
+                        <input type="text" name="pin4" id="pin4" maxlength="1" oninput="moveToNext(this)">
+                        <input type="text" name="pin5" id="pin5" maxlength="1" oninput="moveToNext(this)">
+                        <input type="text" name="pin6" id="pin6" maxlength="1" oninput="moveToNext(this)">
+                    </div>
+                </div>
+                <div class="button">
+                    <input type="submit" value="Verify">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function moveToNext(input) {
+        var maxLength = parseInt(input.getAttribute('maxlength'));
+        var currentLength = input.value.length;
+        if (currentLength >= maxLength) {
+            var nextInput = input.nextElementSibling;
+            if (nextInput) {
+                nextInput.focus();
+            }
+        }
+        updateHiddenField();
+    }
+    
+    function updateHiddenField() {
+        var pin = '';
+        document.querySelectorAll('.input-box.login input').forEach(function(input) {
+            pin += input.value;
+        });
+        document.getElementById('pinHidden').value = pin;
+    }
+    
+    document.querySelectorAll('.input-box.login input').forEach(function(input) {
+        input.addEventListener('input', function(event) {
+            moveToNext(this);
+        });
+        input.addEventListener('keydown', function(event) {
+            if (event.key === 'Backspace' && this.value === '') {
+                var prevInput = this.previousElementSibling;
+                if (prevInput) {
+                    prevInput.focus();
+                }
+            }
+        });
+    });
+</script>
+
+{% endblock %}

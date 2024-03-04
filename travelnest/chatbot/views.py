@@ -156,7 +156,7 @@ def chatbot(request):
                     f"<a href='{homestay_detail_url(homestay.id)}'>{homestay.name}</a> - {homestay.location}"
                     for homestay in homestays
                 ]
-                response = f"I found top 5 homestays that match your criteria. Here are some options: {'<br>'.join(homestay_responses)}"
+                response = f"I found top homestays that match your criteria. Here are some options: {'<br>'.join(homestay_responses)}"
                 response = "I'm sorry, but I couldn't find any homestays with the specified features. Please try again with different details."
             else:
                 response = "Sure, I can help you with booking a homestay. Please provide information about the homestay's location, features, check-in, and check-out dates."

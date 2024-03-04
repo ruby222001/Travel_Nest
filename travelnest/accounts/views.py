@@ -15,9 +15,13 @@ from django.utils import timezone
 from datetime import timedelta
 from django.core.serializers.json import DjangoJSONEncoder
 import os
+from booking.models import Booking
 
 
 # Create your views here.
+
+def generate_pin():
+    return ''.join(random.choices(string.digits, k=6))
 
 
 def signup_host(request):
@@ -50,32 +54,109 @@ def host_signup(request):
         # Check if the username already exists
         if User.objects.filter(username=username).exists():
             messages.error(request, 'Username is already taken. Please choose a different username.')
-            return redirect('home')
+            return redirect('signup_host')
         
         # Check if the email is already registered
         if User.objects.filter(email=email).exists():
             messages.error(request, 'Email is already registered. Please use a different email address.')
-            return redirect('home')
+            return redirect('signup_host')
         
-        # If username is unique, proceed with user creation
-        user = User.objects.create(username=username, is_host=True, first_name=first_name,
-            last_name=last_name,
-            image=image,
-            email=email,
-            mobile=mobile,
-            address=address)
-        user.set_password(password)
-        user.save()
+        request.session['signup_username'] = username
+        request.session['signup_password'] = password
+        request.session['signup_first_name'] = first_name
+        request.session['signup_last_name'] = last_name
+        request.session['signup_email'] = email
+        request.session['signup_mobile'] = mobile
+        request.session['signup_address'] = address
 
-        success_condition = True
-        if success_condition:
-            messages.success(request, 'You have registered successfully as a host.', extra_tags='confirm')
-        else:
-            messages.error(request, 'An error occurred while registering. Please try again.')
+        
+        # Generate and send PIN via email
+        pin = generate_pin()
+        request.session['signup_pin'] = pin
+        request.session['pin_expiry'] = (timezone.now() + timedelta(minutes=5)).isoformat()  # Set expiry time to 5 minutes from now
+        send_mail(
+            'Registration Verification PIN',
+            f'Your registration PIN is: {pin}',
+            settings.EMAIL_HOST_USER,
+            [email],
+            fail_silently=False,
+        )
 
-        return redirect('home')
+        return render(request, 'verify_pin.html')
+        
+        # # If username is unique, proceed with user creation
+        # user = User.objects.create(username=username, is_host=True, first_name=first_name,
+        #     last_name=last_name,
+        #     image=image,
+        #     email=email,
+        #     mobile=mobile,
+        #     address=address)
+        # user.set_password(password)
+        # user.save()
+
+        # success_condition = True
+        # if success_condition:
+        #     messages.success(request, 'You have registered successfully as a host.', extra_tags='confirm')
+        # else:
+        #     messages.error(request, 'An error occurred while registering. Please try again.')
+
+        # return redirect('home')
 
             
+    return redirect('home')
+
+def verify_pin(request):
+    if request.method == 'POST':
+        entered_pin = request.POST.get('pin')
+        pin_expiry_str = request.session.get('pin_expiry')
+        pin_expiry = timezone.datetime.fromisoformat(pin_expiry_str) if pin_expiry_str else None
+        if pin_expiry and timezone.now() <= pin_expiry:
+            saved_pin = request.session.get('signup_pin')
+            if entered_pin == saved_pin:
+                # PIN is correct and within time limit, proceed with registration
+                username = request.session.get('signup_username')
+                password = request.session.get('signup_password')
+                first_name = request.session.get('signup_first_name')
+                last_name = request.session.get('signup_last_name')
+                email = request.session.get('signup_email')
+                mobile = request.session.get('signup_mobile')
+                address = request.session.get('signup_address')
+                image = request.session.get('signup_image')
+
+                # Create user
+                user = User.objects.create(
+                    username=username,
+                    is_guest=True,
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    mobile=mobile,
+                    address=address,
+                    image=image
+                )
+                user.set_password(password)
+                user.save()
+
+                # Clear session data
+                del request.session['signup_pin']
+                del request.session['pin_expiry']
+                del request.session['signup_username']
+                del request.session['signup_password']
+                del request.session['signup_first_name']
+                del request.session['signup_last_name']
+                del request.session['signup_email']
+                del request.session['signup_mobile']
+                del request.session['signup_address']
+
+                messages.success(request, 'You have registered successfully as a guest.')
+                return redirect('home')
+            else:
+                messages.error(request,'Incorrect PIN. Please try again.')
+                return render(request, 'verify_pin.html')
+        else:
+            messages.error(request,'PIN has expired. Please register again.')
+        return redirect('signup_host')
+
     return redirect('home')
 
 
@@ -93,32 +174,109 @@ def guest_signup(request):
         # Check if the username already exists
         if User.objects.filter(username=username).exists():
             messages.error(request, 'Username is already taken. Please choose a different username.')
-            return redirect('home')
+            return redirect('signup_guest')
         
         # Check if the email is already registered
         if User.objects.filter(email=email).exists():
             messages.error(request, 'Email is already registered. Please use a different email address.')
-            return redirect('home')
+            return redirect('signup_guest')
+        
+        request.session['signup_username'] = username
+        request.session['signup_password'] = password
+        request.session['signup_first_name'] = first_name
+        request.session['signup_last_name'] = last_name
+        request.session['signup_email'] = email
+        request.session['signup_mobile'] = mobile
+        request.session['signup_address'] = address
 
-        # If username is unique, proceed with user creation
-        user = User.objects.create(username=username, is_guest=True,first_name=first_name,
-            last_name=last_name,
-            image=image,
-            email=email,
-            mobile=mobile,
-            address=address)
-        user.set_password(password)
-        user.save()
+        
+        # Generate and send PIN via email
+        pin = generate_pin()
+        request.session['signup_pin'] = pin
+        request.session['pin_expiry'] = (timezone.now() + timedelta(minutes=5)).isoformat()  # Set expiry time to 5 minutes from now
+        send_mail(
+            'Registration Verification PIN',
+            f'Your registration PIN is: {pin}',
+            settings.EMAIL_HOST_USER,
+            [email],
+            fail_silently=False,
+        )
 
-        success_condition = True
-        if success_condition:
-            messages.success(request, 'You have registered successfully.', extra_tags='confirm')
-        else:
-            messages.error(request, 'An error occurred while registering. Please try again.')
+        return render(request, 'verify1_pin.html')
 
-        return redirect('home')
+        # # If username is unique, proceed with user creation
+        # user = User.objects.create(username=username, is_guest=True,first_name=first_name,
+        #     last_name=last_name,
+        #     image=image,
+        #     email=email,
+        #     mobile=mobile,
+        #     address=address)
+        # user.set_password(password)
+        # user.save()
+
+        # success_condition = True
+        # if success_condition:
+        #     messages.success(request, 'You have registered successfully.', extra_tags='confirm')
+        # else:
+        #     messages.error(request, 'An error occurred while registering. Please try again.')
+
+        # return redirect('home')
 
             
+    return redirect('home')
+
+def verify1_pin(request):
+    if request.method == 'POST':
+        entered_pin = request.POST.get('pin')
+        pin_expiry_str = request.session.get('pin_expiry')
+        pin_expiry = timezone.datetime.fromisoformat(pin_expiry_str) if pin_expiry_str else None
+        if pin_expiry and timezone.now() <= pin_expiry:
+            saved_pin = request.session.get('signup_pin')
+            if entered_pin == saved_pin:
+                # PIN is correct and within time limit, proceed with registration
+                username = request.session.get('signup_username')
+                password = request.session.get('signup_password')
+                first_name = request.session.get('signup_first_name')
+                last_name = request.session.get('signup_last_name')
+                email = request.session.get('signup_email')
+                mobile = request.session.get('signup_mobile')
+                address = request.session.get('signup_address')
+                image = request.session.get('signup_image')
+
+                # Create user
+                user = User.objects.create(
+                    username=username,
+                    is_guest=True,
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    mobile=mobile,
+                    address=address,
+                    image=image
+                )
+                user.set_password(password)
+                user.save()
+
+                # Clear session data
+                del request.session['signup_pin']
+                del request.session['pin_expiry']
+                del request.session['signup_username']
+                del request.session['signup_password']
+                del request.session['signup_first_name']
+                del request.session['signup_last_name']
+                del request.session['signup_email']
+                del request.session['signup_mobile']
+                del request.session['signup_address']
+
+                messages.success(request,'You have registered successfully as a guest.')
+                return redirect('home')
+            else:
+                messages.error(request, 'Incorrect PIN. Please try again.')
+                return render(request, 'verify1_pin.html')
+        else:
+            messages.error(request,'PIN has expired. Please register again.')
+        return render(request, 'signup_guest')
+
     return redirect('home')
 
 
@@ -172,7 +330,19 @@ def host_profile(request):
 
 @login_required
 def guest_profile(request):
-    return render(request, 'guest_profile.html')
+    # Retrieve liked homestays, past bookings, and upcoming bookings
+    liked_homestays = request.user.liked_homestays.all()
+    past_bookings = Booking.objects.filter(user=request.user, check_out_date__lt=timezone.now().date())
+    upcoming_bookings = Booking.objects.filter(user=request.user, check_in_date__gt=timezone.now().date())
+
+    context = {
+        'user': request.user,
+        'liked_homestays': liked_homestays,
+        'past_bookings': past_bookings,
+        'upcoming_bookings': upcoming_bookings,
+    }
+
+    return render(request, 'guest_profile.html', context)
 
 
 @login_required

@@ -17,4 +17,6 @@ urlpatterns = [
     path('guest-signup/', views.signup_guest, name='signup_guest'),
     path('host-login/', views.login_host, name='login_host'),
     path('guest-login/', views.login_guest, name='login_guest'),
+    path('verify_pin/', views.verify_pin, name='verify_pin'),
+    path('verify1_pin/', views.verify1_pin, name='verify1_pin'),
 ]
